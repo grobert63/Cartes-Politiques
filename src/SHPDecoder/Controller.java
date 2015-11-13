@@ -1,4 +1,4 @@
-package sample;
+package SHPDecoder;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

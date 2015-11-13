@@ -1,4 +1,6 @@
-https://fr.wikipedia.org/wiki/Shapefile
-http://www.mkyong.com/java/how-to-read-file-in-java-fileinputstream/
+https://fr.wikipedia.org/wiki/Shapefile => première approche du .shp
+http://www.mkyong.com/java/how-to-read-file-in-java-fileinputstream/ => Lecture de stream en Java
 http://www.naturalearthdata.com/downloads/110m-cultural-vectors/
-http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf
+http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf => Définition du .sh
+http://sourceforge.net/projects/javashapefilere/ => librairie de lecture .shp + documentation
+http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm => Dessin simple en JavaFX
