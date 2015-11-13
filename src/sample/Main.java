@@ -96,7 +96,7 @@ public class Main extends Application {
                 {
                     if(previous != null)
                     {
-                        gc.strokeLine(previous.getX()+Math.abs(minX),previous.getY()+Math.abs(minY),point.getX()+Math.abs(minX),point.getY()+Math.abs(minY));
+                        gc.strokeLine(previous.getX()+Math.abs(minX),y-(previous.getY()+Math.abs(minY)),point.getX()+Math.abs(minX),y-(point.getY()+Math.abs(minY)));
                     }
                     previous = point;
                 }
