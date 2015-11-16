@@ -18,7 +18,7 @@ public class Main extends Application {
         FileInputStream fileInputStream = null;
         try
         {
-            fileInputStream = new FileReader("C:/Users/supra63200/IdeaProjects/Cartes-Politiques/test/world.shp").getFileInputStream();
+            fileInputStream = new FileReader("test/world.shp").getFileInputStream();
         }
         catch (Exception e)
         {
