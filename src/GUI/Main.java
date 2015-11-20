@@ -4,13 +4,13 @@ import Entities.Region;
 import Entities.HexGrid;
 import Loader.MapLoader;
 import Resolver.TestResolver;
-import Resolver.HexResolver;
 import java.util.List;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import Resolver.IResolver;
 
 
 public class Main extends Application {
@@ -50,7 +50,7 @@ public class Main extends Application {
         }
         
         // Placement aléatoire des régions sur la grille hexagonale pour les tests.
-        HexResolver algo = new TestResolver();
+        IResolver algo = new TestResolver();
         grid = algo.resolve(list);
     }
     

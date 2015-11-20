@@ -8,7 +8,7 @@ import java.util.List;
  * Une implémentation simple de HexResolver servant uniquement pour les tests.
  * @author Théophile
  */
-public class TestResolver implements HexResolver{
+public class TestResolver implements IResolver{
 
     /**
      * (Test uniquement) Place les régions les unes à la suite des autres sur une grille hexagonale.
