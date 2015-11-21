@@ -16,7 +16,6 @@ public class Controller {
 
     void initialize()
     {
-
     }
 
     public void buttonClick(ActionEvent actionEvent) {
