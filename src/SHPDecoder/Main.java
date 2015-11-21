@@ -36,7 +36,7 @@ public class Main extends Application {
         }
         Group root = new Group();
         reader.printInfos();
-        reader.setZoom(5);
+        reader.setZoom(3);
         reader.drawMap(root);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
