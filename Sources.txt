@@ -1,4 +1,4 @@
-https://en.wikipedia.org/wiki/Shapefile => première approche du .shp
+﻿https://en.wikipedia.org/wiki/Shapefile => première approche du .shp
 http://www.mkyong.com/java/how-to-read-file-in-java-fileinputstream/ => Lecture de stream en Java
 http://www.naturalearthdata.com/downloads/110m-cultural-vectors/
 http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf => Définition du .sh
@@ -6,3 +6,4 @@ http://sourceforge.net/projects/javashapefilere/ => librairie de lecture .shp + 
 http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm => Dessin simple en JavaFX
 https://fr.wikipedia.org/wiki/Aire_et_centre_de_masse_d%27un_polygone => Centre de gravité d'un polygone quelconque
 http://www.quarkphysics.ca/scripsi/hexgrid/ => info sur l'implémentation de la grille hexagonale
+http://www.redblobgames.com/grids/hexagons/ => info sur l'implémentation de la grille hexagonale
