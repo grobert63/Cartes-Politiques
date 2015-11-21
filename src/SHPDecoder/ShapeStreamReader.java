@@ -1,3 +1,4 @@
+//Attention grosses modifications en cours, ne pas utiliser
 package SHPDecoder;
 
 import exception.InvalidMapException;
