@@ -86,5 +86,14 @@ public class Region {
         }
         return "noname";
     }
+    
+    /**
+     * Distance du centre de gravité d'une région à une autre
+     * @param other Autre région
+     * @return Distance entre les deux centres de gravité
+     */
+    public double distanceFrom(Region other){
+        return Math.sqrt(Math.pow(this.getCenterX() - other.getCenterX(), 2) + Math.pow(this.getCenterY() - other.getCenterY(), 2));
+    }
 
 }
