@@ -21,10 +21,16 @@ public class HexCanvas extends Canvas{
      * @param hg Grille hexagonale contenant les régions à afficher
      */
     public HexCanvas(double width, double height, HexGrid hg){
-        // à optimiser
         super(width, height);
-        this.hexHeight = height / ((3.0/4.0)*hg.getHeight() + 0.25);
-        this.hexWidth = (Math.sqrt(3.0))/2.0 * hexHeight;
+        
+        if(height/(hg.getHeight() + 0.5) > width/(hg.getWidth())){
+            this.hexHeight = height / ((3.0/4.0)*hg.getHeight() + 0.25);
+            this.hexWidth = (Math.sqrt(3.0))/2.0 * hexHeight;
+        }
+        else{
+            this.hexWidth = width / (hg.getWidth() + 0.5);
+            this.hexHeight = hexWidth * 2.0/(Math.sqrt(3.0));
+        }
 
         GraphicsContext gc = super.getGraphicsContext2D();
         int rgb = 0;
@@ -81,7 +87,7 @@ public class HexCanvas extends Canvas{
     }
     
     /*
-    // Constructeur test
+    // Constructeur test (outdated)
     public HexCanvas(double width, double height, int nbHexVertical, int nbHexHorizontal){
         super(width, height);
         this.hexHeight = height / ((3.0/4.0)*nbHexVertical + 0.25);
