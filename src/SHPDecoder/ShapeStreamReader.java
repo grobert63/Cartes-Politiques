@@ -15,6 +15,10 @@ import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+
+/**
+ * Classe permettant la lecture d'un fichier shapefile pour en recuperer les informations globales et les polygones representant chaque pays
+ */
 public class ShapeStreamReader {
     private ShapeFileReader reader = null;
 
@@ -31,11 +35,15 @@ public class ShapeStreamReader {
             ListPolygonProperty.set(list);
     }
 
-    /*private double zoom = 1;
-    private static final double ZOOM_MIN = 0.1;
-    private static final double ZOOM_MAX = 100;*/
-
-    public ShapeStreamReader(FileInputStream stream) throws InvalidShapeFileException, IOException, InvalidMapException {
+    /**
+     * Constructeur de la classe
+     * @param stream Flux du fichier shapefile a lire
+     * @throws InvalidShapeFileException Le flux n'est pas un fichier shapefile valide
+     * @throws IOException Erreur de lecture du flux de donnees
+     * @throws InvalidMapException Le format de la carte n'est pas reconnu
+     * @throws NullPointerException Le flux de donnees est invalide ou absent
+     */
+    public ShapeStreamReader(FileInputStream stream) throws InvalidShapeFileException, IOException, InvalidMapException, NullPointerException {
         if (stream != null) {
             createShapeFileReader(stream);
             retrievePolygons();
@@ -57,43 +65,65 @@ public class ShapeStreamReader {
     }
 
 
+    /**
+     * retourne la taille en X de la carte
+     * @return taille en X
+     */
     public double getMapSizeX() {
         return (Math.abs(reader.getHeader().getBoxMaxX()) - reader.getHeader().getBoxMinX());
     }
 
+    /**
+     * retourne la taille en Y de la carte
+     * @return taille en Y
+     */
     public double getMapSizeY() {
         return (Math.abs(reader.getHeader().getBoxMaxY()) - reader.getHeader().getBoxMinY());
     }
 
-    /*public double getZoom() {
-        return zoom;
-    }
-
-    public void setZoom(double zoom) {
-        if (zoom >= ZOOM_MIN && zoom <= ZOOM_MAX)
-            this.zoom = zoom;
-    }*/
-
+    /**
+     * retourne la valeur minimale de X
+     * @return minimum de X
+     */
     public double getMapMinX() {
         return reader.getHeader().getBoxMinX();
     }
 
+    /**
+     * retourne la valeur minimale de Y
+     * @return minimum de Y
+     */
     public double getMapMinY() {
         return reader.getHeader().getBoxMinY();
     }
 
+    /**
+     * retourne la valeur maximale de X
+     * @return maximum de X
+     */
     public double getMapMaxX() {
         return reader.getHeader().getBoxMaxX();
     }
 
+    /**
+     * retourne la valeur maximale de Y
+     * @return maximum de Y
+     */
     public double getMapMaxY() {
         return reader.getHeader().getBoxMaxY();
     }
 
+    /**
+     * retourne le type de formes contenues dans le fichier shapefile
+     * @return type des formes
+     */
     public String getShapeName() {
         return reader.getHeader().getShapeType().name();
     }
 
+    /**
+     * affiche les infos globales sur le fichier dans la console
+     */
     public void printInfos() {
         System.out.println("min (X) : " + getMapMinX());
         System.out.println("max (X) : " + getMapMaxX());

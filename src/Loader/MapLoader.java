@@ -2,15 +2,21 @@ package Loader;
 
 import Entities.Region;
 import com.hexiong.jdbf.DBFReader;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
+import com.hexiong.jdbf.JDBFException;
+import exception.InvalidMapException;
 import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
+import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.AbstractShape;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
-import static org.nocrala.tools.gis.data.esri.shapefile.shape.ShapeType.POLYGON;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.nocrala.tools.gis.data.esri.shapefile.shape.ShapeType.POLYGON;
 
 /**
  * Chargeur des fichiers .shp et .dbf
@@ -44,7 +50,7 @@ public class MapLoader {
     /**
      * Construit un chargeur avec uniquement un fichier .shp
      * @param shpFilePath Emplacement du fichier .shp
-     * @throws Exception 
+     * @throws Exception
      */
     public MapLoader(String shpFilePath) throws Exception{
         this(shpFilePath, null);
@@ -53,15 +59,15 @@ public class MapLoader {
     /**
      * Charge une liste de régions à partir des données du/des fichier(s)
      * @return Liste de régions
-     * @throws Exception 
+     * @throws InvalidMapException
      */
-    public List<Region> load() throws Exception{
+    public List<Region> load() throws InvalidMapException, IOException, InvalidShapeFileException, JDBFException {
         List<Region> list = new ArrayList<>();
         
         AbstractShape s;
         while ((s = shpReader.next()) != null){
             if(s.getShapeType() != POLYGON){
-                throw new Exception("La classe MapLoader ne gère pas les formes de type "+s.getShapeType());
+                throw new InvalidMapException("La classe MapLoader ne gère pas les formes de type "+s.getShapeType());
             }
             
             PolygonInfo pi = new PolygonInfo((PolygonShape) s);

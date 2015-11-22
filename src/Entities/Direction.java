@@ -1,5 +1,7 @@
 package Entities;
 
+import exception.InvalidDirectionException;
+
 /**
  * Permet d'utiliser les directions lié aux arêtes d'un hexagone
  * @author Théophile
@@ -17,13 +19,13 @@ public class Direction{
      * Indique l'angle lié à la direction donné
      * @param direction Un des membres de HexDirection.
      * @return Angle de cette direction en degré
-     * @throws Exception 
+     * @throws InvalidDirectionException
      */
     public static double getAngle(int direction) throws Exception{
         if(direction >= 0 && direction <= 5){
             return direction * 60.0 + 30.0;
         }
-        throw new Exception("Une direction doit être comprise entre 0 et 5");
+        throw new InvalidDirectionException("Une direction doit être comprise entre 0 et 5");
     }
     
     /**
@@ -31,13 +33,13 @@ public class Direction{
      * Indique la direction opposée à une direction donnée
      * @param direction Direction donnée
      * @return Direction opposé à la direction donnée
-     * @throws Exception 
+     * @throws InvalidDirectionException
      */
     public static int getOpposite(int direction) throws Exception{
         if(direction >= 0 && direction <= 5){
             return (direction + 3) % 6;
         }
-        throw new Exception("Une direction doit être comprise entre 0 et 5");
+        throw new InvalidDirectionException("Une direction doit être comprise entre 0 et 5");
     }
     
     /**

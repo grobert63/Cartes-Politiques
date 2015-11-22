@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * (Algorithme à revoir)
@@ -92,11 +93,11 @@ public class SimpleAggregerResolver implements IResolver{
                 Index2 idx = entry.getKey();
                 Region r = entry.getValue();
                 if(hasPlaceAround(idx)){
-                    for(int i=0 ; i < isolated.size() ; i++){
-                        distance = r.getDistanceTo(isolated.get(i));
-                        if(min_dist == -1.0 || distance < min_dist){
+                    for (Region anIsolated : isolated) {
+                        distance = r.getDistanceTo(anIsolated);
+                        if (min_dist == -1.0 || distance < min_dist) {
                             source = idx;
-                            nearest = isolated.get(i);
+                            nearest = anIsolated;
                             min_dist = distance;
                         }
                     }
@@ -154,9 +155,7 @@ public class SimpleAggregerResolver implements IResolver{
     
     @Override
     public HexGrid resolve(List<Region> list){
-        for(Region r : list){
-            isolated.add(r);
-        }
+        isolated.addAll(list.stream().collect(Collectors.toList()));
         
         while(!isAllAggregated()){
             aggregate();
@@ -182,10 +181,7 @@ public class SimpleAggregerResolver implements IResolver{
                 return false;
             }
             final Index2 other = (Index2) obj;
-            if (this.x != other.x || this.y != other.y) {
-                return false;
-            }
-            return true;
+            return !(this.x != other.x || this.y != other.y);
         }
 
         @Override
