@@ -7,7 +7,6 @@ import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
 import exception.InvalidMapException;
 import javafx.scene.shape.Polygon;
-import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 
@@ -20,7 +19,6 @@ import java.util.List;
  * @author Théophile
  */
 public class MapLoader {
-    private final ShapeFileReader shpReader;
     private final DBFReader dbfReader;
     private final ShapeStreamReader shapeStreamReader;
 
@@ -39,8 +37,6 @@ public class MapLoader {
         ValidationPreferences v = new ValidationPreferences();
         v.setAllowUnlimitedNumberOfPointsPerShape(true);
         this.shapeStreamReader = new ShapeStreamReader(fileReader.getFileInputStream(),v);
-        this.shpReader = new ShapeFileReader(fileReader.getFileInputStream(),v);
-        
         if(dbfFilePath != null){
             this.dbfReader = new DBFReader(dbfFilePath);
         }
