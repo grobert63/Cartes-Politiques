@@ -1,15 +1,13 @@
 package SHPDecoder;
 
 import exception.InvalidMapException;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.shape.Polygon;
 import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
+import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.AbstractShape;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.ShapeType;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 import java.io.FileInputStream;
@@ -20,20 +18,7 @@ import java.io.IOException;
  * Classe permettant la lecture d'un fichier shapefile pour en recuperer les informations globales et les polygones representant chaque pays
  */
 public class ShapeStreamReader {
-    private ShapeFileReader reader = null;
-
-    private ObservableList<Polygon> listPolygon = FXCollections.observableArrayList();
-
-    private final ListProperty<Polygon> ListPolygonProperty = new SimpleListProperty<>(listPolygon);
-        public final ListProperty<Polygon> ListPolygonProperty() {
-        return ListPolygonProperty;
-        }
-        public final ObservableList<Polygon> getListPolygonProperty() {
-            return ListPolygonProperty.get();
-        }
-        public final void setListPolygonProperty(ObservableList<Polygon> list) {
-            ListPolygonProperty.set(list);
-    }
+    private ShapeFileReader reader;
 
     /**
      * Constructeur de la classe
@@ -44,10 +29,21 @@ public class ShapeStreamReader {
      * @throws NullPointerException Le flux de donnees est invalide ou absent
      */
     public ShapeStreamReader(FileInputStream stream) throws InvalidShapeFileException, IOException, InvalidMapException, NullPointerException {
+        this(stream,null);
+    }
+
+    public ShapeStreamReader(FileInputStream stream, ValidationPreferences validationPreferences) throws InvalidShapeFileException, IOException, InvalidMapException, NullPointerException {
         if (stream != null) {
-            createShapeFileReader(stream);
-            retrievePolygons();
+            if (validationPreferences == null)
+            {
+                createShapeFileReader(stream);
+            }
+            else
+            {
+                createShapeFileReader(stream,validationPreferences);
+            }
         } else {
+            reader = null;
             throw new NullPointerException("Le flux de données est absent");
         }
     }
@@ -60,8 +56,28 @@ public class ShapeStreamReader {
         } catch (IOException e) {
             throw new IOException("Une erreur de lecture est survenue", e.getCause());
         }
-        if (reader.getHeader().getBoxMaxZ() != 0 || reader.getHeader().getBoxMinZ() != 0 || reader.getHeader().getBoxMaxM() != 0 || reader.getHeader().getBoxMinM() != 0)
+        isMapValid(reader);
+    }
+
+    private void createShapeFileReader(FileInputStream stream,ValidationPreferences validationPreferences) throws InvalidShapeFileException, IOException, InvalidMapException {
+        try {
+            reader = new ShapeFileReader(stream,validationPreferences);
+        } catch (InvalidShapeFileException e) {
+            throw new InvalidShapeFileException("La forme est invalide", e.getCause());
+        } catch (IOException e) {
+            throw new IOException("Une erreur de lecture est survenue", e.getCause());
+        }
+        isMapValid(reader);
+    }
+
+    private boolean isMapValid(ShapeFileReader reader) throws InvalidMapException {
+        if (reader.getHeader().getBoxMaxZ() != 0 || reader.getHeader().getBoxMinZ() != 0 || reader.getHeader().getBoxMaxM() != 0 || reader.getHeader().getBoxMinM() != 0) {
             throw new InvalidMapException("Seules les cartes 2D sont gérées");
+        }
+        if (reader.getHeader().getShapeType() != ShapeType.POLYGON){
+            throw new InvalidMapException("Seuls les polygones sont gérés pour les régions");
+        }
+        return true;
     }
 
 
@@ -134,19 +150,21 @@ public class ShapeStreamReader {
         System.out.println("Shape File : " + getShapeName());
     }
 
-    private void retrievePolygons() throws IOException, InvalidShapeFileException {
-        AbstractShape shape;
-        while ((shape = reader.next()) != null) {
+    public Polygon getNextShape() throws IOException, InvalidShapeFileException {
+        AbstractShape shape = reader.next();
+        Polygon polygon = new Polygon();
+        if (shape != null)
+        {
             PolygonShape polygonShape = (PolygonShape) shape;
             for (int i = 0; i < polygonShape.getNumberOfParts(); i++) {
-                Polygon polygon = createPolygonFromPointDataArray(polygonShape.getPointsOfPart(i));
-                listPolygon.add(polygon);
+                addPointDataArrayToPolygon(polygon,polygonShape.getPointsOfPart(i));
             }
         }
+
+        return polygon;
     }
 
-    private Polygon createPolygonFromPointDataArray(PointData[] points) {
-        Polygon polygon = new Polygon();
+    private Polygon addPointDataArrayToPolygon(Polygon polygon, PointData[] points) {
         for (PointData point : points) {
             polygon.getPoints().add(point.getX() - getMapMinX());
             polygon.getPoints().add(getMapSizeY() - (point.getY() - getMapMinY()));

@@ -1,22 +1,19 @@
 package Loader;
 
 import Entities.Region;
+import SHPDecoder.FileReader;
+import SHPDecoder.ShapeStreamReader;
 import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
 import exception.InvalidMapException;
+import javafx.scene.shape.Polygon;
 import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
-import org.nocrala.tools.gis.data.esri.shapefile.shape.AbstractShape;
-import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
-import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.nocrala.tools.gis.data.esri.shapefile.shape.ShapeType.POLYGON;
 
 /**
  * Chargeur des fichiers .shp et .dbf
@@ -25,6 +22,7 @@ import static org.nocrala.tools.gis.data.esri.shapefile.shape.ShapeType.POLYGON;
 public class MapLoader {
     private final ShapeFileReader shpReader;
     private final DBFReader dbfReader;
+    private final ShapeStreamReader shapeStreamReader;
 
     /**
      * Construit un chargeur de fichiers .shp et .dbf
@@ -32,12 +30,13 @@ public class MapLoader {
      * @param dbfFilePath Emplacement du fichier .dbf
      * @throws Exception 
      */
-    public MapLoader(String shpFilePath, String dbfFilePath) throws Exception{
-        FileInputStream is = new FileInputStream(shpFilePath);
+    public MapLoader(String shpFilePath, String dbfFilePath) throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
+        FileReader fileReader = new FileReader(shpFilePath);
         
         ValidationPreferences v = new ValidationPreferences();
         v.setAllowUnlimitedNumberOfPointsPerShape(true);
-        this.shpReader = new ShapeFileReader(is,v);
+        this.shapeStreamReader = new ShapeStreamReader(fileReader.getFileInputStream(),v);
+        this.shpReader = new ShapeFileReader(fileReader.getFileInputStream(),v);
         
         if(dbfFilePath != null){
             this.dbfReader = new DBFReader(dbfFilePath);
@@ -52,7 +51,7 @@ public class MapLoader {
      * @param shpFilePath Emplacement du fichier .shp
      * @throws Exception
      */
-    public MapLoader(String shpFilePath) throws Exception{
+    public MapLoader(String shpFilePath) throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
         this(shpFilePath, null);
     }
     
@@ -64,33 +63,35 @@ public class MapLoader {
     public List<Region> load() throws InvalidMapException, IOException, InvalidShapeFileException, JDBFException {
         List<Region> list = new ArrayList<>();
         
-        AbstractShape s;
-        while ((s = shpReader.next()) != null){
-            if(s.getShapeType() != POLYGON){
-                throw new InvalidMapException("La classe MapLoader ne gère pas les formes de type "+s.getShapeType());
-            }
-            
-            PolygonInfo pi = new PolygonInfo((PolygonShape) s);
-            PointData centre = pi.getCentreDeMasse();
-            
-            Region region = new Region(centre.getX(),centre.getY());
-            
-            if(dbfReader != null){
-                if(dbfReader.hasNextRecord()){
-                    Object[] data = dbfReader.nextRecord();
-                    for (int fieldIndex=0; fieldIndex < dbfReader.getFieldCount(); fieldIndex++)
-                    {
-                        String fieldName = dbfReader.getField(fieldIndex).getName();
-                        region.setData(fieldName, data[fieldIndex].toString());
-                    }
-                }
-                else{
-                    System.err.println("[Warning] Données manquantes dans le .dbf");
-                }
-            }
-            
+        Polygon polygon = shapeStreamReader.getNextShape();
+        while (polygon.getPoints().size() != 0 ){
+            Region region = new Region(polygon);
+            getdbfInfos(region);
             list.add(region);
+            polygon = shapeStreamReader.getNextShape();
         }
         return list;
     }
+
+    private void getdbfInfos(Region region) throws JDBFException {
+        if(dbfReader != null){
+            if(dbfReader.hasNextRecord()){
+                readdbfNextRecord(region);
+            }
+            else{
+                System.err.println("[Warning] Données manquantes dans le .dbf");
+            }
+        }
+    }
+
+    private void readdbfNextRecord(Region region) throws JDBFException {
+        Object[] data = dbfReader.nextRecord();
+        for (int fieldIndex=0; fieldIndex < dbfReader.getFieldCount(); fieldIndex++)
+        {
+            String fieldName = dbfReader.getField(fieldIndex).getName();
+            region.setData(fieldName, data[fieldIndex].toString());
+        }
+    }
+
+
 }
