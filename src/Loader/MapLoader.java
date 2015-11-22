@@ -28,7 +28,10 @@ public class MapLoader {
      * Construit un chargeur de fichiers .shp et .dbf
      * @param shpFilePath Emplacement du fichier .shp
      * @param dbfFilePath Emplacement du fichier .dbf
-     * @throws Exception 
+     * @throws IOException
+     * @throws InvalidMapException
+     * @throws InvalidShapeFileException
+     * @throws JDBFException
      */
     public MapLoader(String shpFilePath, String dbfFilePath) throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
         FileReader fileReader = new FileReader(shpFilePath);
@@ -49,7 +52,10 @@ public class MapLoader {
     /**
      * Construit un chargeur avec uniquement un fichier .shp
      * @param shpFilePath Emplacement du fichier .shp
-     * @throws Exception
+     * @throws IOException
+     * @throws InvalidMapException
+     * @throws InvalidShapeFileException
+     * @throws JDBFException
      */
     public MapLoader(String shpFilePath) throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
         this(shpFilePath, null);
@@ -58,9 +64,12 @@ public class MapLoader {
     /**
      * Charge une liste de régions à partir des données du/des fichier(s)
      * @return Liste de régions
+     * @throws IOException
      * @throws InvalidMapException
+     * @throws InvalidShapeFileException
+     * @throws JDBFException
      */
-    public List<Region> load() throws InvalidMapException, IOException, InvalidShapeFileException, JDBFException {
+    public List<Region> load() throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
         List<Region> list = new ArrayList<>();
         
         Polygon polygon = shapeStreamReader.getNextShape();

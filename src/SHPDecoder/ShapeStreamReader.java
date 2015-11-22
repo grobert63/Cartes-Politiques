@@ -32,6 +32,15 @@ public class ShapeStreamReader {
         this(stream,null);
     }
 
+    /**
+     * Constructeur de la classe
+     * @param stream Flux du fichier shapefile a lire
+     * @param validationPreferences Preferences de lecture du fichier shapefile
+     * @throws InvalidShapeFileException Le flux n'est pas un fichier shapefile valide
+     * @throws IOException Erreur de lecture du flux de donnees
+     * @throws InvalidMapException Le format de la carte n'est pas reconnu
+     * @throws NullPointerException Le flux de donnees est invalide ou absent
+     */
     public ShapeStreamReader(FileInputStream stream, ValidationPreferences validationPreferences) throws InvalidShapeFileException, IOException, InvalidMapException, NullPointerException {
         if (stream != null) {
             if (validationPreferences == null)
@@ -82,63 +91,63 @@ public class ShapeStreamReader {
 
 
     /**
-     * retourne la taille en X de la carte
-     * @return taille en X
+     * Retourne la taille en X de la carte
+     * @return Taille en X
      */
     public double getMapSizeX() {
         return (Math.abs(reader.getHeader().getBoxMaxX()) - reader.getHeader().getBoxMinX());
     }
 
     /**
-     * retourne la taille en Y de la carte
-     * @return taille en Y
+     * Retourne la taille en Y de la carte
+     * @return Taille en Y
      */
     public double getMapSizeY() {
         return (Math.abs(reader.getHeader().getBoxMaxY()) - reader.getHeader().getBoxMinY());
     }
 
     /**
-     * retourne la valeur minimale de X
-     * @return minimum de X
+     * Retourne la valeur minimale de X
+     * @return Minimum de X
      */
     public double getMapMinX() {
         return reader.getHeader().getBoxMinX();
     }
 
     /**
-     * retourne la valeur minimale de Y
-     * @return minimum de Y
+     * Retourne la valeur minimale de Y
+     * @return Minimum de Y
      */
     public double getMapMinY() {
         return reader.getHeader().getBoxMinY();
     }
 
     /**
-     * retourne la valeur maximale de X
-     * @return maximum de X
+     * Retourne la valeur maximale de X
+     * @return Maximum de X
      */
     public double getMapMaxX() {
         return reader.getHeader().getBoxMaxX();
     }
 
     /**
-     * retourne la valeur maximale de Y
-     * @return maximum de Y
+     * Retourne la valeur maximale de Y
+     * @return Maximum de Y
      */
     public double getMapMaxY() {
         return reader.getHeader().getBoxMaxY();
     }
 
     /**
-     * retourne le type de formes contenues dans le fichier shapefile
-     * @return type des formes
+     * Retourne le type de formes contenues dans le fichier shapefile
+     * @return Type des formes
      */
     public String getShapeName() {
         return reader.getHeader().getShapeType().name();
     }
 
     /**
-     * affiche les infos globales sur le fichier dans la console
+     * Affiche les infos globales sur le fichier dans la console
      */
     public void printInfos() {
         System.out.println("min (X) : " + getMapMinX());
@@ -150,6 +159,12 @@ public class ShapeStreamReader {
         System.out.println("Shape File : " + getShapeName());
     }
 
+    /**
+     * Retourne la prochaine forme contenue dans le flux de données
+     * @return Polygone JavaFX contenant les frontières de la région
+     * @throws IOException
+     * @throws InvalidShapeFileException
+     */
     public Polygon getNextShape() throws IOException, InvalidShapeFileException {
         AbstractShape shape = reader.next();
         Polygon polygon = new Polygon();

@@ -21,6 +21,7 @@ public class Region {
      * Construit une région en précisant son centre de gravité
      * @param centerX Position en X du centre de gravité de la région
      * @param centerY Position en Y du centre de gravité de la région
+     * @param border Polygone JavaFX representant les frontières de la région
      */
     public Region(double centerX, double centerY, Polygon border) {
         this._centerX = centerX;
@@ -28,14 +29,26 @@ public class Region {
         this._border = border;
     }
 
+    /**
+     * Construit une région à partir de ses frontières
+     * @param border Polygone JavaFX representant les frontières de la région
+     */
     public Region(Polygon border) {
         setBorder(border);
     }
 
+    /**
+     * Retourne le Polygone JavaFX des frontières de la région
+     * @return Polygone des frontières
+     */
     public Polygon getBorder() {
         return _border;
     }
 
+    /**
+     * Modifie la frontière d'une région
+     * @param border Polygone JavaFX contenant les nouvelles frontières
+     */
     public void setBorder(Polygon border) {
         if (border != null)
         {
