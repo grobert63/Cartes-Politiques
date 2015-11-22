@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import Resolver.IResolver;
+import Resolver.SimpleAggregerResolver;
 
 
 public class Main extends Application {
@@ -50,7 +51,7 @@ public class Main extends Application {
         }
         
         // Placement aléatoire des régions sur la grille hexagonale pour les tests.
-        IResolver algo = new TestResolver();
+        IResolver algo = new SimpleAggregerResolver();
         grid = algo.resolve(list);
     }
     

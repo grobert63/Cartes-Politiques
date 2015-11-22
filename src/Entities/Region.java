@@ -92,8 +92,13 @@ public class Region {
      * @param other Autre région
      * @return Distance entre les deux centres de gravité
      */
-    public double distanceFrom(Region other){
+    public double getDistanceTo(Region other){
         return Math.sqrt(Math.pow(this.getCenterX() - other.getCenterX(), 2) + Math.pow(this.getCenterY() - other.getCenterY(), 2));
     }
 
+    public double getAngleTo(Region other){
+        double vecteurX = other.getCenterX() - this.getCenterX();
+        double vecteurY = other.getCenterY() - this.getCenterY();
+        return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
+    }
 }
