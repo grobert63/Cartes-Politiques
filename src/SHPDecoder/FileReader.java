@@ -9,9 +9,9 @@ import java.io.FileNotFoundException;
  */
 public class FileReader {
 
-    private String path = "";
+    private String _path = "";
 
-    private File file = null;
+    private File _file = null;
 
     /**
      * Crée un nouveau lecteur de fichier
@@ -30,8 +30,8 @@ public class FileReader {
     public void setPath(String path) throws FileNotFoundException {
         File file = new File(path);
         if (file.exists()) {
-            this.path = path;
-            this.file = file;
+            this._path = path;
+            this._file = file;
         }
         else {
             throw new FileNotFoundException("Le fichier n'existe pas");
@@ -43,7 +43,7 @@ public class FileReader {
      * @return Chemin du fichier
      */
     public String getPath() {
-        return path;
+        return _path;
     }
 
     /**
@@ -53,7 +53,7 @@ public class FileReader {
      */
     public FileInputStream getFileInputStream() throws FileNotFoundException {
         try {
-            return new FileInputStream(file);
+            return new FileInputStream(_file);
         }
         catch (FileNotFoundException e)
         {

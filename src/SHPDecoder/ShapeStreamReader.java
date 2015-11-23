@@ -18,7 +18,7 @@ import java.io.IOException;
  * Classe permettant la lecture d'un fichier shapefile pour en recuperer les informations globales et les polygones representant chaque pays
  */
 public class ShapeStreamReader {
-    private ShapeFileReader reader;
+    private ShapeFileReader _reader;
 
     /**
      * Constructeur de la classe
@@ -52,31 +52,31 @@ public class ShapeStreamReader {
                 createShapeFileReader(stream,validationPreferences);
             }
         } else {
-            reader = null;
+            _reader = null;
             throw new NullPointerException("Le flux de données est absent");
         }
     }
 
     private void createShapeFileReader(FileInputStream stream) throws InvalidShapeFileException, IOException, InvalidMapException {
         try {
-            reader = new ShapeFileReader(stream);
+            _reader = new ShapeFileReader(stream);
         } catch (InvalidShapeFileException e) {
             throw new InvalidShapeFileException("La forme est invalide", e.getCause());
         } catch (IOException e) {
             throw new IOException("Une erreur de lecture est survenue", e.getCause());
         }
-        isMapValid(reader);
+        isMapValid(_reader);
     }
 
     private void createShapeFileReader(FileInputStream stream,ValidationPreferences validationPreferences) throws InvalidShapeFileException, IOException, InvalidMapException {
         try {
-            reader = new ShapeFileReader(stream,validationPreferences);
+            _reader = new ShapeFileReader(stream,validationPreferences);
         } catch (InvalidShapeFileException e) {
             throw new InvalidShapeFileException("La forme est invalide", e.getCause());
         } catch (IOException e) {
             throw new IOException("Une erreur de lecture est survenue", e.getCause());
         }
-        isMapValid(reader);
+        isMapValid(_reader);
     }
 
     private boolean isMapValid(ShapeFileReader reader) throws InvalidMapException {
@@ -95,7 +95,7 @@ public class ShapeStreamReader {
      * @return Taille en X
      */
     public double getMapSizeX() {
-        return (Math.abs(reader.getHeader().getBoxMaxX()) - reader.getHeader().getBoxMinX());
+        return (Math.abs(_reader.getHeader().getBoxMaxX()) - _reader.getHeader().getBoxMinX());
     }
 
     /**
@@ -103,7 +103,7 @@ public class ShapeStreamReader {
      * @return Taille en Y
      */
     public double getMapSizeY() {
-        return (Math.abs(reader.getHeader().getBoxMaxY()) - reader.getHeader().getBoxMinY());
+        return (Math.abs(_reader.getHeader().getBoxMaxY()) - _reader.getHeader().getBoxMinY());
     }
 
     /**
@@ -111,7 +111,7 @@ public class ShapeStreamReader {
      * @return Minimum de X
      */
     public double getMapMinX() {
-        return reader.getHeader().getBoxMinX();
+        return _reader.getHeader().getBoxMinX();
     }
 
     /**
@@ -119,7 +119,7 @@ public class ShapeStreamReader {
      * @return Minimum de Y
      */
     public double getMapMinY() {
-        return reader.getHeader().getBoxMinY();
+        return _reader.getHeader().getBoxMinY();
     }
 
     /**
@@ -127,7 +127,7 @@ public class ShapeStreamReader {
      * @return Maximum de X
      */
     public double getMapMaxX() {
-        return reader.getHeader().getBoxMaxX();
+        return _reader.getHeader().getBoxMaxX();
     }
 
     /**
@@ -135,7 +135,7 @@ public class ShapeStreamReader {
      * @return Maximum de Y
      */
     public double getMapMaxY() {
-        return reader.getHeader().getBoxMaxY();
+        return _reader.getHeader().getBoxMaxY();
     }
 
     /**
@@ -143,7 +143,7 @@ public class ShapeStreamReader {
      * @return Type des formes
      */
     public String getShapeName() {
-        return reader.getHeader().getShapeType().name();
+        return _reader.getHeader().getShapeType().name();
     }
 
     /**
@@ -166,7 +166,7 @@ public class ShapeStreamReader {
      * @throws InvalidShapeFileException
      */
     public Polygon getNextShape() throws IOException, InvalidShapeFileException {
-        AbstractShape shape = reader.next();
+        AbstractShape shape = _reader.next();
         Polygon polygon = new Polygon();
         if (shape != null)
         {
