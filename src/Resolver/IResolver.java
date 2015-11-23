@@ -11,5 +11,5 @@ import java.util.List;
  * @author Théophile
  */
 public interface IResolver {
-    public HexGrid resolve(List<Region> list);
+    HexGrid resolve(List<Region> list);
 }

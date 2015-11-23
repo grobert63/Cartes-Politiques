@@ -18,33 +18,33 @@ public class HexCanvas extends Canvas{
     /**
      * @param width Largeur en pixel
      * @param height Hauteur en pixel
-     * @param hg Grille hexagonale contenant les régions à afficher
+     * @param grid Grille hexagonale contenant les régions à afficher
      */
-    public HexCanvas(double width, double height, HexGrid hg){
+    public HexCanvas(double width, double height, HexGrid grid){
         super(width, height);
         
-        if(height/(hg.getHeight() + 0.5) > width/(hg.getWidth())){
-            this.hexHeight = height / ((3.0/4.0)*hg.getHeight() + 0.25);
+        if(height/(grid.getHeight()*0.75 + 0.25) > width/(grid.getWidth())){
+            this.hexHeight = height / ((3.0/4.0)*grid.getHeight() + 0.25);
             this.hexWidth = (Math.sqrt(3.0))/2.0 * hexHeight;
         }
         else{
-            this.hexWidth = width / (hg.getWidth() + 0.5);
+            this.hexWidth = width / (grid.getWidth() + 0.5);
             this.hexHeight = hexWidth * 2.0/(Math.sqrt(3.0));
         }
 
         GraphicsContext gc = super.getGraphicsContext2D();
         int rgb = 0;
         
-        for(int row = 0; row < hg.getHeight(); row++)
+        for(int row = 0; row < grid.getHeight(); row++)
         {
-            for(int col = 0; col < hg.getWidth(); col++)
+            for(int col = 0; col < grid.getWidth(); col++)
             {
-                if(hg.getRegion(col, row) != null){
+                if(grid.getRegion(col, row) != null){
                     gc.setFill(Color.rgb(255, rgb, rgb));
                     gc.fillPolygon(getHexCoordAbsoluteX(row,col), getHexCoordAbsoluteY(row), 6);
                     
                     gc.setFill(Color.BLACK);
-                    gc.fillText(hg.getRegion(col, row).getName(),getTextPositionX(row, col), getTextPositionY(row));
+                    gc.fillText(grid.getRegion(col, row).getName(),getTextPositionX(row, col), getTextPositionY(row));
 
                     //gc.strokePolygon(getHexCoordAbsoluteX(row,col), getHexCoordAbsoluteY(row), 6);
                     rgb = (rgb + 8) % 256;

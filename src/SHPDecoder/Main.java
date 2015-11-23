@@ -1,7 +1,8 @@
 package SHPDecoder;
 
 import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -11,9 +12,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        //primaryStage.setScene(new Scene(root, 300, 275));
+
 
         FileInputStream fileInputStream = null;
         try
@@ -34,15 +33,12 @@ public class Main extends Application {
             System.out.println(e.getMessage());
             System.exit(1);
         }
-        Group root = new Group();
         reader.printInfos();
-        reader.setZoom(3);
-        reader.drawMap(root);
-        primaryStage.setScene(new Scene(root));
+
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
-        System.out.println();
-        System.out.println();
-        reader.printInfos();
     }
 
 
