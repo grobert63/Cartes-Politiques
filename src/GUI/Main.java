@@ -38,15 +38,18 @@ public class Main extends Application {
     public static void chargement() throws Exception {   
         // Chargement des régions en mémoire
         MapLoader ml = new MapLoader(
-                "test/FRA_adm1.shp",
-                "test/FRA_adm1.dbf"
+                //"test/FRA_adm1.shp",
+                //"test/FRA_adm1.dbf"
+                "test/world.shp",
+                "test/world.dbf"
         );
         
         List<Region> list = ml.load();
         
         for(Region r : list){
             // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
-            r.setDefaultField("NAME_1");
+            //r.setDefaultField("NAME_1");
+            r.setDefaultField("name");
             afficherRegion(r);
         }
         
