@@ -182,7 +182,7 @@ public class ShapeStreamReader {
     private Polygon addPointDataArrayToPolygon(Polygon polygon, PointData[] points) {
         for (PointData point : points) {
             polygon.getPoints().add(point.getX() - getMapMinX());
-            polygon.getPoints().add(getMapSizeY() - (point.getY() - getMapMinY()));
+            polygon.getPoints().add(point.getY() - getMapMinY());
         }
         return polygon;
     }
