@@ -9,7 +9,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.TextAlignment;
 
 /**
- *
+ * Décrit un canvas spécialisé dans l'affichage de polygones
  */
 public class PolyCanvas extends Canvas {
     private final double _canvasWidth;
@@ -17,6 +17,12 @@ public class PolyCanvas extends Canvas {
     private final Map _map;
     private final GraphicsContext _gc;
 
+    /**
+     * Canvas affichant la carte avec le nom de la région. Le ratio est toujours respecté
+     * @param canvasWidth Largeur en pixels du canvas
+     * @param canvasHeight Hauteur en pixels du canvas
+     * @param map Structure Map contenant la carte à afficher
+     */
     public PolyCanvas(double canvasWidth, double canvasHeight, Map map) {
         super(canvasWidth, canvasHeight);
         this._canvasWidth = canvasWidth;
