@@ -12,6 +12,8 @@ import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -165,18 +167,17 @@ public class ShapeStreamReader {
      * @throws IOException
      * @throws InvalidShapeFileException
      */
-    public Polygon getNextShape() throws IOException, InvalidShapeFileException {
+    public List<Polygon> getNextShape() throws IOException, InvalidShapeFileException {
         AbstractShape shape = _reader.next();
-        Polygon polygon = new Polygon();
+        List<Polygon> polygons = new ArrayList<>();
         if (shape != null)
         {
             PolygonShape polygonShape = (PolygonShape) shape;
             for (int i = 0; i < polygonShape.getNumberOfParts(); i++) {
-                addPointDataArrayToPolygon(polygon,polygonShape.getPointsOfPart(i));
+                polygons.add(addPointDataArrayToPolygon(new Polygon(),polygonShape.getPointsOfPart(i)));
             }
         }
-
-        return polygon;
+        return polygons;
     }
 
     private Polygon addPointDataArrayToPolygon(Polygon polygon, PointData[] points) {

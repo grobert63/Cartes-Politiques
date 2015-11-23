@@ -4,7 +4,9 @@ import Loader.PolygonInfo;
 import javafx.scene.shape.Polygon;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Décrit une région
@@ -15,44 +17,44 @@ public class Region {
     private String _defaultField = null;
     private double _centerX;
     private double _centerY;
-    private Polygon _border;
+    private List<Polygon> _borders = new ArrayList<>();
 
     /**
      * Construit une région en précisant son centre de gravité
      * @param centerX Position en X du centre de gravité de la région
      * @param centerY Position en Y du centre de gravité de la région
-     * @param border Polygone JavaFX representant les frontières de la région
+     * @param borders Liste de Polygones JavaFX representant les frontières de la région
      */
-    public Region(double centerX, double centerY, Polygon border) {
+    public Region(double centerX, double centerY, List<Polygon> borders) {
         this._centerX = centerX;
         this._centerY = centerY;
-        this._border = border;
+        this._borders = borders;
     }
 
     /**
      * Construit une région à partir de ses frontières
-     * @param border Polygone JavaFX representant les frontières de la région
+     * @param borders Liste de Polygones JavaFX representant les frontières de la région
      */
-    public Region(Polygon border) {
-        setBorder(border);
+    public Region(List<Polygon> borders) {
+        setBorders(borders);
     }
 
     /**
      * Retourne le Polygone JavaFX des frontières de la région
      * @return Polygone des frontières
      */
-    public Polygon getBorder() {
-        return _border;
+    public List<Polygon> getBorders() {
+        return _borders;
     }
 
     /**
      * Modifie la frontière d'une région
-     * @param border Polygone JavaFX contenant les nouvelles frontières
+     * @param borders Polygone JavaFX contenant les nouvelles frontières
      */
-    public void setBorder(Polygon border) {
-        if (border != null)
+    public void setBorders(List<Polygon> borders) {
+        if (borders != null)
         {
-            PointData centreDeMasse = new PolygonInfo(border).getCentreDeMasse();
+            PointData centreDeMasse = new PolygonInfo(borders).getCentreDeMasse();
             this._centerX = centreDeMasse.getX();
             this._centerY = centreDeMasse.getY();
         }
@@ -61,7 +63,7 @@ public class Region {
             this._centerX = 0;
             this._centerY = 0;
         }
-        this._border = border;
+        this._borders = borders;
     }
 
     /**

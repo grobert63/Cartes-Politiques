@@ -1,5 +1,6 @@
 package Loader;
 
+import Entities.Map;
 import Entities.Region;
 import SHPDecoder.FileReader;
 import SHPDecoder.ShapeStreamReader;
@@ -59,23 +60,23 @@ public class MapLoader {
     
     /**
      * Charge une liste de régions à partir des données du/des fichier(s)
-     * @return Liste de régions
+     * @return Structure carte contenant toutes les régions et les dimensions de la carte
      * @throws IOException
      * @throws InvalidMapException
      * @throws InvalidShapeFileException
      * @throws JDBFException
      */
-    public List<Region> load() throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
+    public Map load() throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
         List<Region> list = new ArrayList<>();
         
-        Polygon polygon = shapeStreamReader.getNextShape();
-        while (polygon.getPoints().size() != 0 ){
-            Region region = new Region(polygon);
+        List<Polygon> polygons = shapeStreamReader.getNextShape();
+        while (polygons.size() > 0){
+            Region region = new Region(polygons);
             getdbfInfos(region);
             list.add(region);
-            polygon = shapeStreamReader.getNextShape();
+            polygons = shapeStreamReader.getNextShape();
         }
-        return list;
+        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), list);
     }
 
     private void getdbfInfos(Region region) throws JDBFException {
