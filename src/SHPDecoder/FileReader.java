@@ -5,33 +5,33 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
- *classe permettant de recuperer un flux de lecture pour un fichier a partir de son chemin
+ * Classe permettant de récuperer un flux de lecture pour un fichier à partir de son chemin
  */
 public class FileReader {
 
-    private String path = "";
+    private String _path = "";
 
-    private File file = null;
+    private File _file = null;
 
     /**
-     *cree un nouveau lecteur de fichier
-     * @param path chemin du fichier
-     * @throws FileNotFoundException le fichier n'a pas ete trouve a l'emplacement donne
+     * Crée un nouveau lecteur de fichier
+     * @param path Chemin du fichier
+     * @throws FileNotFoundException Le fichier n'a pas été trouvé a l'emplacement donné
      */
     public FileReader(String path) throws FileNotFoundException {
         setPath(path);
     }
 
     /**
-     * met a jour le chemin du fichier
-     * @param path nouveau chemin du fichier
-     * @throws FileNotFoundException le fichier n'a pas ete trouve a l'emplacement donne
+     * Met à jour le chemin du fichier
+     * @param path Nouveau chemin du fichier
+     * @throws FileNotFoundException Le fichier n'a pas été trouvé a l'emplacement donné
      */
     public void setPath(String path) throws FileNotFoundException {
         File file = new File(path);
         if (file.exists()) {
-            this.path = path;
-            this.file = file;
+            this._path = path;
+            this._file = file;
         }
         else {
             throw new FileNotFoundException("Le fichier n'existe pas");
@@ -39,21 +39,21 @@ public class FileReader {
     }
 
     /**
-     * retourne le chemin du fichier
-     * @return chemin du fichier
+     * Retourne le chemin du fichier
+     * @return Chemin du fichier
      */
     public String getPath() {
-        return path;
+        return _path;
     }
 
     /**
-     * retourne le flux de lecture du fichier
-     * @return flux de lecture
-     * @throws FileNotFoundException le fichier n'existe pas
+     * Retourne le flux de lecture du fichier
+     * @return Flux de lecture
+     * @throws FileNotFoundException Le fichier n'existe pas
      */
     public FileInputStream getFileInputStream() throws FileNotFoundException {
         try {
-            return new FileInputStream(file);
+            return new FileInputStream(_file);
         }
         catch (FileNotFoundException e)
         {

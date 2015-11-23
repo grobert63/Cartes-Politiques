@@ -1,10 +1,11 @@
 package exception;
 
 /**
- * Created by Guillaume Robert on 13/11/2015.
+ * erreur lancee si la carte n'est pas dans un format lisble par le logiciel
  */
 public class InvalidMapException extends Exception {
     public InvalidMapException() {
+        super();
     }
 
     public InvalidMapException(String message, Throwable cause) {

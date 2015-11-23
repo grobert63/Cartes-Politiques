@@ -1,5 +1,9 @@
 package Entities;
 
+import Loader.PolygonInfo;
+import javafx.scene.shape.Polygon;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
+
 import java.util.HashMap;
 
 /**
@@ -11,15 +15,53 @@ public class Region {
     private String _defaultField = null;
     private double _centerX;
     private double _centerY;
+    private Polygon _border;
 
     /**
      * Construit une région en précisant son centre de gravité
      * @param centerX Position en X du centre de gravité de la région
      * @param centerY Position en Y du centre de gravité de la région
+     * @param border Polygone JavaFX representant les frontières de la région
      */
-    public Region(double centerX, double centerY) {
+    public Region(double centerX, double centerY, Polygon border) {
         this._centerX = centerX;
         this._centerY = centerY;
+        this._border = border;
+    }
+
+    /**
+     * Construit une région à partir de ses frontières
+     * @param border Polygone JavaFX representant les frontières de la région
+     */
+    public Region(Polygon border) {
+        setBorder(border);
+    }
+
+    /**
+     * Retourne le Polygone JavaFX des frontières de la région
+     * @return Polygone des frontières
+     */
+    public Polygon getBorder() {
+        return _border;
+    }
+
+    /**
+     * Modifie la frontière d'une région
+     * @param border Polygone JavaFX contenant les nouvelles frontières
+     */
+    public void setBorder(Polygon border) {
+        if (border != null)
+        {
+            PointData centreDeMasse = new PolygonInfo(border).getCentreDeMasse();
+            this._centerX = centreDeMasse.getX();
+            this._centerY = centreDeMasse.getY();
+        }
+        else
+        {
+            this._centerX = 0;
+            this._centerY = 0;
+        }
+        this._border = border;
     }
 
     /**
