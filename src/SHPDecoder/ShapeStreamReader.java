@@ -8,7 +8,7 @@ import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileExcep
 import org.nocrala.tools.gis.data.esri.shapefile.shape.AbstractShape;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.ShapeType;
-import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.PolygonShape;
+import org.nocrala.tools.gis.data.esri.shapefile.shape.shapes.AbstractPolyShape;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -85,7 +85,7 @@ public class ShapeStreamReader {
         if (reader.getHeader().getBoxMaxZ() != 0 || reader.getHeader().getBoxMinZ() != 0 || reader.getHeader().getBoxMaxM() != 0 || reader.getHeader().getBoxMinM() != 0) {
             throw new InvalidMapException("Seules les cartes 2D sont gérées");
         }
-        if (reader.getHeader().getShapeType() != ShapeType.POLYGON){
+        if (reader.getHeader().getShapeType() != ShapeType.POLYGON && reader.getHeader().getShapeType() != ShapeType.POLYGON_Z && reader.getHeader().getShapeType() != ShapeType.POLYGON_M){
             throw new InvalidMapException("Seuls les polygones sont gérés pour les régions");
         }
         return true;
@@ -172,7 +172,7 @@ public class ShapeStreamReader {
         List<Polygon> polygons = new ArrayList<>();
         if (shape != null)
         {
-            PolygonShape polygonShape = (PolygonShape) shape;
+            AbstractPolyShape polygonShape = (AbstractPolyShape) shape;
             for (int i = 0; i < polygonShape.getNumberOfParts(); i++) {
                 polygons.add(addPointDataArrayToPolygon(new Polygon(),polygonShape.getPointsOfPart(i)));
             }

@@ -48,7 +48,7 @@ public class PolyCanvas extends Canvas {
                 _gc.strokePolygon(x,y,size/2);
             }
 
-            _gc.fillText(region.getName(),region.getCenterX() * ratio, canvasHeight-region.getCenterY() * ratio);
+            _gc.fillText(region.getName(),region.getMainCenterX() * ratio, canvasHeight-region.getMainCenterY() * ratio);
         }
 
     }

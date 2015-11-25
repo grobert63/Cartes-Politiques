@@ -12,14 +12,33 @@ public class Map {
 
     /**
      * Constructeur complet
-     * @param _width Largeur totale de la carte (X)
-     * @param _height Longueur totale de la carte (Y)
+     * @param width Largeur totale de la carte (X)
+     * @param height Longueur totale de la carte (Y)
      * @param _regions Liste des régions de la carte
      */
-    public Map(double _width, double _height, List<Region> _regions) {
-        this._width = _width;
-        this._height = _height;
+    public Map(double width, double height, List<Region> _regions) {
+        this._width = width;
+        this._height = height;
         this._regions = _regions;
+        for (Region region : _regions) {
+            region.setMainCenter(1, height, width);
+        }
+    }
+
+    /**
+     * Constructeur complet
+     * @param width Largeur totale de la carte (X)
+     * @param height Longueur totale de la carte (Y)
+     * @param _regions Liste des régions de la carte
+     * @param acceptedPercentForPolygonsOfSameRegion Le pourcentage de distance relative à la taille de la carte pour considerer deux polygones comme se touchant
+     */
+    public Map(double width, double height, List<Region> _regions, double acceptedPercentForPolygonsOfSameRegion) {
+        this._width = width;
+        this._height = height;
+        this._regions = _regions;
+        for (Region region : _regions) {
+            region.setMainCenter(acceptedPercentForPolygonsOfSameRegion, height, width);
+        }
     }
 
     /**

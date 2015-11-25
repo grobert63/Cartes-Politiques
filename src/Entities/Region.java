@@ -1,6 +1,7 @@
 package Entities;
 
 import Loader.PolygonInfo;
+import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
 import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
 
@@ -17,6 +18,25 @@ public class Region {
     private String _defaultField = null;
     private double _centerX;
     private double _centerY;
+    private double _mainCenterX;
+    private double _mainCenterY;
+
+    /**
+     * Retourne la position en X du centre de gravité principal
+     * @return Position en X du centre de gravité principal
+     */
+    public double getMainCenterX() {
+        return _mainCenterX;
+    }
+
+    /**
+     * Retourne la position en Y du centre de gravité principal
+     * @return Position en Y du centre de gravité principal
+     */
+    public double getMainCenterY() {
+        return _mainCenterY;
+    }
+
     private List<Polygon> _borders = new ArrayList<>();
 
     /**
@@ -64,6 +84,18 @@ public class Region {
             this._centerY = 0;
         }
         this._borders = borders;
+    }
+
+    /**
+     * Renseigne le centre de gravité principal de la région
+     * @param acceptedPercent Le pourcentage de distance relative à la taille de la carte pour considerer deux polygones comme se touchant
+     * @param mapHeight Hauteur de la carte
+     * @param mapWidth Largeur de la carte
+     */
+    public void setMainCenter(double acceptedPercent, double mapHeight, double mapWidth) {
+        Point2D mainCenter = new PolygonInfo(_borders).getCentreDeMassePrincipal(acceptedPercent, mapHeight, mapWidth);
+        this._mainCenterX = mainCenter.getX();
+        this._mainCenterY = mainCenter.getY();
     }
 
     /**
@@ -137,7 +169,8 @@ public class Region {
      * @return Distance entre les deux centres de gravité
      */
     public double getDistanceTo(Region other){
-        return Math.sqrt(Math.pow(this.getCenterX() - other.getCenterX(), 2) + Math.pow(this.getCenterY() - other.getCenterY(), 2));
+        //return Math.sqrt(Math.pow(this.getCenterX() - other.getCenterX(), 2) + Math.pow(this.getCenterY() - other.getCenterY(), 2));
+        return Math.sqrt(Math.pow(this.getMainCenterX() - other.getMainCenterX(), 2) + Math.pow(this.getMainCenterY() - other.getMainCenterY(), 2));
     }
 
     public double getAngleTo(Region other){

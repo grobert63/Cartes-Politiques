@@ -62,13 +62,30 @@ public class MapLoader {
      * Charge une liste de régions à partir des données du/des fichier(s)
      * @return Structure carte contenant toutes les régions et les dimensions de la carte
      * @throws IOException
-     * @throws InvalidMapException
      * @throws InvalidShapeFileException
      * @throws JDBFException
      */
-    public Map load() throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
+    public Map load() throws JDBFException, IOException, InvalidShapeFileException {
+        List<Region> list = loadRegions();
+        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), list);
+    }
+
+    /**
+     * Charge une liste de régions à partir des données du/des fichier(s)
+     * @param acceptedPercentForPolygonsOfSameRegion Le pourcentage de distance relative à la taille de la carte pour considerer deux polygones comme se touchant
+     * @return Structure carte contenant toutes les régions et les dimensions de la carte
+     * @throws IOException
+     * @throws InvalidShapeFileException
+     * @throws JDBFException
+     */
+    public Map load(double acceptedPercentForPolygonsOfSameRegion) throws IOException, InvalidShapeFileException, JDBFException {
+        List<Region> list = loadRegions();
+        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), list, acceptedPercentForPolygonsOfSameRegion);
+    }
+
+    private List<Region> loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
         List<Region> list = new ArrayList<>();
-        
+
         List<Polygon> polygons = shapeStreamReader.getNextShape();
         while (polygons.size() > 0){
             Region region = new Region(polygons);
@@ -76,7 +93,7 @@ public class MapLoader {
             list.add(region);
             polygons = shapeStreamReader.getNextShape();
         }
-        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), list);
+        return list;
     }
 
     private void getdbfInfos(Region region) throws JDBFException {
