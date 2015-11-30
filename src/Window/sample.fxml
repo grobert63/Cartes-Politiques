@@ -49,24 +49,24 @@
                     </rowConstraints>
                     <BorderPane>
                         <center>
-                            <Canvas BorderPane.alignment="CENTER"/>
+                            <Pane BorderPane.alignment="CENTER" fx:id="PaneAffichageCarte"/>
                         </center>
                         <bottom>
-                            <ScrollBar BorderPane.alignment="CENTER">
+                            <ScrollBar BorderPane.alignment="CENTER" fx:id="ScrollHCarte">
                                 <padding>
                                     <Insets left="15.0" right="10.0"/>
                                 </padding>
                             </ScrollBar>
                         </bottom>
                         <right>
-                            <ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER">
+                            <ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER" fx:id="ScrollVCarte">
                                 <BorderPane.margin>
                                     <Insets/>
                                 </BorderPane.margin>
                             </ScrollBar>
                         </right>
                         <top>
-                            <Slider maxWidth="100" BorderPane.alignment="CENTER_RIGHT">
+                            <Slider maxWidth="100" BorderPane.alignment="CENTER_RIGHT" fx:id="SliderCarte">
                                 <padding>
                                     <Insets right="10.0"/>
                                 </padding>
@@ -75,7 +75,7 @@
                     </BorderPane>
                     <BorderPane GridPane.columnIndex="1">
                         <center>
-                            <Pane BorderPane.alignment="CENTER" fx:id="PaneAffichage"/>
+                            <Pane BorderPane.alignment="CENTER" fx:id="PaneAffichageResult"/>
                         </center>
                         <bottom>
                             <ScrollBar BorderPane.alignment="CENTER" fx:id="ScrollHResult">
