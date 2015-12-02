@@ -4,8 +4,10 @@ import Entities.HexGrid;
 import Entities.Map;
 import Entities.Region;
 import Loader.MapLoader;
+import Loader.PolygonInfo;
 import Resolver.IResolver;
 import Resolver.SimpleAggregerResolver;
+import java.util.List;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -40,10 +42,10 @@ public class Main extends Application {
     public static void chargement() throws Exception {   
         // Chargement des régions en mémoire
         MapLoader ml = new MapLoader(
-                //"test/FRA_adm1.shp",
-                //"test/FRA_adm1.dbf"
-                "test/world.shp",
-                "test/world.dbf"
+                "test/FRA_adm1.shp",
+                "test/FRA_adm1.dbf"
+                //"test/world.shp",
+                //"test/world.dbf"
                 //"test/usstate500k.shp",
                 //"test/usstate500k.dbf"
                 //"test/usstate20m.shp",
@@ -54,20 +56,39 @@ public class Main extends Application {
         
         for(Region r : map.getRegions()){
             // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
-            //r.setDefaultField("NAME_1");
-            r.setDefaultField("name");
+            r.setDefaultField("NAME_1");
+            //r.setDefaultField("name");
             //r.setDefaultField("NAME");
-            afficherRegion(r);
+            //afficherRegion(r);
         }
         
-        // Placement aléatoire des régions sur la grille hexagonale pour les tests.
+        //debug(map.getRegions());
         IResolver algo = new SimpleAggregerResolver();
         grid = algo.resolve(map.getRegions());
     }
     
     public static void afficherRegion(Region r){
         System.out.println("<"+r.getName()+">");
-        System.out.println("\tCentreX : "+r.getCenterX());
-        System.out.println("\tCentreY : "+r.getCenterY());
+        System.out.println("\tCentreX : "+r.getCenter().x);
+        System.out.println("\tCentreY : "+r.getCenter().y);
+    }
+    
+    public static void debug(List<Region> l){
+        int nbRegions = map.getRegions().size();
+        Region a,b;
+        for(int i=0;i<nbRegions;i++){
+            a = map.getRegions().get(i);
+            for(int j=0;j<nbRegions;j++){
+                b =  map.getRegions().get(j);
+                afficherFrontiere(a,b,PolygonInfo.ratioDeFrontierePartagee(a.getMainBorder(), b.getMainBorder()));
+            }
+        }
+    }
+    
+    public static void afficherFrontiere(Region a, Region b, double pourcentage){
+        System.out.println("<"+a.getName()+">");
+        System.out.println("<"+b.getName()+">");
+        System.out.println("\tPourcentage : "+(int)(pourcentage*100)+" %");
+        System.out.println();
     }
 }

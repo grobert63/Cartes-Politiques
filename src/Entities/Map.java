@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Classe permettant la gestion de toutes les données relatives à la carte non traitée
+ * /!\ Nom de classe à modifier pour ne pas confondre avec la classe java.util.Map; /!\
  */
 public class Map {
     private final double _width;

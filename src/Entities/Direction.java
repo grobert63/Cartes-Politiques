@@ -52,4 +52,8 @@ public class Direction{
         angle = angle % 360;
         return (int)(angle / 60.0);
     }
+    
+    public static double getDifferenceAngleDirection(double angle, int direction) throws Exception{
+        return Math.abs(angle - getAngle(direction));
+    }
 }

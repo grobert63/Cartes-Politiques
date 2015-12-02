@@ -33,7 +33,10 @@ public class HexCanvas extends Canvas{
         }
 
         GraphicsContext gc = super.getGraphicsContext2D();
+        
         int rgb = 0;
+        int increment = (255/grid.getNbRegions());
+        if(increment == 0) increment = 1;
         
         for(int row = 0; row < grid.getHeight(); row++)
         {
@@ -47,7 +50,7 @@ public class HexCanvas extends Canvas{
                     gc.fillText(grid.getRegion(col, row).getName(),getTextPositionX(row, col), getTextPositionY(row));
 
                     //gc.strokePolygon(getHexCoordAbsoluteX(row,col), getHexCoordAbsoluteY(row), 6);
-                    rgb = (rgb + 8) % 256;
+                    rgb = (rgb + increment) % 256;
                 }
             }
         }

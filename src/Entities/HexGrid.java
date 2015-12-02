@@ -8,6 +8,7 @@ public class HexGrid {
     private final int width;
     private final int height;
     private Region[][] array;
+    private int nbRegions = 0;
 
     /**
      * Construit la grille avec sa hauteur et sa largeur.
@@ -52,5 +53,10 @@ public class HexGrid {
      */
     public void addRegion(int x, int y, Region r){
         array[x][y] = r;
+        nbRegions++;
+    }
+    
+    public int getNbRegions(){
+        return nbRegions;
     }
 }
