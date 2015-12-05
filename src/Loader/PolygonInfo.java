@@ -12,19 +12,22 @@ import java.util.stream.Collectors;
  * @author Théophile
  */
 public class PolygonInfo {
-    private final List<Polygon> _polygons;
+    //private final List<Polygon> _polygons;
 
     /**
      * @param polygons Liste de Polygones dont on souhaite obtenir des informations
      */
+    /*
     public PolygonInfo(List<Polygon> polygons) {
         this._polygons = polygons;
     }
+    */
 
     /**
      * Calcule et renvoie l'aire totale des polygones
      * @return Aire des polygones
      */
+    /*
     public double getAire(){
         double somme = 0;
 
@@ -58,11 +61,12 @@ public class PolygonInfo {
         }
         return somme * 0.5;
     }
-    
+    */
     /**
      * Calcule et retourne le centre de gravité/masse des polygones.
      * @return Centre de gravité des polygones
      */
+    /*
     public Point getCentreDeMasse(){
         // à optimiser
         List<Point2D> centres = _polygons.stream().map(this::getCentreDeMassePoly).collect(Collectors.toList());
@@ -75,6 +79,7 @@ public class PolygonInfo {
         }
         return new Point(centre.getX()/div,centre.getY()/div);
     }
+    */
 
     /**
      * Calcule et retourne le centre de masse principal d'une région en excluant les polygones trop éloignés
@@ -83,6 +88,7 @@ public class PolygonInfo {
      * @param mapWidth Largeur de la carte
      * @return Centre de gravité principal des polygones
      */
+    /*
     public Point2D getCentreDeMassePrincipal(double acceptedPercent, double mapHeight, double mapWidth) {
         List<Map<Integer, Point2D>>  listCentres = new ArrayList<>();
         listCentres.add(new HashMap<>());
@@ -229,4 +235,5 @@ public class PolygonInfo {
         
         return nbPointFrontiereCommune/(double)nbPointBorderA;
     }
+    */
 }

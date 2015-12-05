@@ -1,4 +1,4 @@
-package SHPDecoder;
+package Loader;
 
 import exception.InvalidMapException;
 import javafx.scene.shape.Polygon;

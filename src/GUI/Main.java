@@ -52,7 +52,7 @@ public class Main extends Application {
                 //"test/usstate20m.dbf"
         );
         
-        map = ml.load(0.5);
+        map = ml.load();
         
         for(Region r : map.getRegions()){
             // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
@@ -80,7 +80,7 @@ public class Main extends Application {
             a = map.getRegions().get(i);
             for(int j=0;j<nbRegions;j++){
                 b =  map.getRegions().get(j);
-                afficherFrontiere(a,b,PolygonInfo.ratioDeFrontierePartagee(a.getMainBorder(), b.getMainBorder()));
+                afficherFrontiere(a,b,a.pourcentageDeFrontiereCommune(b));
             }
         }
     }

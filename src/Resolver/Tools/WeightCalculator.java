@@ -6,6 +6,7 @@
 package Resolver.Tools;
 
 import Entities.Direction;
+import Entities.Geometry;
 import Entities.Region;
 import Loader.PolygonInfo;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class WeightCalculator {
             for(int j=0;j<nbRegions;j++){
                 if(i!=j){
                     b =  regions.get(j);
-                    ratio = PolygonInfo.ratioDeFrontierePartagee(a.getMainBorder(), b.getMainBorder());
+                    ratio = a.pourcentageDeFrontiereCommune(b);
                     frontieres.put(b,ratio);
                     ratioTotal += ratio;
                 }

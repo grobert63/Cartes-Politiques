@@ -21,52 +21,48 @@ public class SimpleAggregerResolver implements IResolver{
     List<Region> isolated = new ArrayList<>();
     
     int minX=0, maxX=0, minY=0, maxY=0;
-
-    private boolean isAllAggregated(){
-        return isolated.isEmpty();
-    }
-    
-    private void aggregate(){        
+ 
+    private void firstAggregate() {
         double distance, min_dist = -1.0;
         Region nearest = null;
-        if(aggreger == null){
-            Region source = null;
-            for(int i=0 ; i < isolated.size() ; i++){
-                for(int j = i+1; j<isolated.size();j++){
-                    distance = isolated.get(i).getDistanceTo(isolated.get(j));
-                    if(min_dist == -1.0 || distance < min_dist){
-                        source = isolated.get(i);
-                        nearest = isolated.get(j);
+        Region source = null;
+        for (int i = 0; i < isolated.size(); i++) {
+            for (int j = i + 1; j < isolated.size(); j++) {
+                distance = isolated.get(i).getDistanceTo(isolated.get(j));
+                if (min_dist == -1.0 || distance < min_dist) {
+                    source = isolated.get(i);
+                    nearest = isolated.get(j);
+                    min_dist = distance;
+                }
+            }
+        }
+        aggreger = new Aggreger(source);
+        aggreger.add(nearest, source, getDirection(source, nearest));
+        isolated.remove(source);
+        isolated.remove(nearest);
+    }
+
+    private void aggregate() {
+        double distance, min_dist = -1.0;
+        Region nearest = null;
+        Region source = null;
+        for (Region r : aggreger.getAggregatedRegion()) {
+            if (aggreger.hasPlaceAround(r)) {
+                for (Region anIsolated : isolated) {
+                    distance = r.getDistanceTo(anIsolated);
+                    if (min_dist == -1.0 || distance < min_dist) {
+                        source = r;
+                        nearest = anIsolated;
                         min_dist = distance;
                     }
                 }
             }
-            aggreger = new Aggreger(source);
-            aggreger.add(nearest, source, getDirection(source, nearest));
-            isolated.remove(source);
-            isolated.remove(nearest);
-
         }
-        else{
-            Region source = null;
-            for (Region r : aggreger.getAggregatedRegion()){
-                if(aggreger.hasPlaceAround(r)){
-                    for (Region anIsolated : isolated) {
-                        distance = r.getDistanceTo(anIsolated);
-                        if (min_dist == -1.0 || distance < min_dist) {
-                            source = r;
-                            nearest = anIsolated;
-                            min_dist = distance;
-                        }
-                    }
-                }
-            }
-            //System.out.println(map.get(source).getName() + " " + source+ " -> "+nearest.getName());
-            aggreger.add(nearest, source, getDirection(source, nearest));
-            isolated.remove(nearest);
-        }
+        //System.out.println(map.get(source).getName() + " " + source+ " -> "+nearest.getName());
+        aggreger.add(nearest, source, getDirection(source, nearest));
+        isolated.remove(nearest);
     }
-    
+
     private int getDirection(Region source, Region nearest){
         double angle = source.getAngleTo(nearest);
         int direction = Direction.getDirectionFromAngle(angle);
@@ -80,7 +76,8 @@ public class SimpleAggregerResolver implements IResolver{
     public HexGrid resolve(List<Region> list){
         isolated.addAll(list.stream().collect(Collectors.toList()));
         
-        while(!isAllAggregated()){
+        firstAggregate();
+        while(!isolated.isEmpty()){
             aggregate();
         }
         return aggreger.toGrid();

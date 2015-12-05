@@ -34,7 +34,7 @@ public class PolyCanvas extends Canvas {
         _gc.setTextAlign(TextAlignment.CENTER);
         _gc.setTextBaseline(VPos.CENTER);
         for (Region region:map.getRegions()) {
-            for (Polygon polygon : region.getBorders()) {
+            for (Polygon polygon : region.getBoundaries()) {
                 int size = polygon.getPoints().size();
                 double x[] = new double[size / 2], y[] = new double[size / 2];
                 for (int i = 0; i < size; i++) {
@@ -48,7 +48,7 @@ public class PolyCanvas extends Canvas {
                 _gc.strokePolygon(x,y,size/2);
             }
 
-            _gc.fillText(region.getName(),region.getMainCenter().x * ratio, canvasHeight-region.getMainCenter().y * ratio);
+            _gc.fillText(region.getName(),region.getCenter().x * ratio, canvasHeight-region.getCenter().y * ratio);
         }
 
     }
