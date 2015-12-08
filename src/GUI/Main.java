@@ -1,18 +1,22 @@
 package GUI;
 
+import DataManager.Load;
 import Entities.HexGrid;
 import Entities.Map;
 import Entities.Region;
 import Loader.MapLoader;
-import Loader.PolygonInfo;
+import LoggerUtils.LoggerManager;
 import Resolver.IResolver;
 import Resolver.SimpleAggregerResolver;
-import java.util.List;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
 
 
 public class Main extends Application {
@@ -26,6 +30,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        LoggerManager.getInstance().getLogger().log(Level.INFO,"Starting...");
         HBox root = new HBox();
         // Création et affichage de la grille hexagonale
         Canvas hexgrid = new HexCanvas(800, 700, grid);
@@ -37,6 +42,11 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.setTitle("Canvas Test");
         stage.show();
+        try {
+            Load.loadMultiple(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public static void chargement() throws Exception {   

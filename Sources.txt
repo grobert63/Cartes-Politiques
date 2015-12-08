@@ -8,3 +8,4 @@ https://fr.wikipedia.org/wiki/Aire_et_centre_de_masse_d%27un_polygone => Centre 
 http://www.quarkphysics.ca/scripsi/hexgrid/ => info sur l'implémentation de la grille hexagonale
 http://www.redblobgames.com/grids/hexagons/ => info sur l'implémentation de la grille hexagonale
 https://code.google.com/p/jdbf/ => bibliothèque de lecture de fichier .dbf
+https://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm => chargement et sauvegarde en JavaFX
