@@ -1,10 +1,6 @@
 package Entities;
 
-import Loader.PolygonInfo;
-import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
-import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,86 +12,26 @@ import java.util.List;
 public class Region {
     private HashMap<String,String> data = new HashMap<>();
     private String _defaultField = null;
-    private double _centerX;
-    private double _centerY;
-    private double _mainCenterX;
-    private double _mainCenterY;
-
-    /**
-     * Retourne la position en X du centre de gravité principal
-     * @return Position en X du centre de gravité principal
-     */
-    public double getMainCenterX() {
-        return _mainCenterX;
-    }
-
-    /**
-     * Retourne la position en Y du centre de gravité principal
-     * @return Position en Y du centre de gravité principal
-     */
-    public double getMainCenterY() {
-        return _mainCenterY;
-    }
-
-    private List<Polygon> _borders = new ArrayList<>();
-
-    /**
-     * Construit une région en précisant son centre de gravité
-     * @param centerX Position en X du centre de gravité de la région
-     * @param centerY Position en Y du centre de gravité de la région
-     * @param borders Liste de Polygones JavaFX representant les frontières de la région
-     */
-    public Region(double centerX, double centerY, List<Polygon> borders) {
-        this._centerX = centerX;
-        this._centerY = centerY;
-        this._borders = borders;
-    }
-
+    private Point _center;
+    private List<Polygon> _boundaries = new ArrayList<>();
+    private Polygon _mainPolygon;
+    
     /**
      * Construit une région à partir de ses frontières
-     * @param borders Liste de Polygones JavaFX representant les frontières de la région
+     * @param boundaries Liste de Polygones JavaFX representant les frontières de la région
      */
-    public Region(List<Polygon> borders) {
-        setBorders(borders);
+    public Region(List<Polygon> boundaries) {
+        _boundaries = boundaries;
+        _mainPolygon = Geometry.getMainPolygon(_boundaries);
+        _center = Geometry.getCentreDeMasse(_mainPolygon);
     }
 
-    /**
-     * Retourne le Polygone JavaFX des frontières de la région
-     * @return Polygone des frontières
-     */
-    public List<Polygon> getBorders() {
-        return _borders;
+    public Point getCenter(){
+        return _center;
     }
 
-    /**
-     * Modifie la frontière d'une région
-     * @param borders Polygone JavaFX contenant les nouvelles frontières
-     */
-    public void setBorders(List<Polygon> borders) {
-        if (borders != null)
-        {
-            PointData centreDeMasse = new PolygonInfo(borders).getCentreDeMasse();
-            this._centerX = centreDeMasse.getX();
-            this._centerY = centreDeMasse.getY();
-        }
-        else
-        {
-            this._centerX = 0;
-            this._centerY = 0;
-        }
-        this._borders = borders;
-    }
-
-    /**
-     * Renseigne le centre de gravité principal de la région
-     * @param acceptedPercent Le pourcentage de distance relative à la taille de la carte pour considerer deux polygones comme se touchant
-     * @param mapHeight Hauteur de la carte
-     * @param mapWidth Largeur de la carte
-     */
-    public void setMainCenter(double acceptedPercent, double mapHeight, double mapWidth) {
-        Point2D mainCenter = new PolygonInfo(_borders).getCentreDeMassePrincipal(acceptedPercent, mapHeight, mapWidth);
-        this._mainCenterX = mainCenter.getX();
-        this._mainCenterY = mainCenter.getY();
+    public List<Polygon> getBoundaries() {
+        return _boundaries;
     }
 
     /**
@@ -137,19 +73,6 @@ public class Region {
         }
     }
 
-    /**
-     * @return La position en X du centre de gravité de la région
-     */
-    public double getCenterX() {
-        return _centerX;
-    }
-
-    /**
-     * @return La position en Y du centre de gravité de la région
-     */
-    public double getCenterY() {
-        return _centerY;
-    }
     
     /**
      * Indique le nom de la région, soit la valeur lié au champ par défaut.
@@ -169,13 +92,20 @@ public class Region {
      * @return Distance entre les deux centres de gravité
      */
     public double getDistanceTo(Region other){
-        //return Math.sqrt(Math.pow(this.getCenterX() - other.getCenterX(), 2) + Math.pow(this.getCenterY() - other.getCenterY(), 2));
-        return Math.sqrt(Math.pow(this.getMainCenterX() - other.getMainCenterX(), 2) + Math.pow(this.getMainCenterY() - other.getMainCenterY(), 2));
+        return Math.sqrt(Math.pow(this.getCenter().x - other.getCenter().x, 2) + Math.pow(this.getCenter().y - other.getCenter().y, 2));
     }
 
     public double getAngleTo(Region other){
-        double vecteurX = other.getCenterX() - this.getCenterX();
-        double vecteurY = other.getCenterY() - this.getCenterY();
+        double vecteurX = other.getCenter().x - this.getCenter().x;
+        double vecteurY = other.getCenter().y - this.getCenter().y;
         return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
+    }
+    
+    public Polygon getMainPolygon(){
+        return _mainPolygon;
+    }
+    
+    public double pourcentageDeFrontiereCommune(Region other){
+        return Geometry.ratioCommonBoudaries(this.getMainPolygon(), other.getMainPolygon());
     }
 }

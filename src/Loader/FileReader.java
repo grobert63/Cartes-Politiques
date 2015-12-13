@@ -1,4 +1,4 @@
-package SHPDecoder;
+package Loader;
 
 import java.io.File;
 import java.io.FileInputStream;

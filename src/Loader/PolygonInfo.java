@@ -1,8 +1,8 @@
 package Loader;
 
+import Entities.Point;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
-import org.nocrala.tools.gis.data.esri.shapefile.shape.PointData;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,19 +12,22 @@ import java.util.stream.Collectors;
  * @author Théophile
  */
 public class PolygonInfo {
-    private final List<Polygon> _polygons;
+    //private final List<Polygon> _polygons;
 
     /**
      * @param polygons Liste de Polygones dont on souhaite obtenir des informations
      */
+    /*
     public PolygonInfo(List<Polygon> polygons) {
         this._polygons = polygons;
     }
+    */
 
     /**
      * Calcule et renvoie l'aire totale des polygones
      * @return Aire des polygones
      */
+    /*
     public double getAire(){
         double somme = 0;
 
@@ -58,12 +61,13 @@ public class PolygonInfo {
         }
         return somme * 0.5;
     }
-    
+    */
     /**
      * Calcule et retourne le centre de gravité/masse des polygones.
      * @return Centre de gravité des polygones
      */
-    public PointData getCentreDeMasse(){
+    /*
+    public Point getCentreDeMasse(){
         // à optimiser
         List<Point2D> centres = _polygons.stream().map(this::getCentreDeMassePoly).collect(Collectors.toList());
         int i = 0;
@@ -73,8 +77,9 @@ public class PolygonInfo {
             centre = new Point2D(centres.get(i).getX() * getAirePoly(_polygons.get(i)) + centre.getX(),centres.get(i).getY() * getAirePoly(_polygons.get(i)) + centre.getY());
             div += getAirePoly(_polygons.get(i));
         }
-        return new PointData(centre.getX()/div,centre.getY()/div);
+        return new Point(centre.getX()/div,centre.getY()/div);
     }
+    */
 
     /**
      * Calcule et retourne le centre de masse principal d'une région en excluant les polygones trop éloignés
@@ -83,6 +88,7 @@ public class PolygonInfo {
      * @param mapWidth Largeur de la carte
      * @return Centre de gravité principal des polygones
      */
+    /*
     public Point2D getCentreDeMassePrincipal(double acceptedPercent, double mapHeight, double mapWidth) {
         List<Map<Integer, Point2D>>  listCentres = new ArrayList<>();
         listCentres.add(new HashMap<>());
@@ -194,4 +200,40 @@ public class PolygonInfo {
     private static double distanceBetweenPoints(Point2D pointA, Point2D pointB) {
         return Math.sqrt((Math.pow(pointB.getX() - pointA.getX(),2) + Math.pow(pointB.getY() - pointA.getY(),2)));
     }
+    
+    public Polygon getMainPolygon(){
+        Polygon larger = null;
+        int maxPoints = -1;
+        for(Polygon p : _polygons){
+            int nbPoints = p.getPoints().size();
+            if(nbPoints > maxPoints){
+                maxPoints = nbPoints;
+                larger = p;
+            }
+        }
+        return larger;
+    }
+        
+    public static double ratioDeFrontierePartagee(Polygon borderA, Polygon borderB){
+        List<Point> frontiereB = new ArrayList<>();
+        int nbPointFrontiereCommune = 0;
+        int nbPointBorderA = 0;
+        
+        Iterator<Double> iteratorB = borderB.getPoints().iterator();
+        while (iteratorB.hasNext()) {
+            frontiereB.add(new Point(iteratorB.next(),iteratorB.next()));
+        }
+        
+        Iterator<Double> iteratorA = borderA.getPoints().iterator();
+        while (iteratorA.hasNext()) {
+            Point pt = new Point(iteratorA.next(),iteratorA.next());
+            if(frontiereB.contains(pt)){
+                nbPointFrontiereCommune++;
+            }
+            nbPointBorderA++;
+        }
+        
+        return nbPointFrontiereCommune/(double)nbPointBorderA;
+    }
+    */
 }

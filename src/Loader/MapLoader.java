@@ -2,8 +2,6 @@ package Loader;
 
 import Entities.Map;
 import Entities.Region;
-import SHPDecoder.FileReader;
-import SHPDecoder.ShapeStreamReader;
 import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
 import exception.InvalidMapException;
@@ -68,19 +66,6 @@ public class MapLoader {
     public Map load() throws JDBFException, IOException, InvalidShapeFileException {
         List<Region> list = loadRegions();
         return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), list);
-    }
-
-    /**
-     * Charge une liste de régions à partir des données du/des fichier(s)
-     * @param acceptedPercentForPolygonsOfSameRegion Le pourcentage de distance relative à la taille de la carte pour considerer deux polygones comme se touchant
-     * @return Structure carte contenant toutes les régions et les dimensions de la carte
-     * @throws IOException
-     * @throws InvalidShapeFileException
-     * @throws JDBFException
-     */
-    public Map load(double acceptedPercentForPolygonsOfSameRegion) throws IOException, InvalidShapeFileException, JDBFException {
-        List<Region> list = loadRegions();
-        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), list, acceptedPercentForPolygonsOfSameRegion);
     }
 
     private List<Region> loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
