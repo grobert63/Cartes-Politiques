@@ -4,10 +4,7 @@ import GUI.*;
 import GUI.Main;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 public class Controller {
@@ -37,14 +34,16 @@ public class Controller {
     Slider SliderCarte;
 
     @FXML
+    CheckBox NomPaysCarte;
+    @FXML
     void initialize()
     {
         SliderResult.setMin(1);
-        SliderResult.setMax(2);
+        SliderResult.setMax(10);
         SliderResult.setBlockIncrement(0.01);
 
         SliderCarte.setMin(1);
-        SliderCarte.setMax(2);
+        SliderCarte.setMax(10);
         SliderCarte.setBlockIncrement(0.01);
 
         try {
@@ -52,14 +51,15 @@ public class Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        PolyCanvas canvasCarte = new PolyCanvas(1000,700, Main.map);
+        PolyCanvas canvasCarte = new PolyCanvas( Main.map);
         HexCanvas canvas = new HexCanvas(1000, 700,GUI.Main.grid);
 
         PaneAffichageCarte.getChildren().add(canvasCarte);
         PaneAffichageResult.getChildren().add(canvas);
 
-        canvas.widthProperty().bind(PaneAffichageResult.widthProperty());
+
         canvas.heightProperty().bind(PaneAffichageResult.heightProperty());
+        canvas.widthProperty().bind(PaneAffichageResult.widthProperty());
         canvasCarte.widthProperty().bind(PaneAffichageCarte.widthProperty());
         canvasCarte.heightProperty().bind(PaneAffichageCarte.heightProperty());
 
@@ -67,8 +67,10 @@ public class Controller {
         canvas.zoomProperty().bind(SliderResult.valueProperty());
 
         canvas.decalageXProperty().bind(ScrollHResult.valueProperty().multiply(-1).multiply(canvas.widthProperty().divide(ScrollHResult.maxProperty())));
-        canvasCarte.decalageXProperty().bind(ScrollHCarte.valueProperty().multiply(-1).multiply(canvas.widthProperty().divide(ScrollHCarte.maxProperty())));
-        canvas.decalageYProperty().bind(ScrollVResult.valueProperty().multiply(-1).multiply(canvas.widthProperty().divide(ScrollHResult.maxProperty())));
-        canvasCarte.decalageYProperty().bind(ScrollVCarte.valueProperty().multiply(-1).multiply(canvas.widthProperty().divide(ScrollVCarte.maxProperty())));
+        canvasCarte.decalageXProperty().bind(ScrollHCarte.valueProperty().multiply(-1).multiply(canvasCarte.widthProperty().divide(ScrollHCarte.maxProperty())));
+        canvas.decalageYProperty().bind(ScrollVResult.valueProperty().multiply(-1).multiply(canvas.heightProperty().divide(ScrollHResult.maxProperty())));
+        canvasCarte.decalageYProperty().bind(ScrollVCarte.valueProperty().multiply(-1).multiply(canvasCarte.heightProperty().divide(ScrollVCarte.maxProperty())));
+
+        canvasCarte.nomPaysProperty().bind(NomPaysCarte.selectedProperty());
     }
 }

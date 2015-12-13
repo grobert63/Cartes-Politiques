@@ -35,7 +35,7 @@ public class Main extends Application {
         // Création et affichage de la grille hexagonale
         Canvas hexgrid = new HexCanvas(800, 700, grid);
         root.getChildren().add(hexgrid);
-        Canvas polygrid = new PolyCanvas(800, 700, map);
+        Canvas polygrid = new PolyCanvas( map);
         root.getChildren().add(polygrid);
         
         Scene scene = new Scene(root);

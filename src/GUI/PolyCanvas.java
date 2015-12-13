@@ -2,10 +2,7 @@ package GUI;
 
 import Entities.Map;
 import Entities.Region;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -62,30 +59,44 @@ public class PolyCanvas extends Canvas {
         this.decalageY.set(decalageY);
     }
 
+
+    private BooleanProperty nomPays = new SimpleBooleanProperty();
+
+    public boolean getNomPays() {
+        return nomPays.get();
+    }
+
+    public BooleanProperty nomPaysProperty() {
+        return nomPays;
+    }
+
+    public void setNomPays(boolean nomPays) {
+        this.nomPays.set(nomPays);
+    }
+
     /**
      * Canvas affichant la carte avec le nom de la région. Le ratio est toujours respecté
-     * @param canvasWidth Largeur en pixels du canvas
-     * @param canvasHeight Hauteur en pixels du canvas
      * @param map Structure Map contenant la carte à afficher
      */
-    public PolyCanvas(double canvasWidth, double canvasHeight, Map map) {
-        super(canvasWidth, canvasHeight);
+    public PolyCanvas( Map map) {
+        super();
 
         this._map = map;
 
-        this._canvasWidth = canvasWidth;
-        this._canvasHeight = canvasHeight;
 
         widthProperty().addListener(evt -> draw());
         heightProperty().addListener(evt -> draw());
-
+        decalageXProperty().addListener(evt->draw());
+        decalageYProperty().addListener(evt->draw());
+        nomPaysProperty().addListener(evt->draw());
+        zoomProperty().addListener(evt->draw());
     }
     private void draw()
     {
         _canvasWidth = getWidth();
         _canvasHeight = getHeight();
         GraphicsContext gc = super.getGraphicsContext2D();
-        double ratio = resize()*getZoom();
+        double ratio = resize();
         boolean temp = false;
 
         gc.setFill(Color.WHITE);
@@ -94,21 +105,21 @@ public class PolyCanvas extends Canvas {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         for (Region region:_map.getRegions()) {
-            for (Polygon polygon : region.getBorders()) {
+            for (Polygon polygon : region.getBoundaries()) {
                 int size = polygon.getPoints().size();
                 double x[] = new double[size / 2], y[] = new double[size / 2];
                 for (int i = 0; i < size; i++) {
                     if (temp) {
-                        y[i / 2] = _canvasHeight - polygon.getPoints().get(i) * ratio + getDecalageY();
+                        y[i / 2] =(_canvasHeight- polygon.getPoints().get(i) + getDecalageY())*ratio*getZoom();
                     } else {
-                        x[i / 2] = polygon.getPoints().get(i) * ratio + getDecalageY();
+                        x[i / 2] =( polygon.getPoints().get(i)  + getDecalageX())*ratio*getZoom();
                     }
                     temp = !temp;
                 }
                 gc.strokePolygon(x,y,size/2);
             }
-
-            gc.fillText(region.getName(),region.getMainCenterX() * ratio + getDecalageX(), _canvasHeight-region.getMainCenterY() * ratio + getDecalageY());
+            if(getNomPays())
+                gc.fillText(region.getName(),(region.getCenter().x + getDecalageX())*getZoom()*ratio, ((_canvasHeight- region.getCenter().y  + getDecalageY()))*getZoom()*ratio);
         }
     }
     private double resize() {
