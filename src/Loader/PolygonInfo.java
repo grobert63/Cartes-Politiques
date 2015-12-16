@@ -1,12 +1,5 @@
 package Loader;
 
-import Entities.Point;
-import javafx.geometry.Point2D;
-import javafx.scene.shape.Polygon;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 /**
  * Décrit une classe permettant d'obtenir des informations sur les PolygonShape contenu dans le .shp
  * @author Théophile
@@ -92,6 +85,43 @@ public class PolygonInfo {
     public Point2D getCentreDeMassePrincipal(double acceptedPercent, double mapHeight, double mapWidth) {
         List<Map<Integer, Point2D>>  listCentres = new ArrayList<>();
         listCentres.add(new HashMap<>());
+        getListeCentreDeMasseParGroupeDePolygonesDansMemeZone(acceptedPercent, mapHeight, mapWidth, listCentres);
+        Map<Integer, Point2D> centres = getZoneLaPlusGrande(listCentres);
+        double div = 0;
+        Point2D centre = null;
+        for (int key : centres.keySet()) {
+            if (centre == null) {
+                centre = new Point2D(centres.get(key).getX() * getAirePoly(_polygons.get(key)),centres.get(key).getY() * getAirePoly(_polygons.get(key)));
+            }
+            else {
+                centre = new Point2D(centres.get(key).getX() * getAirePoly(_polygons.get(key)) + centre.getX(),centres.get(key).getY() * getAirePoly(_polygons.get(key)) + centre.getY());
+            }
+            div += getAirePoly(_polygons.get(key));
+        }
+        if (centre != null) {
+            return new Point2D(centre.getX()/div,centre.getY()/div);
+        }
+        return new Point2D(0,0);
+    }
+
+    private Map<Integer, Point2D> getZoneLaPlusGrande(List<Map<Integer, Point2D>> listCentres) {
+        double aire = 0,aireTemp = 0;
+        Map<Integer,Point2D> centres = new HashMap<>();
+        for(Map<Integer,Point2D> liste : listCentres) {
+            for (Integer key : liste.keySet()) {
+                aireTemp += getAirePoly(_polygons.get(key));
+            }
+            if (aireTemp > aire)
+            {
+                aire = aireTemp;
+                centres = liste;
+            }
+            aireTemp = 0;
+        }
+        return centres;
+    }
+
+    private void getListeCentreDeMasseParGroupeDePolygonesDansMemeZone(double acceptedPercent, double mapHeight, double mapWidth, List<Map<Integer, Point2D>> listCentres) {
         Polygon previous = null;
         int i = 0, j = 0;
         for (Polygon polygon : _polygons) {
@@ -111,34 +141,6 @@ public class PolygonInfo {
             i++;
             previous = polygon;
         }
-        double aire = 0,aireTemp = 0;
-        Map<Integer,Point2D> centres = new HashMap<>();
-        for(Map<Integer,Point2D> liste : listCentres) {
-            for (Integer key : liste.keySet()) {
-                aireTemp += getAirePoly(_polygons.get(key));
-            }
-            if (aireTemp > aire)
-            {
-                aire = aireTemp;
-                centres = liste;
-            }
-            aireTemp = 0;
-        }
-        double div = 0;
-        Point2D centre = null;
-        for (int key : centres.keySet()) {
-            if (centre == null) {
-                centre = new Point2D(centres.get(key).getX() * getAirePoly(_polygons.get(key)),centres.get(key).getY() * getAirePoly(_polygons.get(key)));
-            }
-            else {
-                centre = new Point2D(centres.get(key).getX() * getAirePoly(_polygons.get(key)) + centre.getX(),centres.get(key).getY() * getAirePoly(_polygons.get(key)) + centre.getY());
-            }
-            div += getAirePoly(_polygons.get(key));
-        }
-        if (centre != null) {
-            return new Point2D(centre.getX()/div,centre.getY()/div);
-        }
-        return new Point2D(0,0);
     }
 
     private Point2D getCentreDeMassePoly(Polygon polygon) {

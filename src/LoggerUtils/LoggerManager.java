@@ -1,10 +1,8 @@
 package LoggerUtils;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 /**
@@ -16,24 +14,30 @@ public class LoggerManager {
 
     private static Logger _logger;
 
-    public static LoggerManager getInstance() {
-        return ourInstance;
-    }
-
     private LoggerManager() {
         _logger = Logger.getLogger(LoggerManager.class.getName());
         long currentDateTime = System.currentTimeMillis();
         Date currentDate = new Date(currentDateTime);
         DateFormat df = new SimpleDateFormat("ddMMyyyy");
-        String path = "%t/Cartes-Politiques" + df.format(currentDate) + "%u.log";
+        //String path = "%t/Cartes-Politiques" + df.format(currentDate) + "-%u.log";
+        String path = "df.format(currentDate) + \"-%u.log";
 
-        try {
+        /*if (!(new File(path)).mkdirs())
+        {
+            _logger.log(Level.SEVERE, "Impossible de créer le repertoire de Log");
+        }*/
+        /*try {
             FileHandler handler = new FileHandler(path);
             handler.setFormatter(new LoggerUtils.LoggerFormatter());
+            _logger.setUseParentHandlers(false);
             _logger.addHandler(handler);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+    }
+
+    public static LoggerManager getInstance() {
+        return ourInstance;
     }
 
     public Logger getLogger() {

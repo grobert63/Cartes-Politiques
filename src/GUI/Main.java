@@ -1,6 +1,7 @@
 package GUI;
 
-import DataManager.Load;
+import DataManager.Converter;
+import DataManager.Save;
 import Entities.HexGrid;
 import Entities.Map;
 import Entities.Region;
@@ -14,7 +15,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -28,28 +28,7 @@ public class Main extends Application {
         Application.launch(args);
     }
 
-    @Override
-    public void start(Stage stage) {
-        LoggerManager.getInstance().getLogger().log(Level.INFO,"Starting...");
-        HBox root = new HBox();
-        // Création et affichage de la grille hexagonale
-        Canvas hexgrid = new HexCanvas(800, 700, grid);
-        root.getChildren().add(hexgrid);
-        Canvas polygrid = new PolyCanvas( map);
-        root.getChildren().add(polygrid);
-        
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Canvas Test");
-        stage.show();
-        try {
-            Load.loadMultiple(stage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public static void chargement() throws Exception {   
+    public static void chargement() throws Exception {
         // Chargement des régions en mémoire
         MapLoader ml = new MapLoader(
                 "test/FRA_adm1.shp",
@@ -61,17 +40,17 @@ public class Main extends Application {
                 //"test/usstate20m.shp",
                 //"test/usstate20m.dbf"
         );
-        
+
         map = ml.load();
-        
-        for(Region r : map.getRegions()){
+
+        for (Region r : map.getRegions()) {
             // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
             r.setDefaultField("NAME_1");
             //r.setDefaultField("name");
             //r.setDefaultField("NAME");
             //afficherRegion(r);
         }
-        
+
         //debug(map.getRegions());
         IResolver algo = new SimpleAggregerResolver();
         grid = algo.resolve(map.getRegions());
@@ -100,5 +79,28 @@ public class Main extends Application {
         System.out.println("<"+b.getName()+">");
         System.out.println("\tPourcentage : "+(int)(pourcentage*100)+" %");
         System.out.println();
+    }
+
+    @Override
+    public void start(Stage stage) {
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
+        HBox root = new HBox();
+        // Création et affichage de la grille hexagonale
+        Canvas hexgrid = new HexCanvas(800, 700, grid);
+        root.getChildren().add(hexgrid);
+        Canvas polygrid = new PolyCanvas(map);
+        root.getChildren().add(polygrid);
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Canvas Test");
+        stage.show();
+        Save.saveToImage(stage, Converter.CanvasToImage(hexgrid));
+        /*try {
+            Load.loadMultiple(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
     }
 }
