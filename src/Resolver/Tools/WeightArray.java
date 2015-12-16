@@ -10,8 +10,8 @@ package Resolver.Tools;
  * @author Théophile
  */
 public class WeightArray {
-    private double[][][] array;
-    private int nbRegions;
+    private final double[][][] array;
+    private final int nbRegions;
 
     public WeightArray(int nbRegions) {
         this.nbRegions = nbRegions;

@@ -6,9 +6,8 @@
 package Resolver.Tools;
 
 import Entities.Direction;
-import Entities.Geometry;
 import Entities.Region;
-import Loader.PolygonInfo;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +17,8 @@ import java.util.Map;
  * @author Théophile
  */
 public class WeightCalculator {
-    private List<Region> regions;
-    private Map<Region,Map<Region,Double>> voisins = new HashMap<>();
+    private final List<Region> regions;
+    private final Map<Region, Map<Region, Double>> voisins = new HashMap<>();
 
     public WeightCalculator(List<Region> regions) {
         this.regions = regions;

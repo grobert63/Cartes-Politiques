@@ -9,7 +9,7 @@ import java.util.List;
 public class Map {
     private final double _width;
     private final double _height;
-    private List<Region> _regions;
+    private final List<Region> _regions;
 
     /**
      * Constructeur complet

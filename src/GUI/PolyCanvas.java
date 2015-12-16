@@ -14,71 +14,20 @@ import javafx.scene.text.TextAlignment;
  * Décrit un canvas spécialisé dans l'affichage de polygones
  */
 public class PolyCanvas extends Canvas {
+    private final Map _map;
+    private final IntegerProperty decalageX = new SimpleIntegerProperty();
+    private final IntegerProperty decalageY = new SimpleIntegerProperty();
+    private final DoubleProperty zoom = new SimpleDoubleProperty();
+    private final BooleanProperty nomPays = new SimpleBooleanProperty();
     private  double _canvasWidth;
     private  double _canvasHeight;
-    private final Map _map;
-
-
-    private IntegerProperty decalageX = new SimpleIntegerProperty();
-    private IntegerProperty decalageY = new SimpleIntegerProperty();
-    private DoubleProperty zoom = new SimpleDoubleProperty();
-
-    public double getZoom() {
-        return zoom.get();
-    }
-
-    public DoubleProperty zoomProperty() {
-        return zoom;
-    }
-
-    public void setZoom(double zoom) {
-        this.zoom.set(zoom);
-    }
-
-    public int getDecalageX() {
-        return decalageX.get();
-    }
-
-    public IntegerProperty decalageXProperty() {
-        return decalageX;
-    }
-
-    public void setDecalageX(int decalageX) {
-        this.decalageX.set(decalageX);
-    }
-
-    public int getDecalageY() {
-        return decalageY.get();
-    }
-
-    public IntegerProperty decalageYProperty() {
-        return decalageY;
-    }
-
-    public void setDecalageY(int decalageY) {
-        this.decalageY.set(decalageY);
-    }
-
-
-    private BooleanProperty nomPays = new SimpleBooleanProperty();
-
-    public boolean getNomPays() {
-        return nomPays.get();
-    }
-
-    public BooleanProperty nomPaysProperty() {
-        return nomPays;
-    }
-
-    public void setNomPays(boolean nomPays) {
-        this.nomPays.set(nomPays);
-    }
 
     /**
      * Canvas affichant la carte avec le nom de la région. Le ratio est toujours respecté
+     *
      * @param map Structure Map contenant la carte à afficher
      */
-    public PolyCanvas( Map map) {
+    public PolyCanvas(Map map) {
         super();
 
         this._map = map;
@@ -86,11 +35,60 @@ public class PolyCanvas extends Canvas {
 
         widthProperty().addListener(evt -> draw());
         heightProperty().addListener(evt -> draw());
-        decalageXProperty().addListener(evt->draw());
-        decalageYProperty().addListener(evt->draw());
-        nomPaysProperty().addListener(evt->draw());
-        zoomProperty().addListener(evt->draw());
+        decalageXProperty().addListener(evt -> draw());
+        decalageYProperty().addListener(evt -> draw());
+        nomPaysProperty().addListener(evt -> draw());
+        zoomProperty().addListener(evt -> draw());
     }
+
+    public double getZoom() {
+        return zoom.get();
+    }
+
+    public void setZoom(double zoom) {
+        this.zoom.set(zoom);
+    }
+
+    public DoubleProperty zoomProperty() {
+        return zoom;
+    }
+
+    public int getDecalageX() {
+        return decalageX.get();
+    }
+
+    public void setDecalageX(int decalageX) {
+        this.decalageX.set(decalageX);
+    }
+
+    public IntegerProperty decalageXProperty() {
+        return decalageX;
+    }
+
+    public int getDecalageY() {
+        return decalageY.get();
+    }
+
+    public void setDecalageY(int decalageY) {
+        this.decalageY.set(decalageY);
+    }
+
+    public IntegerProperty decalageYProperty() {
+        return decalageY;
+    }
+
+    public boolean getNomPays() {
+        return nomPays.get();
+    }
+
+    public void setNomPays(boolean nomPays) {
+        this.nomPays.set(nomPays);
+    }
+
+    public BooleanProperty nomPaysProperty() {
+        return nomPays;
+    }
+
     private void draw()
     {
         _canvasWidth = getWidth();

@@ -73,8 +73,8 @@ public class Main extends Application {
             }
         }
     }
-    
-    public static void afficherFrontiere(Region a, Region b, double pourcentage){
+
+    private static void afficherFrontiere(Region a, Region b, double pourcentage) {
         System.out.println("<"+a.getName()+">");
         System.out.println("<"+b.getName()+">");
         System.out.println("\tPourcentage : "+(int)(pourcentage*100)+" %");

@@ -7,7 +7,7 @@ package Entities;
 public class HexGrid {
     private final int width;
     private final int height;
-    private Region[][] array;
+    private final Region[][] array;
     private int nbRegions = 0;
 
     /**

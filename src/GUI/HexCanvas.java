@@ -13,69 +13,64 @@ import javafx.scene.paint.Color;
  * @author Théophile
  */
 public class HexCanvas extends Canvas{
+    private final double[] hexCoordRelativeX = {0.5, 0.5, 0.0, -0.5, -0.5, 0.0};
+    private final double[] hexCoordRelativeY = {0.25, -0.25, -0.5, -0.25, 0.25, 0.5};
+    private final IntegerProperty decalageX = new SimpleIntegerProperty();
+    private final IntegerProperty decalageY = new SimpleIntegerProperty();
+    private final DoubleProperty zoom = new SimpleDoubleProperty();
     private double hexWidth;
     private double hexHeight;
-        
-    private final double[] hexCoordRelativeX = {0.5,0.5,0.0,-0.5,-0.5,0.0};
-    private final double[] hexCoordRelativeY = {0.25,-0.25,-0.5,-0.25,0.25,0.5};
+
+    /**
+     * @param width  Largeur en pixel
+     * @param height Hauteur en pixel
+     * @param grid   Grille hexagonale contenant les régions à afficher
+     */
+    public HexCanvas(double width, double height, HexGrid grid) {
+        super(width, height);
 
 
-    private IntegerProperty decalageX = new SimpleIntegerProperty();
-    private IntegerProperty decalageY = new SimpleIntegerProperty();
-    private DoubleProperty zoom = new SimpleDoubleProperty();
+        widthProperty().addListener(evt -> draw());
+        heightProperty().addListener(evt -> draw());
+        decalageXProperty().addListener(evt -> draw());
+        decalageYProperty().addListener(evt -> draw());
+        zoomProperty().addListener(evt -> draw());
+    }
 
     public double getZoom() {
         return zoom.get();
-    }
-
-    public DoubleProperty zoomProperty() {
-        return zoom;
     }
 
     public void setZoom(double zoom) {
         this.zoom.set(zoom);
     }
 
-    public int getDecalageX() {
-        return decalageX.get();
+    public DoubleProperty zoomProperty() {
+        return zoom;
     }
 
-    public IntegerProperty decalageXProperty() {
-        return decalageX;
+    public int getDecalageX() {
+        return decalageX.get();
     }
 
     public void setDecalageX(int decalageX) {
         this.decalageX.set(decalageX);
     }
 
-    public int getDecalageY() {
-        return decalageY.get();
+    public IntegerProperty decalageXProperty() {
+        return decalageX;
     }
 
-    public IntegerProperty decalageYProperty() {
-        return decalageY;
+    public int getDecalageY() {
+        return decalageY.get();
     }
 
     public void setDecalageY(int decalageY) {
         this.decalageY.set(decalageY);
     }
 
-    /**
-     * @param width Largeur en pixel
-     * @param height Hauteur en pixel
-     * @param grid Grille hexagonale contenant les régions à afficher
-     */
-    public HexCanvas(double width, double height, HexGrid grid){
-        super(width, height);
-        
-
-
-
-        widthProperty().addListener(evt -> draw());
-        heightProperty().addListener(evt -> draw());
-        decalageXProperty().addListener(evt->draw());
-        decalageYProperty().addListener(evt->draw());
-        zoomProperty().addListener(evt->draw());
+    public IntegerProperty decalageYProperty() {
+        return decalageY;
     }
 
     @Override

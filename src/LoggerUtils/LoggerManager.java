@@ -1,8 +1,5 @@
 package LoggerUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -10,17 +7,17 @@ import java.util.logging.Logger;
  * Created by Guillaume Robert on 08/12/2015.
  */
 public class LoggerManager {
-    private static LoggerManager ourInstance = new LoggerManager();
+    private static final LoggerManager ourInstance = new LoggerManager();
 
     private static Logger _logger;
 
     private LoggerManager() {
         _logger = Logger.getLogger(LoggerManager.class.getName());
-        long currentDateTime = System.currentTimeMillis();
+        /*long currentDateTime = System.currentTimeMillis();
         Date currentDate = new Date(currentDateTime);
         DateFormat df = new SimpleDateFormat("ddMMyyyy");
-        //String path = "%t/Cartes-Politiques" + df.format(currentDate) + "-%u.log";
-        String path = "df.format(currentDate) + \"-%u.log";
+        String path = "%t/Cartes-Politiques" + df.format(currentDate) + "-%u.log";
+        String path = "df.format(currentDate) + \"-%u.log";*/
 
         /*if (!(new File(path)).mkdirs())
         {

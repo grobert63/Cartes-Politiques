@@ -4,6 +4,7 @@ import Entities.Direction;
 import Entities.HexGrid;
 import Entities.Region;
 import Resolver.Tools.Aggreger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,9 +18,8 @@ import java.util.stream.Collectors;
  * @author Théophile
  */
 public class SimpleAggregerResolver implements IResolver{
+    final List<Region> isolated = new ArrayList<>();
     Aggreger aggreger = null;
-    List<Region> isolated = new ArrayList<>();
-    
     int minX=0, maxX=0, minY=0, maxY=0;
  
     private void firstAggregate() {

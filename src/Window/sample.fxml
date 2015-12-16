@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Window.Controller">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40"
+            fx:controller="Window.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
-                <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                </items>
+                <MenuItem mnemonicParsing="false" text="Close"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
-                <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                </items>
+                <MenuItem mnemonicParsing="false" text="Delete"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
-                <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                </items>
+                <MenuItem mnemonicParsing="false" text="About"/>
             </Menu>
         </MenuBar>
     </top>
@@ -68,20 +61,18 @@
                             </ScrollBar>
                         </right>
                   <top>
-                     <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
-                        <children>
-                           <CheckBox mnemonicParsing="false" text=": Nom des pays" fx:id="NomPaysCarte">
+                      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
+                          <CheckBox mnemonicParsing="false" text=": Nom des pays" fx:id="NomPaysCarte">
                               <padding>
-                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                               </padding>
-                           </CheckBox>
-                                  <Slider fx:id="SliderCarte" maxWidth="100">
-                                      <padding>
-                                          <Insets right="10.0" />
-                                      </padding>
-                                  </Slider>
-                        </children>
-                     </HBox>
+                          </CheckBox>
+                          <Slider fx:id="SliderCarte" maxWidth="100">
+                              <padding>
+                                  <Insets right="10.0"/>
+                              </padding>
+                          </Slider>
+                      </HBox>
                   </top>
                     </BorderPane>
                     <BorderPane GridPane.columnIndex="1">
@@ -99,11 +90,9 @@
                             <ScrollBar fx:id="ScrollVResult" orientation="VERTICAL" BorderPane.alignment="CENTER" />
                         </right>
                   <top>
-                     <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
-                        <children>
-                            <Slider fx:id="SliderResult" maxWidth="100" />
-                        </children>
-                     </HBox>
+                      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+                          <Slider fx:id="SliderResult" maxWidth="100"/>
+                      </HBox>
                   </top>
                     </BorderPane>
                 </GridPane>

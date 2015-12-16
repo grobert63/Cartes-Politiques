@@ -1,6 +1,7 @@
 package Entities;
 
 import javafx.scene.shape.Polygon;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +11,11 @@ import java.util.List;
  * @author Théophile
  */
 public class Region {
-    private HashMap<String,String> data = new HashMap<>();
+    private final HashMap<String, String> data = new HashMap<>();
+    private final Point _center;
+    private final Polygon _mainPolygon;
     private String _defaultField = null;
-    private Point _center;
     private List<Polygon> _boundaries = new ArrayList<>();
-    private Polygon _mainPolygon;
     
     /**
      * Construit une région à partir de ses frontières

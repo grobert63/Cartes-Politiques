@@ -8,6 +8,7 @@ package Resolver.Tools;
 import Entities.Direction;
 import Entities.HexGrid;
 import Entities.Region;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author Théophile
  */
 public class Aggreger {
-    Map<Index2,Region> map = new HashMap<>();
+    final Map<Index2, Region> map = new HashMap<>();
     
     int minX=0, maxX=0, minY=0, maxY=0;
     
@@ -77,7 +78,7 @@ public class Aggreger {
     }
     
     public List<Region> getAggregatedRegion(){
-        return new ArrayList(map.values());
+        return new ArrayList<>(map.values());
     }
     
     public void add(Region r, Region reference, int direction){//Index2 source, Region nearest){
