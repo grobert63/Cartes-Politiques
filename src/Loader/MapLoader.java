@@ -1,11 +1,12 @@
 package Loader;
 
 import Entities.Map;
+import Entities.RawPolygon;
 import Entities.Region;
+import Entities.RegionManager;
 import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
 import exception.InvalidMapException;
-import javafx.scene.shape.Polygon;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 
@@ -35,6 +36,7 @@ public class MapLoader {
         
         ValidationPreferences v = new ValidationPreferences();
         v.setAllowUnlimitedNumberOfPointsPerShape(true);
+        
         this.shapeStreamReader = new ShapeStreamReader(fileReader.getFileInputStream(),v);
         if(dbfFilePath != null){
             this.dbfReader = new DBFReader(dbfFilePath);
@@ -64,22 +66,48 @@ public class MapLoader {
      * @throws JDBFException
      */
     public Map load() throws JDBFException, IOException, InvalidShapeFileException {
-        List<Region> list = loadRegions();
-        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), list);
+        RegionManager rm = loadRegions();
+        
+        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), rm);
     }
 
-    private List<Region> loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
-        List<Region> list = new ArrayList<>();
+    private RegionManager loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
+        List<List<RawPolygon>> rawRegions = new ArrayList<>();
 
-        List<Polygon> polygons = shapeStreamReader.getNextShape();
-        while (polygons.size() > 0){
-            Region region = new Region(polygons);
-            getdbfInfos(region);
-            list.add(region);
-            polygons = shapeStreamReader.getNextShape();
+        List<RawPolygon> rawRegion = shapeStreamReader.getNextShape();
+
+        while(rawRegion.size() > 0){
+            rawRegions.add(rawRegion);
+            rawRegion = shapeStreamReader.getNextShape();
         }
-        return list;
+
+        RegionManager rm = new RegionManager(rawRegions);
+
+        for(Region r : rm.getRegions()){
+            getdbfInfos(r);
+        }
+        
+        return rm;
     }
+    
+    /*
+    private BoundaryManager makeBoundaries(List<Region> regions){
+        
+        int nbRegions = regions.size();
+        RawPolygon[] raws = new RawPolygon[regions.size()];
+        for(int i=0 ; i<nbRegions ; i++){
+            raws[i] = regions.get(i).getMainPolygon();
+        }
+        
+        BoundaryManager boundaryManager = new BoundaryManager(raws);
+
+        BoundPolygon[] bounds = boundaryManager.getBoundsPolygon();
+        for(int i=0 ; i<nbRegions ; i++){
+            regions.get(i).setBoundPolygon(bounds[i]);
+        }
+        return boundaryManager;
+    }
+    */
 
     private void getdbfInfos(Region region) throws JDBFException {
         if(dbfReader != null){
@@ -97,7 +125,7 @@ public class MapLoader {
         for (int fieldIndex=0; fieldIndex < dbfReader.getFieldCount(); fieldIndex++)
         {
             String fieldName = dbfReader.getField(fieldIndex).getName();
-            region.setData(fieldName, data[fieldIndex].toString());
+            region.setInfo(fieldName, data[fieldIndex].toString());
         }
     }
 

@@ -9,18 +9,25 @@ import java.util.List;
 public class Map {
     private final double _width;
     private final double _height;
+    private final List<Boundary> _boundaries;
+    private final List<Boundary> _simpleBoundaries;
     private final List<Region> _regions;
 
+    // à arranger
+    private static final double COEF_SIMPLIFY = 0.3;
+    
     /**
      * Constructeur complet
      * @param width Largeur totale de la carte (X)
      * @param height Longueur totale de la carte (Y)
-     * @param _regions Liste des régions de la carte
+     * @param rm
      */
-    public Map(double width, double height, List<Region> _regions) {
+    public Map(double width, double height, RegionManager rm) {
         this._width = width;
         this._height = height;
-        this._regions = _regions;
+        this._regions = rm.getRegions();
+        this._boundaries = rm.getBoundaries();
+        this._simpleBoundaries = Geometry.getSimplifyBoundaries(_boundaries, COEF_SIMPLIFY);
     }
 
     /**
@@ -45,5 +52,13 @@ public class Map {
      */
     public List<Region> getRegions() {
         return _regions;
+    }
+    
+    public List<Boundary> getBoundaries(){
+        return _boundaries;
+    }
+    
+    public List<Boundary> getSimpleBoundaries(){
+        return _simpleBoundaries;
     }
 }

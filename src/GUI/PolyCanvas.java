@@ -1,5 +1,6 @@
 package GUI;
 
+import Entities.Boundary;
 import Entities.Map;
 import Entities.Region;
 import javafx.beans.property.*;
@@ -7,7 +8,6 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.text.TextAlignment;
 
 /**
@@ -21,6 +21,8 @@ public class PolyCanvas extends Canvas {
     private final BooleanProperty nomPays = new SimpleBooleanProperty();
     private  double _canvasWidth;
     private  double _canvasHeight;
+    
+    private double _ratio;
 
     /**
      * Canvas affichant la carte avec le nom de la région. Le ratio est toujours respecté
@@ -94,32 +96,40 @@ public class PolyCanvas extends Canvas {
         _canvasWidth = getWidth();
         _canvasHeight = getHeight();
         GraphicsContext gc = super.getGraphicsContext2D();
-        double ratio = resize();
-        boolean temp = false;
+        _ratio = resize();
 
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,getWidth(),getHeight());
         gc.setFill(Color.BLACK);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
-        for (Region region:_map.getRegions()) {
-            for (Polygon polygon : region.getBoundaries()) {
-                int size = polygon.getPoints().size();
-                double x[] = new double[size / 2], y[] = new double[size / 2];
-                for (int i = 0; i < size; i++) {
-                    if (temp) {
-                        y[i / 2] =(_canvasHeight- polygon.getPoints().get(i) + getDecalageY())*ratio*getZoom();
-                    } else {
-                        x[i / 2] =( polygon.getPoints().get(i)  + getDecalageX())*ratio*getZoom();
-                    }
-                    temp = !temp;
-                }
-                gc.strokePolygon(x,y,size/2);
+                
+        for (Boundary b : _map.getSimpleBoundaries()) {
+            int size = b.getPoints().size();
+            double x[] = new double[size];
+            double y[] = new double[size];
+            for (int i = 0; i < size; i++) {
+                x[i] = computeX(b.getPoints().get(i).x);
+                y[i] = computeY(b.getPoints().get(i).y);
             }
-            if(getNomPays())
-                gc.fillText(region.getName(),(region.getCenter().x + getDecalageX())*getZoom()*ratio, ((_canvasHeight- region.getCenter().y  + getDecalageY()))*getZoom()*ratio);
+            
+            gc.strokePolyline(x, y, size);
+        }
+
+        for (Region region : _map.getRegions()) {
+            gc.fillText(region.getName(), computeX(region.getCenter().x), computeY(region.getCenter().y));
         }
     }
+    
+        
+    private double computeX(double x){
+        return (x + getDecalageX()) * _ratio * getZoom();
+    }
+    
+    private double computeY(double y){
+        return _canvasHeight - (y - getDecalageY()) * _ratio * getZoom();
+    }
+    
     private double resize() {
         double ratioX, ratioY;
         ratioX = _canvasWidth / _map.getWidth();

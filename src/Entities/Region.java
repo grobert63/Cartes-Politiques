@@ -1,9 +1,7 @@
 package Entities;
 
-import javafx.scene.shape.Polygon;
-
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -11,38 +9,49 @@ import java.util.List;
  * @author Théophile
  */
 public class Region {
-    private final HashMap<String, String> data = new HashMap<>();
-    private final Point _center;
-    private final Polygon _mainPolygon;
+    private Map<String,String> infos = new HashMap<>();
     private String _defaultField = null;
-    private List<Polygon> _boundaries = new ArrayList<>();
     
-    /**
-     * Construit une région à partir de ses frontières
-     * @param boundaries Liste de Polygones JavaFX representant les frontières de la région
-     */
-    public Region(List<Polygon> boundaries) {
-        _boundaries = boundaries;
-        _mainPolygon = Geometry.getMainPolygon(_boundaries);
-        _center = Geometry.getCentreDeMasse(_mainPolygon);
+    private List<RawPolygon> _displayablePolygons;
+    private RawPolygon _rawMainPolygon;
+    private BoundPolygon _boundMainPolygon;
+    
+    private Point _center;
+
+    
+    // Constructeur à modifier
+    public Region(List<RawPolygon> displayablePolygons, RawPolygon rawMainPolygon, BoundPolygon boundMainPolygon) {
+        _displayablePolygons = displayablePolygons;
+        _rawMainPolygon = rawMainPolygon;
+        _boundMainPolygon = boundMainPolygon;
+        
+        _center = Geometry.getCentreDeMasse(rawMainPolygon);
     }
 
+    public List<RawPolygon> getDisplayablePolygons() {
+        return _displayablePolygons;
+    }
+    
+    public RawPolygon getRawMainPolygon(){
+        return _rawMainPolygon;
+    }
+    
+    public BoundPolygon getBoundMainPolygon(){
+        return _boundMainPolygon;
+    }
+    
     public Point getCenter(){
         return _center;
     }
-
-    public List<Polygon> getBoundaries() {
-        return _boundaries;
-    }
-
+    
     /**
      * Renseigne une donnée sur cette région.
      * (Cette donnée provient généralement du fichier .dbf)
-     * @param field Champ / Nom de la colonne ("nom_region", "nb_habitants", ...)
-     * @param value Valeur de la donnée ("Auvergne", "1 300 000", ...)
+     * @param field Champ / Nom de la colonne (ex : "nom_region" ou "nb_habitants"...)
+     * @param value Valeur de la donnée (ex : "Auvergne" ou "1 300 000"...)
      */
-    public void setData(String field, String value){
-        data.put(field, value);
+    public void setInfo(String field, String value){
+        infos.put(field, value);
     }
     
     /**
@@ -50,8 +59,8 @@ public class Region {
      * @param field Champ / Colonne
      * @return Donnée liée au champ renseigné
      */
-    public String getData(String field){
-        return data.get(field);
+    public String getInfo(String field){
+        return infos.get(field);
     }
     
     /**
@@ -69,12 +78,11 @@ public class Region {
      * @param defaultField Champ par défaut
      */
     public void setDefaultField(String defaultField) {
-        if(data.containsKey(defaultField)) {
+        if(infos.containsKey(defaultField)) {
             this._defaultField = defaultField;
         }
     }
 
-    
     /**
      * Indique le nom de la région, soit la valeur lié au champ par défaut.
      * Le champ par défaut doit avoir été au préalablement renseigné par un appel à la méthode setDefaultField.
@@ -82,7 +90,7 @@ public class Region {
      */
     public String getName(){
         if(this._defaultField != null) {
-            return data.get(_defaultField);
+            return infos.get(_defaultField);
         }
         return "noname";
     }
@@ -100,13 +108,5 @@ public class Region {
         double vecteurX = other.getCenter().x - this.getCenter().x;
         double vecteurY = other.getCenter().y - this.getCenter().y;
         return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
-    }
-    
-    public Polygon getMainPolygon(){
-        return _mainPolygon;
-    }
-    
-    public double pourcentageDeFrontiereCommune(Region other){
-        return Geometry.ratioCommonBoudaries(this.getMainPolygon(), other.getMainPolygon());
     }
 }

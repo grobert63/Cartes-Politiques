@@ -20,6 +20,8 @@ public class WeightAggregerResolver implements IResolver{
     
     @Override
     public HexGrid resolve(List<Region> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /*
         regions = list;
         isolated.addAll(list.stream().collect(Collectors.toList()));
         
@@ -33,6 +35,7 @@ public class WeightAggregerResolver implements IResolver{
             //aggregate();
         }
         return aggreger.toGrid();
+        */
     }
     
 }

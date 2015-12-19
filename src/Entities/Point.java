@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entities;
 
 /**
@@ -29,12 +24,12 @@ public class Point{
             return false;
         }
         final Point other = (Point) obj;
-        return !(this.x != other.x || this.y != other.y);
+        return this.x == other.x && this.y == other.y;
     }
 
     @Override
     public int hashCode() {
-        return (int)(x * 43797 + y);
+        return (int)((x * 4957.0 + y)*13.0);
     }
 
     @Override

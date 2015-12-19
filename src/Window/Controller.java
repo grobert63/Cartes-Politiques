@@ -45,6 +45,9 @@ public class Controller {
         SliderCarte.setMin(1);
         SliderCarte.setMax(10);
         SliderCarte.setBlockIncrement(0.01);
+        
+        ScrollHCarte.setValue(50);
+        ScrollVCarte.setValue(50);
 
         try {
             GUI.Main.chargement();
@@ -67,9 +70,9 @@ public class Controller {
         canvas.zoomProperty().bind(SliderResult.valueProperty());
 
         canvas.decalageXProperty().bind(ScrollHResult.valueProperty().multiply(-1).multiply(canvas.widthProperty().divide(ScrollHResult.maxProperty())));
-        canvasCarte.decalageXProperty().bind(ScrollHCarte.valueProperty().multiply(-1).multiply(canvasCarte.widthProperty().divide(ScrollHCarte.maxProperty())));
+        canvasCarte.decalageXProperty().bind(ScrollHCarte.valueProperty().subtract(50).multiply(-1).multiply(canvasCarte.widthProperty().divide(ScrollHCarte.maxProperty())));
         canvas.decalageYProperty().bind(ScrollVResult.valueProperty().multiply(-1).multiply(canvas.heightProperty().divide(ScrollHResult.maxProperty())));
-        canvasCarte.decalageYProperty().bind(ScrollVCarte.valueProperty().multiply(-1).multiply(canvasCarte.heightProperty().divide(ScrollVCarte.maxProperty())));
+        canvasCarte.decalageYProperty().bind(ScrollVCarte.valueProperty().subtract(50).multiply(-1).multiply(canvasCarte.heightProperty().divide(ScrollVCarte.maxProperty())));
 
         canvasCarte.nomPaysProperty().bind(NomPaysCarte.selectedProperty());
     }

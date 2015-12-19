@@ -17,6 +17,7 @@ import java.util.Map;
  * @author Théophile
  */
 public class WeightCalculator {
+    /*
     private final List<Region> regions;
     private final Map<Region, Map<Region, Double>> voisins = new HashMap<>();
 
@@ -89,4 +90,5 @@ public class WeightCalculator {
         
         throw new UnsupportedOperationException("Pas fini !!!!!!!!!!!!!!!!");
     }
+    */
 }

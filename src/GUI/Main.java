@@ -15,7 +15,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.util.List;
 import java.util.logging.Level;
 
 
@@ -51,7 +50,6 @@ public class Main extends Application {
             //afficherRegion(r);
         }
 
-        //debug(map.getRegions());
         IResolver algo = new SimpleAggregerResolver();
         grid = algo.resolve(map.getRegions());
     }
@@ -60,25 +58,6 @@ public class Main extends Application {
         System.out.println("<"+r.getName()+">");
         System.out.println("\tCentreX : "+r.getCenter().x);
         System.out.println("\tCentreY : "+r.getCenter().y);
-    }
-    
-    public static void debug(List<Region> l){
-        int nbRegions = map.getRegions().size();
-        Region a,b;
-        for(int i=0;i<nbRegions;i++){
-            a = map.getRegions().get(i);
-            for(int j=0;j<nbRegions;j++){
-                b =  map.getRegions().get(j);
-                afficherFrontiere(a,b,a.pourcentageDeFrontiereCommune(b));
-            }
-        }
-    }
-
-    private static void afficherFrontiere(Region a, Region b, double pourcentage) {
-        System.out.println("<"+a.getName()+">");
-        System.out.println("<"+b.getName()+">");
-        System.out.println("\tPourcentage : "+(int)(pourcentage*100)+" %");
-        System.out.println();
     }
 
     @Override
