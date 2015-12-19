@@ -1,6 +1,6 @@
 package Loader;
 
-import Entities.Map;
+import Entities.GeoMap;
 import Entities.RawPolygon;
 import Entities.Region;
 import Entities.RegionManager;
@@ -65,10 +65,10 @@ public class MapLoader {
      * @throws InvalidShapeFileException
      * @throws JDBFException
      */
-    public Map load() throws JDBFException, IOException, InvalidShapeFileException {
+    public GeoMap load() throws JDBFException, IOException, InvalidShapeFileException {
         RegionManager rm = loadRegions();
         
-        return new Map(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), rm);
+        return new GeoMap(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), rm);
     }
 
     private RegionManager loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
@@ -89,25 +89,6 @@ public class MapLoader {
         
         return rm;
     }
-    
-    /*
-    private BoundaryManager makeBoundaries(List<Region> regions){
-        
-        int nbRegions = regions.size();
-        RawPolygon[] raws = new RawPolygon[regions.size()];
-        for(int i=0 ; i<nbRegions ; i++){
-            raws[i] = regions.get(i).getMainPolygon();
-        }
-        
-        BoundaryManager boundaryManager = new BoundaryManager(raws);
-
-        BoundPolygon[] bounds = boundaryManager.getBoundsPolygon();
-        for(int i=0 ; i<nbRegions ; i++){
-            regions.get(i).setBoundPolygon(bounds[i]);
-        }
-        return boundaryManager;
-    }
-    */
 
     private void getdbfInfos(Region region) throws JDBFException {
         if(dbfReader != null){
@@ -128,6 +109,4 @@ public class MapLoader {
             region.setInfo(fieldName, data[fieldIndex].toString());
         }
     }
-
-
 }

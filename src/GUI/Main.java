@@ -2,8 +2,9 @@ package GUI;
 
 import DataManager.Converter;
 import DataManager.Save;
+import Debug.TimeDebug;
 import Entities.HexGrid;
-import Entities.Map;
+import Entities.GeoMap;
 import Entities.Region;
 import Loader.MapLoader;
 import LoggerUtils.LoggerManager;
@@ -20,14 +21,16 @@ import java.util.logging.Level;
 
 public class Main extends Application {
     public static HexGrid grid;
-    public static Map map;
+    public static GeoMap map;
     
     public static void main(String[] args) throws Exception {
+        System.out.println("\n/!\\ Attention /!\\ : ce \"main\" n'est pas fini.\nPour afficher les cartes, il faut utiliser le main du package Window.\n");
         chargement();
         Application.launch(args);
     }
 
     public static void chargement() throws Exception {
+        TimeDebug.timeStart(0);
         // Chargement des régions en mémoire
         MapLoader ml = new MapLoader(
                 "test/FRA_adm1.shp",
@@ -52,6 +55,10 @@ public class Main extends Application {
 
         IResolver algo = new SimpleAggregerResolver();
         grid = algo.resolve(map.getRegions());
+        
+        TimeDebug.timeStop(0);
+        TimeDebug.setTimeLabel(0, "Chargement de la carte");
+        TimeDebug.displayTime(0);
     }
     
     public static void afficherRegion(Region r){
@@ -80,6 +87,6 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-
+        
     }
 }

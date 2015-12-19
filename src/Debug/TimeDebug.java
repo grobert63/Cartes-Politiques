@@ -32,12 +32,12 @@ public class TimeDebug {
     
     public static void displayPourcentage(int index, int refIndex){
         displayHeader(index);
-        System.out.println(((int)((times.get(index)/(double)times.get(refIndex))*10000))/100.0 + " %");
+        System.out.println("\t> "+((int)((times.get(index)/(double)times.get(refIndex))*10000))/100.0 + " %");
     }
     
     public static void displayTime(int index){
         displayHeader(index);
-        System.out.println((times.get(index)/ 1000000000.0)+" sec");
+        System.out.println("\t> "+(times.get(index)/ 1000000000.0)+" sec");
     }
     
     private static void displayHeader(int index){

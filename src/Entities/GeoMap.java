@@ -4,9 +4,8 @@ import java.util.List;
 
 /**
  * Classe permettant la gestion de toutes les données relatives à la carte non traitée
- * /!\ Nom de classe à modifier pour ne pas confondre avec la classe java.util.Map; /!\
  */
-public class Map {
+public class GeoMap {
     private final double _width;
     private final double _height;
     private final List<Boundary> _boundaries;
@@ -22,7 +21,7 @@ public class Map {
      * @param height Longueur totale de la carte (Y)
      * @param rm
      */
-    public Map(double width, double height, RegionManager rm) {
+    public GeoMap(double width, double height, RegionManager rm) {
         this._width = width;
         this._height = height;
         this._regions = rm.getRegions();

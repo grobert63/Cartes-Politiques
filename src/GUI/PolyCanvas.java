@@ -1,7 +1,7 @@
 package GUI;
 
 import Entities.Boundary;
-import Entities.Map;
+import Entities.GeoMap;
 import Entities.Region;
 import javafx.beans.property.*;
 import javafx.geometry.VPos;
@@ -14,7 +14,7 @@ import javafx.scene.text.TextAlignment;
  * Décrit un canvas spécialisé dans l'affichage de polygones
  */
 public class PolyCanvas extends Canvas {
-    private final Map _map;
+    private final GeoMap _map;
     private final IntegerProperty decalageX = new SimpleIntegerProperty();
     private final IntegerProperty decalageY = new SimpleIntegerProperty();
     private final DoubleProperty zoom = new SimpleDoubleProperty();
@@ -29,7 +29,7 @@ public class PolyCanvas extends Canvas {
      *
      * @param map Structure Map contenant la carte à afficher
      */
-    public PolyCanvas(Map map) {
+    public PolyCanvas(GeoMap map) {
         super();
 
         this._map = map;
@@ -121,13 +121,12 @@ public class PolyCanvas extends Canvas {
         }
     }
     
-        
     private double computeX(double x){
-        return (x + getDecalageX()) * _ratio * getZoom();
+        return ((x + getDecalageX()) * _ratio - (_canvasWidth / 2)) * getZoom() + (_canvasWidth / 2);
     }
     
     private double computeY(double y){
-        return _canvasHeight - (y - getDecalageY()) * _ratio * getZoom();
+        return (_canvasHeight - (y - getDecalageY()) * _ratio - (_canvasHeight / 2)) * getZoom() + (_canvasHeight / 2);
     }
     
     private double resize() {
