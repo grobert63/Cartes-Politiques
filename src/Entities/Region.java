@@ -1,6 +1,7 @@
 package Entities;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.List;
 
@@ -9,16 +10,18 @@ import java.util.List;
  * @author Théophile
  */
 public class Region {
-    private Map<String,String> infos = new HashMap<>();
+    private final Map<String,String> infos = new HashMap<>();
     private String _defaultField = null;
     
-    private List<RawPolygon> _displayablePolygons;
-    private RawPolygon _rawMainPolygon;
-    private BoundPolygon _boundMainPolygon;
+    private final List<RawPolygon> _displayablePolygons;
+    private final RawPolygon _rawMainPolygon;
+    private final BoundPolygon _boundMainPolygon;
     
-    private Point _center;
+    private final Point _center;
+    
+    // equals et hashcode peut-être à redéfinir 
+    private final Map<Region,List<Boundary>> _neighbors = new HashMap<>();
 
-    
     // Constructeur à modifier
     public Region(List<RawPolygon> displayablePolygons, RawPolygon rawMainPolygon, BoundPolygon boundMainPolygon) {
         _displayablePolygons = displayablePolygons;
@@ -109,4 +112,17 @@ public class Region {
         double vecteurY = other.getCenter().y - this.getCenter().y;
         return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
     }
+    
+    void addNeighbor(Region neighbor, Boundary commonBoundary){
+        if(!_neighbors.containsKey(neighbor)){
+            _neighbors.put(neighbor, new LinkedList<>());
+        }
+        _neighbors.get(neighbor).add(commonBoundary);
+    }
+
+    public Map<Region, List<Boundary>> getNeighbors() {
+        return _neighbors;
+    }
+    
+    
 }

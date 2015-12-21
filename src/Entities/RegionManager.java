@@ -1,6 +1,9 @@
 package Entities;
 
+import Debug.TimeDebug;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,6 +32,10 @@ public class RegionManager {
             Region r = new Region(displayablePolygons[i],rawMainPolygons[i],boundMainPolygons[i]);
             _regions.add(r);
         }
+        
+        TimeDebug.timeStart(20);
+        calculateNeighbors(_regions, _bm.getBoundaries());
+        TimeDebug.timeStop(20);
     }
     
     public List<Region> getRegions(){
@@ -37,5 +44,42 @@ public class RegionManager {
     
     public List<Boundary> getBoundaries(){
         return _bm.getBoundaries();
+    }
+    
+    public final void calculateNeighbors(List<Region> regions, List<Boundary> allBoundaries){
+        List<Region> involvedRegions = new LinkedList<>();
+        BoundPolygon currentPoly;
+        
+        for(Boundary b : allBoundaries){
+            involvedRegions.clear();
+            
+            for(Region r : regions){
+                currentPoly = r.getBoundMainPolygon();
+                if(currentPoly.getBoundaries().contains(b)){
+                    involvedRegions.add(r);
+                }
+            }
+            
+            Iterator<Region> it = involvedRegions.iterator();
+            switch(involvedRegions.size()){
+                case 1 :
+                    it.next().addNeighbor(null, b);
+                    break;
+                case 2 :
+                    Region r1 = it.next(), r2 = it.next();
+                    r1.addNeighbor(r2, b);
+                    r2.addNeighbor(r1, b);
+                    break;
+                default :
+                    System.err.println("involvedRegions.size() = "+involvedRegions.size());
+                    break;
+            }
+        }
+    }
+
+    public void setRegionsName(String defaultField){
+        for(Region r : _regions){
+            r.setDefaultField(defaultField);
+        }
     }
 }

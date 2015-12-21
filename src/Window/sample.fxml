@@ -67,7 +67,7 @@
                                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                               </padding>
                           </CheckBox>
-                          <Slider fx:id="SliderCarte" maxWidth="100">
+                          <Slider fx:id="SliderZoomCarte" maxWidth="100">
                               <padding>
                                   <Insets right="10.0"/>
                               </padding>

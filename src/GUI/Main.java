@@ -3,6 +3,7 @@ package GUI;
 import DataManager.Converter;
 import DataManager.Save;
 import Debug.TimeDebug;
+import Entities.Boundary;
 import Entities.HexGrid;
 import Entities.GeoMap;
 import Entities.Region;
@@ -10,6 +11,9 @@ import Loader.MapLoader;
 import LoggerUtils.LoggerManager;
 import Resolver.IResolver;
 import Resolver.SimpleAggregerResolver;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -21,7 +25,7 @@ import java.util.logging.Level;
 
 public class Main extends Application {
     public static HexGrid grid;
-    public static GeoMap map;
+    public static GeoMap geoMap;
     
     public static void main(String[] args) throws Exception {
         System.out.println("\n/!\\ Attention /!\\ : ce \"main\" n'est pas fini.\nPour afficher les cartes, il faut utiliser le main du package Window.\n");
@@ -43,28 +47,47 @@ public class Main extends Application {
                 //"test/usstate20m.dbf"
         );
 
-        map = ml.load();
+        geoMap = ml.load();
+        
+        // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
+        geoMap.debug_getManager().setRegionsName("NAME_1");
+        //geoMap.debug_getManager().setRegionsName("name");
+        //geoMap.debug_getManager().setRegionsName("NAME");
 
-        for (Region r : map.getRegions()) {
-            // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
-            r.setDefaultField("NAME_1");
-            //r.setDefaultField("name");
-            //r.setDefaultField("NAME");
-            //afficherRegion(r);
+        for (Region r : geoMap.getRegions()) {
+            afficherRegion(r);
         }
 
         IResolver algo = new SimpleAggregerResolver();
-        grid = algo.resolve(map.getRegions());
+        grid = algo.resolve(geoMap.getRegions());
         
         TimeDebug.timeStop(0);
-        TimeDebug.setTimeLabel(0, "Chargement de la carte");
+        TimeDebug.setTimeLabel(0, "Temps de chargement total de la carte");
         TimeDebug.displayTime(0);
+        
+        TimeDebug.setTimeLabel(1, "Simplification de la carte");
+        TimeDebug.displayPourcentage(1, 0);
+        
+        TimeDebug.setTimeLabel(20, "Calcul des voisins");
+        TimeDebug.displayPourcentage(20, 0);
     }
     
     public static void afficherRegion(Region r){
         System.out.println("<"+r.getName()+">");
-        System.out.println("\tCentreX : "+r.getCenter().x);
-        System.out.println("\tCentreY : "+r.getCenter().y);
+        Map<Region,List<Boundary>> neighbors = r.getNeighbors();
+        for(Entry<Region,List<Boundary>> e : neighbors.entrySet()){
+            Region neighbor = e.getKey();
+            List<Boundary> boundary = e.getValue();
+            if(neighbor != null){
+                System.out.println("\t"+neighbor.getName()+" : "+boundary.size());
+            }
+            else{
+                System.out.println("\t *Vide* : "+boundary.size());
+            }
+        }
+        
+        //System.out.println("\tCentreX : "+r.getCenter().x);
+        //System.out.println("\tCentreY : "+r.getCenter().y);
     }
 
     @Override
@@ -74,7 +97,7 @@ public class Main extends Application {
         // Création et affichage de la grille hexagonale
         Canvas hexgrid = new HexCanvas(800, 700, grid);
         root.getChildren().add(hexgrid);
-        Canvas polygrid = new PolyCanvas(map);
+        Canvas polygrid = new PolyCanvas(geoMap);
         root.getChildren().add(polygrid);
 
         Scene scene = new Scene(root);

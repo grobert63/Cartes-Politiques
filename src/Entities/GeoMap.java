@@ -1,5 +1,6 @@
 package Entities;
 
+import Debug.TimeDebug;
 import java.util.List;
 
 /**
@@ -8,9 +9,8 @@ import java.util.List;
 public class GeoMap {
     private final double _width;
     private final double _height;
-    private final List<Boundary> _boundaries;
+    private final RegionManager _manager;
     private final List<Boundary> _simpleBoundaries;
-    private final List<Region> _regions;
 
     // à arranger
     private static final double COEF_SIMPLIFY = 0.3;
@@ -19,14 +19,17 @@ public class GeoMap {
      * Constructeur complet
      * @param width Largeur totale de la carte (X)
      * @param height Longueur totale de la carte (Y)
-     * @param rm
+     * @param manager
      */
-    public GeoMap(double width, double height, RegionManager rm) {
+    public GeoMap(double width, double height, RegionManager manager) {
         this._width = width;
         this._height = height;
-        this._regions = rm.getRegions();
-        this._boundaries = rm.getBoundaries();
-        this._simpleBoundaries = Geometry.getSimplifyBoundaries(_boundaries, COEF_SIMPLIFY);
+        this._manager = manager;
+        
+        TimeDebug.timeStart(1);
+        // à déplacer
+        this._simpleBoundaries = Geometry.getSimplifyBoundaries(manager.getBoundaries(), COEF_SIMPLIFY);
+        TimeDebug.timeStop(1);
     }
 
     /**
@@ -50,14 +53,18 @@ public class GeoMap {
      * @return Liste des régions
      */
     public List<Region> getRegions() {
-        return _regions;
+        return _manager.getRegions();
     }
     
     public List<Boundary> getBoundaries(){
-        return _boundaries;
+        return _manager.getBoundaries();
     }
     
     public List<Boundary> getSimpleBoundaries(){
         return _simpleBoundaries;
+    }
+    
+    public RegionManager debug_getManager(){
+        return _manager;
     }
 }

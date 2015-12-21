@@ -31,8 +31,8 @@ public class Controller {
     ScrollBar ScrollVCarte;
 
     @FXML
-    Slider SliderCarte;
-
+    Slider SliderZoomCarte;
+ 
     @FXML
     CheckBox NomPaysCarte;
     @FXML
@@ -42,10 +42,10 @@ public class Controller {
         SliderResult.setMax(10);
         SliderResult.setBlockIncrement(0.01);
 
-        SliderCarte.setMin(1);
-        SliderCarte.setMax(10);
-        SliderCarte.setBlockIncrement(0.01);
-        
+        SliderZoomCarte.setMin(1);
+        SliderZoomCarte.setMax(10);
+        SliderZoomCarte.setBlockIncrement(0.01);
+
         ScrollHCarte.setValue(50);
         ScrollVCarte.setValue(50);
 
@@ -54,7 +54,7 @@ public class Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        PolyCanvas canvasCarte = new PolyCanvas( Main.map);
+        PolyCanvas canvasCarte = new PolyCanvas( Main.geoMap);
         HexCanvas canvas = new HexCanvas(1000, 700,GUI.Main.grid);
 
         PaneAffichageCarte.getChildren().add(canvasCarte);
@@ -66,7 +66,7 @@ public class Controller {
         canvasCarte.widthProperty().bind(PaneAffichageCarte.widthProperty());
         canvasCarte.heightProperty().bind(PaneAffichageCarte.heightProperty());
 
-        canvasCarte.zoomProperty().bind(SliderCarte.valueProperty());
+        canvasCarte.zoomProperty().bind(SliderZoomCarte.valueProperty());
         canvas.zoomProperty().bind(SliderResult.valueProperty());
 
         canvas.decalageXProperty().bind(ScrollHResult.valueProperty().multiply(-1).multiply(canvas.widthProperty().divide(ScrollHResult.maxProperty())));

@@ -66,9 +66,9 @@ public class MapLoader {
      * @throws JDBFException
      */
     public GeoMap load() throws JDBFException, IOException, InvalidShapeFileException {
-        RegionManager rm = loadRegions();
+        RegionManager manager = loadRegions();
         
-        return new GeoMap(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), rm);
+        return new GeoMap(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), manager);
     }
 
     private RegionManager loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
@@ -81,13 +81,13 @@ public class MapLoader {
             rawRegion = shapeStreamReader.getNextShape();
         }
 
-        RegionManager rm = new RegionManager(rawRegions);
+        RegionManager manager = new RegionManager(rawRegions);
 
-        for(Region r : rm.getRegions()){
+        for(Region r : manager.getRegions()){
             getdbfInfos(r);
         }
         
-        return rm;
+        return manager;
     }
 
     private void getdbfInfos(Region region) throws JDBFException {
