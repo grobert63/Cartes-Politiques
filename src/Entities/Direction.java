@@ -44,7 +44,7 @@ public class Direction{
     
     /**
      * Indique la direction la plus proche d'un angle donné.
-     * En sachant 0° correspond au NORD et 90° à l'OUEST
+     * En sachant 0° correspond au NORD et 90° à l'EST
      * @param angle Angle en degré
      * @return Direction la plus proche de l'angle
      */

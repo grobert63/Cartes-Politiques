@@ -1,4 +1,4 @@
-package Window;
+package GUI;
 
 import GUI.*;
 import GUI.Main;
@@ -50,7 +50,7 @@ public class Controller {
         ScrollVCarte.setValue(50);
 
         try {
-            GUI.Main.chargement();
+            Main.chargement();
         } catch (Exception e) {
             e.printStackTrace();
         }

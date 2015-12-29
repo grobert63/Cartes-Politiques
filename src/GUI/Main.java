@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.util.logging.Level;
@@ -27,10 +27,16 @@ public class Main extends Application {
     public static HexGrid grid;
     public static GeoMap geoMap;
     
-    public static void main(String[] args) throws Exception {
-        System.out.println("\n/!\\ Attention /!\\ : ce \"main\" n'est pas fini.\nPour afficher les cartes, il faut utiliser le main du package Window.\n");
-        chargement();
+    public static void main(String[] args) {
         Application.launch(args);
+    }
+    
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root, 650, 400));
+        primaryStage.show();
     }
 
     public static void chargement() throws Exception {
@@ -58,8 +64,10 @@ public class Main extends Application {
             afficherRegion(r);
         }
 
+        TimeDebug.timeStart(21);
         IResolver algo = new SimpleAggregerResolver();
         grid = algo.resolve(geoMap.getRegions());
+        TimeDebug.timeStop(21);
         
         TimeDebug.timeStop(0);
         TimeDebug.setTimeLabel(0, "Temps de chargement total de la carte");
@@ -70,6 +78,9 @@ public class Main extends Application {
         
         TimeDebug.setTimeLabel(20, "Calcul des voisins");
         TimeDebug.displayPourcentage(20, 0);
+        
+        TimeDebug.setTimeLabel(21, "Algorithme de résolution \""+algo.getClass().getSimpleName()+'"');
+        TimeDebug.displayPourcentage(21, 0);
     }
     
     public static void afficherRegion(Region r){
@@ -90,6 +101,7 @@ public class Main extends Application {
         //System.out.println("\tCentreY : "+r.getCenter().y);
     }
 
+    /*
     @Override
     public void start(Stage stage) {
         LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
@@ -105,11 +117,12 @@ public class Main extends Application {
         stage.setTitle("Canvas Test");
         stage.show();
         Save.saveToImage(stage, Converter.CanvasToImage(hexgrid));
-        /*try {
-            Load.loadMultiple(stage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        //try {
+        //    Load.loadMultiple(stage);
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
         
     }
+    */
 }

@@ -1,6 +1,8 @@
 package Entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -11,6 +13,7 @@ import java.util.TreeMap;
  */
 public class Geometry {
 
+    // à arranger (utiliser l'aire)
     static public RawPolygon getMainPolygon(List<RawPolygon> polygons) {
         RawPolygon larger = null;
         int maxPoints = -1;
@@ -65,11 +68,11 @@ public class Geometry {
         return pt1.x * pt0.y - pt0.x * pt1.y;
     }
     
-    static double distanceBetween2Points(Point pointA, Point pointB) {
+    public static double distanceBetween2Points(Point pointA, Point pointB) {
         return Math.sqrt((Math.pow(pointB.x - pointA.x,2) + Math.pow(pointB.y - pointA.y,2)));
     }
     
-    static double distanceBetween2PointsAlongBoudary(Boundary boundary, int firstIndex, int lastIndex){
+    public static double distanceBetween2PointsAlongBoudary(Boundary boundary, int firstIndex, int lastIndex){
         if(firstIndex > lastIndex){
             int tmp = lastIndex;
             lastIndex = firstIndex;
@@ -85,6 +88,12 @@ public class Geometry {
             somme_dist += Geometry.distanceBetween2Points(ptA, ptB);
         }
         return somme_dist;
+    }
+    
+    static public double angleBetween2Points(Point pt, Point reference){
+        double vecteurX = pt.x - reference.x;
+        double vecteurY = pt.y - reference.y;
+        return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
     }
         
     public static List<Boundary> getSimplifyBoundaries(List<Boundary> boundaries, double coef){
@@ -158,4 +167,47 @@ public class Geometry {
     private static double hauteurTriangle(double longueurBase, double aire){
         return (2*aire)/longueurBase;
     }
+    
+    public static HashMap<Boundary,double[]> calculerPourcentageBoundary(BoundPolygon bound, Point center){
+        HashMap<Boundary,double[]> pourcentages = new HashMap<>();
+        
+        double polyLength;
+        Point previous, current;
+        int directionToPrevious, directionToCurrent;
+        double[] directionsPourcent, boundaryLengthDirection;
+        
+        for(Boundary b : bound.getBoundaries()){
+            boundaryLengthDirection = new double[6];
+            for(int i=0 ; i<boundaryLengthDirection.length ; i++){
+                boundaryLengthDirection[i] = 0.0;
+            }
+            
+            Iterator<Point> it = b.getPoints().iterator();
+            current = it.next();
+            for(Point p = it.next() ; it.hasNext() ; p = it.next()){
+                previous = current;
+                current = p;
+                
+                directionToPrevious = Direction.getDirectionFromAngle(Geometry.angleBetween2Points(previous, center));
+                directionToCurrent = Direction.getDirectionFromAngle(Geometry.angleBetween2Points(current, center));
+                if(directionToPrevious == directionToCurrent){
+                    boundaryLengthDirection[directionToPrevious] = Geometry.distanceBetween2Points(previous, current);
+                }
+                else{
+                    // à faire
+                }
+            }
+            
+            directionsPourcent = new double[6];
+            polyLength = bound.getPerimeter();
+            for(int i=0 ; i<directionsPourcent.length ; i++){
+                directionsPourcent[i] = boundaryLengthDirection[i]/polyLength;
+            }
+            
+            pourcentages.put(b, directionsPourcent);
+        }
+        
+        return pourcentages;
+    }
+
 }

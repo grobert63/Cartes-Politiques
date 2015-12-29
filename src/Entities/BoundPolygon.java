@@ -13,4 +13,12 @@ public class BoundPolygon {
     public List<Boundary> getBoundaries(){
         return _boundaries;
     }
+    
+    public double getPerimeter(){
+        double perimeter = 0;
+        for(Boundary b : _boundaries){
+            perimeter += b.getLength();
+        }
+        return perimeter;
+    }
 }

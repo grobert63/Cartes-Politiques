@@ -46,7 +46,7 @@ public class RegionManager {
         return _bm.getBoundaries();
     }
     
-    public final void calculateNeighbors(List<Region> regions, List<Boundary> allBoundaries){
+    private void calculateNeighbors(List<Region> regions, List<Boundary> allBoundaries){
         List<Region> involvedRegions = new LinkedList<>();
         BoundPolygon currentPoly;
         

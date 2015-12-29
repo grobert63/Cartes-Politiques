@@ -108,9 +108,7 @@ public class Region {
     }
 
     public double getAngleTo(Region other){
-        double vecteurX = other.getCenter().x - this.getCenter().x;
-        double vecteurY = other.getCenter().y - this.getCenter().y;
-        return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
+        return Geometry.angleBetween2Points(this.getCenter(),other.getCenter());
     }
     
     void addNeighbor(Region neighbor, Boundary commonBoundary){
@@ -123,6 +121,4 @@ public class Region {
     public Map<Region, List<Boundary>> getNeighbors() {
         return _neighbors;
     }
-    
-    
 }

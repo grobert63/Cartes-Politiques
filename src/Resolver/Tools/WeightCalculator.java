@@ -17,43 +17,15 @@ import java.util.Map;
  * @author Théophile
  */
 public class WeightCalculator {
-    /*
     private final List<Region> regions;
-    private final Map<Region, Map<Region, Double>> voisins = new HashMap<>();
 
     public WeightCalculator(List<Region> regions) {
         this.regions = regions;
     }
-        
-    private void calculerVoisins(){
-        double ratio;
-        double ratioTotal;
-        
-        int nbRegions = regions.size();
-        Region a,b;
-        Map<Region,Double> frontieres;
-        for(int i=0;i<nbRegions;i++){
-            a = regions.get(i);
-            frontieres = new HashMap<>();
-            voisins.put(a, frontieres);
-            
-            ratioTotal = 0;
-            for(int j=0;j<nbRegions;j++){
-                if(i!=j){
-                    b =  regions.get(j);
-                    ratio = a.pourcentageDeFrontiereCommune(b);
-                    frontieres.put(b,ratio);
-                    ratioTotal += ratio;
-                }
-            }
-            frontieres.put(null,1-ratioTotal);
-        }
-    }
-        
+   
     public WeightArray getWeights() throws Exception{
         Region rA, rB;
         
-        calculerVoisins();
         WeightArray weights = new WeightArray(regions.size());
         for(int col=0; col<=weights.size();col++){
             for(int row=0; row<=weights.size();row++){
@@ -85,10 +57,9 @@ public class WeightCalculator {
     private double calculateWeight(Region rA, Region rB, int direction) throws Exception{
         double distance = rA.getDistanceTo(rB);
         double angle = Direction.getDifferenceAngleDirection(rA.getAngleTo(rB),direction);
-        double frontiereCommune = voisins.get(rA).get(rB);
+        //double frontiereCommune = voisins.get(rA).get(rB);
         
         
         throw new UnsupportedOperationException("Pas fini !!!!!!!!!!!!!!!!");
     }
-    */
 }
