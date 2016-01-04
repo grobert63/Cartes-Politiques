@@ -39,19 +39,28 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void chargement() throws Exception {
+    public static void chargement(String shp,String dbf) throws Exception {
         TimeDebug.timeStart(0);
         // Chargement des régions en mémoire
-        MapLoader ml = new MapLoader(
-                "test/FRA_adm1.shp",
-                "test/FRA_adm1.dbf"
-                //"test/world.shp",
-                //"test/world.dbf"
-                //"test/usstate500k.shp",
-                //"test/usstate500k.dbf"
-                //"test/usstate20m.shp",
-                //"test/usstate20m.dbf"
-        );
+        MapLoader ml;
+        if(shp == null || dbf == null)
+        {
+             ml = new MapLoader(
+                    "test/FRA_adm1.shp",
+                    "test/FRA_adm1.dbf"
+                    //"test/world.shp",
+                    //"test/world.dbf"
+                    //"test/usstate500k.shp",
+                    //"test/usstate500k.dbf"
+                    //"test/usstate20m.shp",
+                    //"test/usstate20m.dbf"
+            );
+        }
+        else
+        {
+            ml = new MapLoader(shp,dbf);
+        }
+
 
         geoMap = ml.load();
         

@@ -91,7 +91,7 @@ public class PolyCanvas extends Canvas {
         return nomPays;
     }
 
-    private void draw()
+    public void draw()
     {
         _canvasWidth = getWidth();
         _canvasHeight = getHeight();

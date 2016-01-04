@@ -3,6 +3,7 @@ package DataManager;
 import LoggerUtils.LoggerManager;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class Load {
         return list;
     }
 
-    public static File loadSingle(Stage stage) throws IOException {
+    public static File loadSingle(Window stage) throws IOException {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Ouvrir le fichier shapeFile");
         fileChooser.getExtensionFilters().addAll(
@@ -64,5 +65,19 @@ public class Load {
             return file;
         }
         throw new IOException("impossible de lire le fichier : " + file.getName());
+    }
+
+    public static File loadSingle(Window stage, FileChooser.ExtensionFilter extension,File directory) throws IOException {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Ouvrir le fichier shapeFile");
+        fileChooser.getExtensionFilters().addAll(extension);
+        fileChooser.setInitialDirectory(directory);
+        File file = fileChooser.showOpenDialog(stage);
+        if (file.exists())
+        {
+            LoggerManager.getInstance().getLogger().log(Level.INFO,"File : " + file.getName() + " loaded");
+            return file;
+        }
+        return null;
     }
 }
