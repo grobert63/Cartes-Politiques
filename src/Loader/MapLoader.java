@@ -1,5 +1,6 @@
 package Loader;
 
+import Debug.TimeDebug;
 import Entities.GeoMap;
 import Entities.RawPolygon;
 import Entities.Region;
@@ -74,18 +75,22 @@ public class MapLoader {
     private RegionManager loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
         List<List<RawPolygon>> rawRegions = new ArrayList<>();
 
+        TimeDebug.timeStart(18);
         List<RawPolygon> rawRegion = shapeStreamReader.getNextShape();
 
         while(rawRegion.size() > 0){
             rawRegions.add(rawRegion);
             rawRegion = shapeStreamReader.getNextShape();
         }
+        TimeDebug.timeStop(18);
 
         RegionManager manager = new RegionManager(rawRegions);
 
+        TimeDebug.timeStart(18);
         for(Region r : manager.getRegions()){
             getdbfInfos(r);
         }
+        TimeDebug.timeStop(18);
         
         return manager;
     }

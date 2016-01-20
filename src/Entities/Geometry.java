@@ -72,7 +72,7 @@ public class Geometry {
         return Math.sqrt((Math.pow(pointB.x - pointA.x,2) + Math.pow(pointB.y - pointA.y,2)));
     }
     
-    public static double distanceBetween2PointsAlongBoudary(Boundary boundary, int firstIndex, int lastIndex){
+    public static double distanceBetween2PointsAlongBoundary(Boundary boundary, int firstIndex, int lastIndex){
         if(firstIndex > lastIndex){
             int tmp = lastIndex;
             lastIndex = firstIndex;
@@ -90,7 +90,7 @@ public class Geometry {
         return somme_dist;
     }
     
-    static public double angleBetween2Points(Point pt, Point reference){
+    static public double angleBetween2Points(Point reference, Point pt){
         double vecteurX = pt.x - reference.x;
         double vecteurY = pt.y - reference.y;
         return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
@@ -114,7 +114,7 @@ public class Geometry {
     }
 
     private static TreeMap<Integer,Point> simplify(Boundary boundary, int firstIndex, int lastIndex, double coef){
-        if(firstIndex + 1 == lastIndex || Geometry.distanceBetween2PointsAlongBoudary(boundary, firstIndex, lastIndex) < coef){
+        if(firstIndex + 1 == lastIndex || Geometry.distanceBetween2PointsAlongBoundary(boundary, firstIndex, lastIndex) < coef){
             TreeMap<Integer,Point> includedPoint = new TreeMap<>();
             includedPoint.put(firstIndex, boundary.getPoints().get(firstIndex));
             includedPoint.put(lastIndex, boundary.getPoints().get(lastIndex));
@@ -188,8 +188,8 @@ public class Geometry {
                 previous = current;
                 current = p;
                 
-                directionToPrevious = Direction.getDirectionFromAngle(Geometry.angleBetween2Points(previous, center));
-                directionToCurrent = Direction.getDirectionFromAngle(Geometry.angleBetween2Points(current, center));
+                directionToPrevious = Direction.getDirectionFromAngle(Geometry.angleBetween2Points(center, previous));
+                directionToCurrent = Direction.getDirectionFromAngle(Geometry.angleBetween2Points(center, current));
                 if(directionToPrevious == directionToCurrent){
                     boundaryLengthDirection[directionToPrevious] = Geometry.distanceBetween2Points(previous, current);
                 }

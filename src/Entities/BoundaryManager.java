@@ -17,7 +17,6 @@ public class BoundaryManager {
     private final BoundPolygon[] _boundPolygons;
     
     public BoundaryManager(RawPolygon[] raws){
-        TimeDebug.timeStart(1);
         TimeDebug.timeStart(2);
         
         _seeker = new PointSeeker(raws);
@@ -294,11 +293,11 @@ public class BoundaryManager {
     }
     
     private List<Integer> getRegionsWhichContains(Point p){
-        TimeDebug.timeStart(1);
+        TimeDebug.timeStart(15);
         
         List<Integer> region_indexes = _seeker.getContainingPolygon(p);
         
-        TimeDebug.timeStop(1);
+        TimeDebug.timeStop(15);
         
         
         // rajoute 20% à la durée

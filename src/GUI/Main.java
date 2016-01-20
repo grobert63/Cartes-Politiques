@@ -79,8 +79,15 @@ public class Main extends Application {
         TimeDebug.timeStop(21);
         
         TimeDebug.timeStop(0);
+        
         TimeDebug.setTimeLabel(0, "Temps de chargement total de la carte");
         TimeDebug.displayTime(0);
+        
+        TimeDebug.setTimeLabel(18, "Chargement à partir des fichiers");
+        TimeDebug.displayPourcentage(18, 0);
+        
+        TimeDebug.setTimeLabel(19, "Topologisation");
+        TimeDebug.displayPourcentage(19, 0);
         
         TimeDebug.setTimeLabel(1, "Simplification de la carte");
         TimeDebug.displayPourcentage(1, 0);

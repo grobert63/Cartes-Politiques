@@ -25,8 +25,10 @@ public class RegionManager {
             rawMainPolygons[i] = Geometry.getMainPolygon(polygons);
         }
         
+        TimeDebug.timeStart(19);
         _bm = new BoundaryManager(rawMainPolygons);
         BoundPolygon[] boundMainPolygons = _bm.getBoundPolygon();
+        TimeDebug.timeStop(19);
         
         for(int i=0 ; i<nbRegions ; i++){
             Region r = new Region(displayablePolygons[i],rawMainPolygons[i],boundMainPolygons[i]);
