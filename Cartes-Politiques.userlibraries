@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="jdbf-1.2">
+    <archive path="C:/Users/PAYS/Desktop/Cartes-Politiques - Copie/lib/jdbf-1.2.jar" />
+  </library>
+  <library name="shapefilereader-1.0">
+    <archive path="C:/Users/PAYS/Desktop/Cartes-Politiques - Copie/lib/shapefilereader-1.0.jar" />
+  </library>
+</eclipse-userlibraries>
+
