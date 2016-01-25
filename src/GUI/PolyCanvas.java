@@ -4,9 +4,11 @@ import Entities.Boundary;
 import Entities.GeoMap;
 import Entities.Region;
 import javafx.beans.property.*;
+import javafx.event.EventHandler;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
@@ -23,7 +25,8 @@ public class PolyCanvas extends Canvas {
     private  double _canvasHeight;
     
     private double _ratio;
-
+    private double oldX;
+    private double oldY;
     /**
      * Canvas affichant la carte avec le nom de la région. Le ratio est toujours respecté
      *
@@ -41,6 +44,31 @@ public class PolyCanvas extends Canvas {
         decalageYProperty().addListener(evt -> draw());
         nomPaysProperty().addListener(evt -> draw());
         zoomProperty().addListener(evt -> draw());
+
+        setOnScroll(event -> zoomProperty().setValue(event.getDeltaY()/200+zoomProperty().getValue()));
+
+        setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                int x =(int) (event.getX()*getZoom()*4);
+                int y =(int) (event.getY()*getZoom()*4);
+                if(oldX != 0) {
+                    decalageXProperty().setValue(getDecalageX() + x - oldX );
+                    decalageYProperty().setValue(getDecalageY() + y - oldY );
+                }
+                oldX = x;
+                oldY = y;
+
+            }
+        });
+
+        setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                oldX = 0;
+                oldY = 0;
+            }
+        });
     }
 
     public double getZoom() {
@@ -115,20 +143,20 @@ public class PolyCanvas extends Canvas {
             
             gc.strokePolyline(x, y, size);
         }
-
-        for (Region region : _map.getRegions()) {
-            gc.fillText(region.getName(), computeX(region.getCenter().x), computeY(region.getCenter().y));
+        if(getNomPays())
+            for (Region region : _map.getRegions()) {
+                gc.fillText(region.getName(), computeX(region.getCenter().x), computeY(region.getCenter().y));
         }
     }
     
     private double computeX(double x){
-        return ((x + getDecalageX()) * _ratio - (_canvasWidth / 2)) * getZoom() + (_canvasWidth / 2);
+        return ((x + getDecalageX()/50) * _ratio - (_canvasWidth / 2)) * getZoom() + (_canvasWidth / 2);
     }
     
     private double computeY(double y){
-        return (_canvasHeight - (y - getDecalageY()) * _ratio - (_canvasHeight / 2)) * getZoom() + (_canvasHeight / 2);
+        return (_canvasHeight - (y - getDecalageY()/50) * _ratio - (_canvasHeight / 2)) * getZoom() + (_canvasHeight / 2);
     }
-    
+
     private double resize() {
         double ratioX, ratioY;
         ratioX = _canvasWidth / _map.getWidth();

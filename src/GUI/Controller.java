@@ -79,13 +79,13 @@ public class Controller {
         canvasCarte.widthProperty().bind(PaneAffichageCarte.widthProperty());
         canvasCarte.heightProperty().bind(PaneAffichageCarte.heightProperty());
 
-        canvasCarte.zoomProperty().bind(SliderZoomCarte.valueProperty());
-        canvas.zoomProperty().bind(SliderResult.valueProperty());
+        canvasCarte.zoomProperty().bindBidirectional(SliderZoomCarte.valueProperty());
+        canvas.zoomProperty().bindBidirectional(SliderResult.valueProperty());
 
-        canvas.decalageXProperty().bind(ScrollHResult.valueProperty().multiply(-1).multiply(canvas.widthProperty().divide(ScrollHResult.maxProperty())));
-        canvasCarte.decalageXProperty().bind(ScrollHCarte.valueProperty().subtract(50).multiply(-1).multiply(canvasCarte.widthProperty().divide(ScrollHCarte.maxProperty())));
-        canvas.decalageYProperty().bind(ScrollVResult.valueProperty().multiply(-1).multiply(canvas.heightProperty().divide(ScrollHResult.maxProperty())));
-        canvasCarte.decalageYProperty().bind(ScrollVCarte.valueProperty().subtract(50).multiply(-1).multiply(canvasCarte.heightProperty().divide(ScrollVCarte.maxProperty())));
+        canvas.decalageXProperty().bindBidirectional(ScrollHResult.valueProperty());
+        canvasCarte.decalageXProperty().bindBidirectional(ScrollHCarte.valueProperty());
+        canvas.decalageYProperty().bindBidirectional(ScrollVResult.valueProperty());
+        canvasCarte.decalageYProperty().bindBidirectional(ScrollVCarte.valueProperty());
 
         canvasCarte.nomPaysProperty().bind(NomPaysCarte.selectedProperty());
     }
