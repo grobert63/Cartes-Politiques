@@ -11,9 +11,13 @@ import Loader.MapLoader;
 import LoggerUtils.LoggerManager;
 import Resolver.IResolver;
 import Resolver.SimpleAggregerResolver;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.hexiong.jdbf.DBFReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,7 +30,9 @@ import java.util.logging.Level;
 public class Main extends Application {
     public static HexGrid grid;
     public static GeoMap geoMap;
-    
+    public static ArrayList<String> nameCollumns = new ArrayList<String>();
+
+
     public static void main(String[] args) {
         Application.launch(args);
     }
@@ -65,7 +71,13 @@ public class Main extends Application {
         geoMap = ml.load();
         
         // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
-        geoMap.debug_getManager().setRegionsName("NAME_1");
+        int i;
+        nameCollumns.clear();
+        for(i = 0; i < ml.getDbfReader().getFieldCount(); ++i) {
+            if(ml.getDbfReader().getField(i).getName().toLowerCase().contains("name"))
+                nameCollumns.add(ml.getDbfReader().getField(i).getName());
+        }
+        geoMap.debug_getManager().setRegionsName(nameCollumns.get(nameCollumns.size()-1));
         //geoMap.debug_getManager().setRegionsName("name");
         //geoMap.debug_getManager().setRegionsName("NAME");
 

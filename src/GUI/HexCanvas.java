@@ -46,8 +46,8 @@ public class HexCanvas extends Canvas{
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                int x =(int) (event.getX()*getZoom());
-                int y =(int) (event.getY()*getZoom());
+                int x =(int) (event.getX());
+                int y =(int) (event.getY());
                 if(oldX != 0) {
                     decalageXProperty().setValue(getDecalageX() + x - oldX);
                     decalageYProperty().setValue(getDecalageY() + y - oldY);

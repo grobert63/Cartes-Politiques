@@ -3,6 +3,8 @@ package GUI;
 import DataManager.Load;
 import GUI.*;
 import GUI.Main;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -15,6 +17,7 @@ import java.io.IOException;
 
 public class Controller {
 
+    public Menu menuName;
     private PolyCanvas canvasCarte;
     private HexCanvas canvas;
 
@@ -88,8 +91,32 @@ public class Controller {
         canvasCarte.decalageYProperty().bindBidirectional(ScrollVCarte.valueProperty());
 
         canvasCarte.nomPaysProperty().bind(NomPaysCarte.selectedProperty());
+
+
+        chargementName();
     }
 
+    private void chargementName()
+    {
+        menuName.getItems().clear();
+        ToggleGroup toggleGroup = new ToggleGroup();
+        for (String name :Main.nameCollumns) {
+            RadioMenuItem radio = new RadioMenuItem(name);
+            radio.setToggleGroup(toggleGroup);
+            radio.setSelected(true);
+            radio.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Main.geoMap.debug_getManager().setRegionsName(radio.getText());
+                    canvas.draw();
+                    canvasCarte.draw();
+                }
+            });
+            menuName.getItems().add(radio);
+
+        }
+
+    }
 
     @FXML
     public void load()
@@ -103,5 +130,6 @@ public class Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        chargementName();
     }
 }

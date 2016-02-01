@@ -50,8 +50,8 @@ public class PolyCanvas extends Canvas {
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                int x =(int) (event.getX()*getZoom()*4);
-                int y =(int) (event.getY()*getZoom()*4);
+                int x =(int) (event.getX()*4);
+                int y =(int) (event.getY()*4);
                 if(oldX != 0) {
                     decalageXProperty().setValue(getDecalageX() + x - oldX );
                     decalageYProperty().setValue(getDecalageY() + y - oldY );

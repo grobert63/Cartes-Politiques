@@ -72,6 +72,11 @@ public class MapLoader {
         return new GeoMap(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), manager);
     }
 
+    public DBFReader getDbfReader()
+    {
+        return dbfReader;
+    }
+
     private RegionManager loadRegions() throws IOException, InvalidShapeFileException, JDBFException {
         List<List<RawPolygon>> rawRegions = new ArrayList<>();
 
