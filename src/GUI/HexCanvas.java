@@ -34,7 +34,6 @@ public class HexCanvas extends Canvas{
     public HexCanvas(double width, double height, HexGrid grid) {
         super(width, height);
 
-
         widthProperty().addListener(evt -> draw());
         heightProperty().addListener(evt -> draw());
         decalageXProperty().addListener(evt -> draw());

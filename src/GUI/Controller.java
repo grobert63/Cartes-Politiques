@@ -131,5 +131,7 @@ public class Controller {
             e.printStackTrace();
         }
         chargementName();
+        canvas.draw();
+        canvasCarte.draw();
     }
 }

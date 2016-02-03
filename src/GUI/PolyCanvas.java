@@ -10,13 +10,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.TextAlignment;
 
 /**
  * Décrit un canvas spécialisé dans l'affichage de polygones
  */
 public class PolyCanvas extends Canvas {
-    private final GeoMap _map;
     private final IntegerProperty decalageX = new SimpleIntegerProperty();
     private final IntegerProperty decalageY = new SimpleIntegerProperty();
     private final DoubleProperty zoom = new SimpleDoubleProperty();
@@ -35,8 +35,6 @@ public class PolyCanvas extends Canvas {
     public PolyCanvas(GeoMap map) {
         super();
 
-        this._map = map;
-
 
         widthProperty().addListener(evt -> draw());
         heightProperty().addListener(evt -> draw());
@@ -50,8 +48,8 @@ public class PolyCanvas extends Canvas {
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                int x =(int) (event.getX()*4);
-                int y =(int) (event.getY()*4);
+                int x =(int) (event.getX());
+                int y =(int) (event.getY());
                 if(oldX != 0) {
                     decalageXProperty().setValue(getDecalageX() + x - oldX );
                     decalageYProperty().setValue(getDecalageY() + y - oldY );
@@ -132,19 +130,19 @@ public class PolyCanvas extends Canvas {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
                 
-        for (Boundary b : _map.getSimpleBoundaries()) {
+        for (Boundary b : Main.geoMap.getSimpleBoundaries()) {
             int size = b.getPoints().size();
             double x[] = new double[size];
             double y[] = new double[size];
             for (int i = 0; i < size; i++) {
-                x[i] = computeX(b.getPoints().get(i).x);
-                y[i] = computeY(b.getPoints().get(i).y);
+                y[i] =(_canvasHeight- b.getPoints().get(i).y + getDecalageY())*_ratio*getZoom();
+                x[i] =(b.getPoints().get(i).x  + getDecalageX())*_ratio*getZoom();
             }
-            
+
             gc.strokePolyline(x, y, size);
         }
         if(getNomPays())
-            for (Region region : _map.getRegions()) {
+            for (Region region : Main.geoMap.getRegions()) {
                 gc.fillText(region.getName(), computeX(region.getCenter().x), computeY(region.getCenter().y));
         }
     }
@@ -159,12 +157,12 @@ public class PolyCanvas extends Canvas {
 
     private double resize() {
         double ratioX, ratioY;
-        ratioX = _canvasWidth / _map.getWidth();
-        ratioY = _canvasHeight / _map.getHeight();
+        ratioX = _canvasWidth / Main.geoMap.getWidth();
+        ratioY = _canvasHeight / Main.geoMap.getHeight();
         if (ratioX < 1 && ratioY < 1)
         {
-            ratioX = _map.getWidth() / _canvasWidth;
-            ratioY = _map.getHeight() / _canvasHeight;
+            ratioX = Main.geoMap.getWidth() / _canvasWidth;
+            ratioY = Main.geoMap.getHeight() / _canvasHeight;
         }
         return ratioX < ratioY ? ratioX : ratioY;
     }
