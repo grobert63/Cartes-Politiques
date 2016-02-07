@@ -135,8 +135,8 @@ public class PolyCanvas extends Canvas {
             double x[] = new double[size];
             double y[] = new double[size];
             for (int i = 0; i < size; i++) {
-                y[i] =(_canvasHeight- b.getPoints().get(i).y + getDecalageY())*_ratio*getZoom();
-                x[i] =(b.getPoints().get(i).x  + getDecalageX())*_ratio*getZoom();
+                y[i] =_canvasHeight- (b.getPoints().get(i).y)*_ratio*getZoom() + getDecalageY();
+                x[i] =(b.getPoints().get(i).x )*_ratio*getZoom() + getDecalageX();
             }
 
             gc.strokePolyline(x, y, size);
