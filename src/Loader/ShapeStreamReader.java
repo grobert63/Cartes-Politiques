@@ -168,29 +168,6 @@ public class ShapeStreamReader {
      * @throws IOException
      * @throws InvalidShapeFileException
      */
-    /*
-    public List<Polygon> getNextShape() throws IOException, InvalidShapeFileException {
-        AbstractShape shape = _reader.next();
-        List<Polygon> polygons = new ArrayList<>();
-        if (shape != null)
-        {
-            AbstractPolyShape polygonShape = (AbstractPolyShape) shape;
-            for (int i = 0; i < polygonShape.getNumberOfParts(); i++) {
-                polygons.add(addPointDataArrayToPolygon(new Polygon(),polygonShape.getPointsOfPart(i)));
-            }
-        }
-        return polygons;
-    }
-
-    private Polygon addPointDataArrayToPolygon(Polygon polygon, PointData[] points) {
-        for (PointData point : points) {
-            polygon.getPoints().add(point.getX() - getMapMinX());
-            polygon.getPoints().add(point.getY() - getMapMinY());
-        }
-        return polygon;
-    }
-    */
-    
     public List<RawPolygon> getNextShape() throws IOException, InvalidShapeFileException {
         AbstractShape shape = _reader.next();
         List<RawPolygon> polygons = new ArrayList<>();

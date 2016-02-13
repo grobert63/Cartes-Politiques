@@ -104,13 +104,10 @@ public class Controller {
             RadioMenuItem radio = new RadioMenuItem(name);
             radio.setToggleGroup(toggleGroup);
             radio.setSelected(true);
-            radio.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    Main.geoMap.debug_getManager().setRegionsName(radio.getText());
-                    canvas.draw();
-                    canvasCarte.draw();
-                }
+            radio.setOnAction(event -> {
+                Main.geoMap.debug_getManager().setRegionsName(radio.getText());
+                canvas.draw();
+                canvasCarte.draw();
             });
             menuName.getItems().add(radio);
 

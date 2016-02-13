@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -97,19 +98,12 @@ public class Geometry {
     }
         
     public static List<Boundary> getSimplifyBoundaries(List<Boundary> boundaries, double coef){
-        List<Boundary> simplified = new ArrayList<>();
-        for(Boundary b : boundaries){
-            simplified.add(simplifyBoundary(b, coef));
-        }
-        return simplified;
+        return boundaries.stream().map(b -> simplifyBoundary(b, coef)).collect(Collectors.toList());
     }
 
     private static Boundary simplifyBoundary(Boundary b, double coef) {
         TreeMap<Integer,Point> simplifiedPoints = simplify(b,0,b.getPoints().size()-1,coef);
-        List<Point> points = new ArrayList<>();
-        for(Point p : simplifiedPoints.values()){
-            points.add(p);
-        }
+        List<Point> points = simplifiedPoints.values().stream().collect(Collectors.toList());
         return new Boundary(points);
     }
 

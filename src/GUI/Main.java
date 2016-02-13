@@ -1,36 +1,29 @@
 package GUI;
 
-import DataManager.Converter;
-import DataManager.Save;
 import Debug.TimeDebug;
 import Entities.Boundary;
-import Entities.HexGrid;
 import Entities.GeoMap;
+import Entities.HexGrid;
 import Entities.Region;
 import Loader.MapLoader;
-import LoggerUtils.LoggerManager;
 import Resolver.IResolver;
 import Resolver.SimpleAggregerResolver;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.hexiong.jdbf.DBFReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 
 public class Main extends Application {
     public static HexGrid grid;
     public static GeoMap geoMap;
-    public static ArrayList<String> nameCollumns = new ArrayList<String>();
+    public static ArrayList<String> nameCollumns = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -81,9 +74,7 @@ public class Main extends Application {
         //geoMap.debug_getManager().setRegionsName("name");
         //geoMap.debug_getManager().setRegionsName("NAME");
 
-        for (Region r : geoMap.getRegions()) {
-            afficherRegion(r);
-        }
+        geoMap.getRegions().forEach(Main::afficherRegion);
 
         TimeDebug.timeStart(21);
         IResolver algo = new SimpleAggregerResolver();

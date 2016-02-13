@@ -45,27 +45,21 @@ public class PolyCanvas extends Canvas {
 
         setOnScroll(event -> zoomProperty().setValue(event.getDeltaY()/200+zoomProperty().getValue()));
 
-        setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                int x =(int) (event.getX());
-                int y =(int) (event.getY());
-                if(oldX != 0) {
-                    decalageXProperty().setValue(getDecalageX() + x - oldX );
-                    decalageYProperty().setValue(getDecalageY() + y - oldY );
-                }
-                oldX = x;
-                oldY = y;
-
+        setOnMouseDragged(event -> {
+            int x =(int) (event.getX());
+            int y =(int) (event.getY());
+            if(oldX != 0) {
+                decalageXProperty().setValue(getDecalageX() + x - oldX );
+                decalageYProperty().setValue(getDecalageY() + y - oldY );
             }
+            oldX = x;
+            oldY = y;
+
         });
 
-        setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                oldX = 0;
-                oldY = 0;
-            }
+        setOnMouseReleased(event -> {
+            oldX = 0;
+            oldY = 0;
         });
     }
 

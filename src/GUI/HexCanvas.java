@@ -5,12 +5,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 /**
  * Décrit un canvas spécialisé dans l'affichage d'une grille hexagonale
@@ -42,27 +38,21 @@ public class HexCanvas extends Canvas{
 
         setOnScroll(event -> zoomProperty().setValue(event.getDeltaY()/200+zoomProperty().getValue()));
 
-        setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                int x =(int) (event.getX());
-                int y =(int) (event.getY());
-                if(oldX != 0) {
-                    decalageXProperty().setValue(getDecalageX() + x - oldX);
-                    decalageYProperty().setValue(getDecalageY() + y - oldY);
-                }
-                oldX = x;
-                oldY = y;
-
+        setOnMouseDragged(event -> {
+            int x =(int) (event.getX());
+            int y =(int) (event.getY());
+            if(oldX != 0) {
+                decalageXProperty().setValue(getDecalageX() + x - oldX);
+                decalageYProperty().setValue(getDecalageY() + y - oldY);
             }
+            oldX = x;
+            oldY = y;
+
         });
 
-        setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                oldX = 0;
-                oldY = 0;
-            }
+        setOnMouseReleased(event -> {
+            oldX = 0;
+            oldY = 0;
         });
     }
 
