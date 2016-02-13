@@ -2,7 +2,7 @@ package Loader;
 
 import Entities.Point;
 import Entities.RawPolygon;
-import exception.InvalidMapException;
+import CustomException.InvalidMapException;
 import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;

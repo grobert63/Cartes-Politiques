@@ -69,7 +69,7 @@ public class Load {
 
     public static File loadSingle(Window stage, FileChooser.ExtensionFilter extension,File directory) throws IOException {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Ouvrir le fichier shapeFile");
+        fileChooser.setTitle("Ouvrir le fichier");
         fileChooser.getExtensionFilters().addAll(extension);
         fileChooser.setInitialDirectory(directory);
         File file = fileChooser.showOpenDialog(stage);

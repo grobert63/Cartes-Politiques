@@ -7,7 +7,7 @@ import Entities.Region;
 import Entities.RegionManager;
 import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
-import exception.InvalidMapException;
+import CustomException.InvalidMapException;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 
@@ -34,10 +34,10 @@ public class MapLoader {
      */
     public MapLoader(String shpFilePath, String dbfFilePath) throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
         FileReader fileReader = new FileReader(shpFilePath);
-        
+
         ValidationPreferences v = new ValidationPreferences();
         v.setAllowUnlimitedNumberOfPointsPerShape(true);
-        
+
         this.shapeStreamReader = new ShapeStreamReader(fileReader.getFileInputStream(),v);
         if(dbfFilePath != null){
             this.dbfReader = new DBFReader(dbfFilePath);

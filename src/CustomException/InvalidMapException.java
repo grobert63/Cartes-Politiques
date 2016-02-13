@@ -1,4 +1,4 @@
-package exception;
+package CustomException;
 
 /**
  * erreur lancee si la carte n'est pas dans un format lisble par le logiciel
