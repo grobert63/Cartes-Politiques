@@ -6,6 +6,7 @@ import Entities.GeoMap;
 import Entities.HexGrid;
 import Entities.Region;
 import Loader.MapLoader;
+import LoggerUtils.LoggerManager;
 import Resolver.IResolver;
 import Resolver.SimpleAggregerResolver;
 import javafx.application.Application;
@@ -18,12 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 
 public class Main extends Application {
     public static HexGrid grid;
     public static GeoMap geoMap;
-    public static ArrayList<String> nameCollumns = new ArrayList<>();
+    public static ArrayList<String> nameColumns = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -32,10 +34,12 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception{
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Application started");
     }
 
     public static void chargement(String shp,String dbf) throws Exception {
@@ -65,12 +69,12 @@ public class Main extends Application {
         
         // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
         int i;
-        nameCollumns.clear();
+        nameColumns.clear();
         for(i = 0; i < ml.getDbfReader().getFieldCount(); ++i) {
             if(ml.getDbfReader().getField(i).getName().toLowerCase().contains("name"))
-                nameCollumns.add(ml.getDbfReader().getField(i).getName());
+                nameColumns.add(ml.getDbfReader().getField(i).getName());
         }
-        geoMap.debug_getManager().setRegionsName(nameCollumns.get(nameCollumns.size()-1));
+        geoMap.debug_getManager().setRegionsName(nameColumns.get(nameColumns.size()-1));
         //geoMap.debug_getManager().setRegionsName("name");
         //geoMap.debug_getManager().setRegionsName("NAME");
 

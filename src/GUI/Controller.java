@@ -1,19 +1,13 @@
 package GUI;
 
 import DataManager.Load;
-import GUI.*;
-import GUI.Main;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Controller {
 
@@ -100,7 +94,7 @@ public class Controller {
     {
         menuName.getItems().clear();
         ToggleGroup toggleGroup = new ToggleGroup();
-        for (String name :Main.nameCollumns) {
+        for (String name :Main.nameColumns) {
             RadioMenuItem radio = new RadioMenuItem(name);
             radio.setToggleGroup(toggleGroup);
             radio.setSelected(true);
