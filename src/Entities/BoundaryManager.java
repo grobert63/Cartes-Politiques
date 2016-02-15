@@ -33,22 +33,16 @@ public class BoundaryManager {
         
         
         for(int i=0 ; i<raws.length ; i++){
-            //System.out.println("<Polygon #"+i+">");
             
             if(bounds[i].getBoundaries().isEmpty()){
-                //System.out.println("\t<Ne contient pas de boundaries/>");
-                
                 TimeDebug.timeStart(5);
                 makeBoundaries(raws,i,boundariesToBeAdd);
                 TimeDebug.timeStop(5);
                 
             }
             else{
-                
-                //System.out.println("\t<Contient déjà des boundaries/>");
                 TimeDebug.timeStart(6);
-              
-                //System.out.println(i);
+
                 List<int[]> extremities = getExtremitiesOfBoundariesToBeMade(bounds[i],raws[i]);
                 
                 for(int[] array : extremities){
@@ -59,47 +53,7 @@ public class BoundaryManager {
             }
             
             addCreatedBoundariesToPolygon(boundariesToBeAdd,bounds);
-            
-            //System.out.println("</Polygon #"+i+">");
-            //System.out.println();
         }
-        
-        //<debug>
-        /*
-        System.out.println("<Pourcentages>");
-        
-        TimeDebug.setTimeLabel(1, "getRegionsWhichContains");
-        TimeDebug.displayTime(1);
-        
-        TimeDebug.setTimeLabel(2,"new PointSeeker");
-        TimeDebug.displayTime(2);
-             
-        TimeDebug.setTimeLabel(4,"makeBoundaries/for");
-        TimeDebug.displayTime(4);
-        
-        System.out.println("{");
-        
-        TimeDebug.setTimeLabel(7,"makeBoundaries/for/debut");
-        TimeDebug.displayTime(7);
-        
-        TimeDebug.setTimeLabel(8,"makeBoundaries/for/getRegionsWhichContains");
-        TimeDebug.displayTime(8);
-        
-        TimeDebug.setTimeLabel(3,"makeBoundaries/for/path");
-        TimeDebug.displayTime(3);
-   
-        System.out.println("}");
-
-        
-        System.out.println();
-        TimeDebug.setTimeLabel(5,"\"Ne contient pas de boundaries\"");
-        TimeDebug.displayTime(5);
-        
-        TimeDebug.setTimeLabel(6,"\"Contient déjà des boundaries\"");
-        TimeDebug.displayTime(6);
-        System.out.println();
-        */
-        //</debug>
         
         _boundPolygons = bounds;
     }
@@ -115,8 +69,6 @@ public class BoundaryManager {
     private void addCreatedBoundariesToPolygon(Map<Integer, List<Boundary>> boundariesToBeAdd, BoundPolygon[] bounds) {
         int boundIndex;
         List<Boundary> listeBoundaries;
-        
-        //System.out.println("\t<Ajout des boundaries aux polygons>");
 
         for(Entry<Integer, List<Boundary>> entry : boundariesToBeAdd.entrySet()) {
             boundIndex = entry.getKey();
@@ -124,9 +76,7 @@ public class BoundaryManager {
             for(Boundary b : listeBoundaries){
                 bounds[boundIndex].getBoundaries().add(b);
             }
-            //System.out.println("\t\t<Ajout au polygon #"+boundIndex+" : "+listeBoundaries.size()+" boundarie(s)/>");
         }
-        //System.out.println("\t</Ajout des boundaries aux polygons>");
         
         boundariesToBeAdd.clear();
     }
@@ -142,8 +92,6 @@ public class BoundaryManager {
         Point previous_pt, current_pt, first_pt;
 
         first_pt = polygon.getPoints().get(firstPointIndex);
-
-        //System.out.println("\t<Boundaries de "+first_pt+" -> "+last_pt+">");
 
         List<Integer> polyWithPreviousPt;
         List<Integer> polyWithCurrentPt = getRegionsWhichContains(first_pt);
@@ -171,12 +119,6 @@ public class BoundaryManager {
             if (current_pt.equals(previous_pt)) {
                 continue;
             }
-
-            /*
-            System.out.println("\t<i = "+i+">");
-            System.out.println("\t<lastPointIndex = "+lastPointIndex+">");
-            System.out.println("\t<nbPoints = "+nbPoints+">");
-            */
             
             TimeDebug.timeStop(7);
             
@@ -199,12 +141,10 @@ public class BoundaryManager {
                 
                 // à arranger
                 if(nbPolyWithCurrentPt == nbPolyWithPreviousPt || !isSame(polyWithPreviousPt,polyWithCurrentPt)){
-                    //System.err.println("false 1");
                     path = 4;
                 }
                 
                 if(nbPolyWithCurrentPt != nbPolyWithPreviousPt || !isOneSubFromOther(polyWithCurrentPt,polyWithPreviousPt)){
-                    //System.err.println("false 2");
                     path = 4;
                 }
             }
@@ -244,20 +184,9 @@ public class BoundaryManager {
             }
             
             TimeDebug.timeStop(3);
-            
-            /*
-            //<debug>
-            if(boundary_tmp != null){
-                System.out.println("\t<Boundary.size() = "+boundary_tmp.getPoints().size());
-                System.out.println("\t<La région "+polyWithCurrentPt.get(0)+" contient "+raws[polyWithCurrentPt.get(0)].getPoints().size()+ " points/>");
-            }
-            else{
-                System.out.println("\t<Boundary = null");
-            }
-            */
+
         }
         TimeDebug.timeStop(4);
-        //System.out.println("\t</Boundaries>");
     }
     
     private boolean isSame(List<Integer> la, List<Integer> lb){
@@ -299,34 +228,21 @@ public class BoundaryManager {
         
         TimeDebug.timeStop(15);
         
-        
-        // rajoute 20% à la durée
-        /*
-        System.out.print("\t\t\t<Point "+p+" appartient aux régions : ");
-        for(Integer i : region_indexes){
-            System.out.print(i+",");
-        }
-        System.out.print("\b/>\n");
-        */
-        
-        //</debug>
+
         return region_indexes;
     }
 
     private Boundary startOrContinueBoundary(Boundary boundary_tmp, Point point) {
         if(boundary_tmp == null){
             boundary_tmp = new Boundary();
-            //System.out.println("\t\t<Boundary>");
         }
         boundary_tmp.getPoints().add(point);
-        //System.out.println("\t\t\t<Ajout du point "+point+"/>");
         return boundary_tmp;
     }
 
     private Boundary finalizeBoundary(Boundary boundary_tmp, Point point, Map<Integer, List<Boundary>> boundariesToBeAdd, List<Integer> polygonsIndex){
         if(boundary_tmp != null){
             boundary_tmp.getPoints().add(point);
-            //System.out.println("\t\t\t<Ajout du point "+point+"/>");
             for(int polygonIndex : polygonsIndex){
                 if (boundariesToBeAdd.containsKey(polygonIndex)) {
                     boundariesToBeAdd.get(polygonIndex).add(boundary_tmp);
@@ -335,9 +251,7 @@ public class BoundaryManager {
                     list.add(boundary_tmp);
                     boundariesToBeAdd.put(polygonIndex, list);
                 }
-                //System.out.println("\t\t\t<Polygon #"+polygonIndex+" : ajout de la boundary/>");
             }
-            //System.out.println("\t\t</Boundary>");
             _boundaries.add(boundary_tmp);
         }
         return null;
@@ -347,18 +261,13 @@ public class BoundaryManager {
         List<int[]> extremities = new ArrayList<>();
         
         List<Boundary> remainingBoundaries = boundPoly.getBoundaries().stream().collect(Collectors.toList());
-        //System.out.println("\t\t<remainingBoundaries.size() = "+remainingBoundaries.size()+"/>");
         
         int nbPoints = rawPoly.getPoints().size() - 1;
-        //System.out.println("\t\t<nbPoints = "+nbPoints+"/>");
 
         Boundary firstBoundary = remainingBoundaries.get(0);
-        //System.out.println("\n\n\t\t<firstBoundary.getStartingPoint() = "+firstBoundary.getStartingPoint());
         
         int indexOfFirstPointOfFirstBoundary = rawPoly.getPoints().indexOf(firstBoundary.getStartingPoint());
-        
-        //System.out.println("\t\t<indexOfFirstPointOfFirstBoundary = "+indexOfFirstPointOfFirstBoundary+"/>");
-        //<debug>
+
         if(indexOfFirstPointOfFirstBoundary == -1){
             Point p = firstBoundary.getStartingPoint();
             List<Integer> l = _seeker.getContainingPolygon(p);
@@ -370,77 +279,55 @@ public class BoundaryManager {
             System.err.println();
             System.exit(1);
         }
-        //</debug>
         
         int currentPointIndex, lastPointIndex;
-        
-        //System.out.println("\t\t<rawPoly.getPoints().get((indexOfFirstPointOfFirstBoundary+1)%nbPoints) = "+rawPoly.getPoints().get((indexOfFirstPointOfFirstBoundary+1)%nbPoints)+"/>");
-        //System.out.println("\t\t<firstBoundary.getPoints().get(1) = "+firstBoundary.getPoints().get(1)+"/>");
 
         if(rawPoly.getPoints().get((indexOfFirstPointOfFirstBoundary+1)%nbPoints).equals(firstBoundary.getPoints().get(1))){
-            //System.out.println("\t\t<Bon sens/>");
             currentPointIndex = (indexOfFirstPointOfFirstBoundary + firstBoundary.getPoints().size() - 1) % nbPoints;
             lastPointIndex = indexOfFirstPointOfFirstBoundary;
         }
         else{
-            //System.out.println("\t\t<Mauvais sens/>");
             currentPointIndex = indexOfFirstPointOfFirstBoundary;
             lastPointIndex = (indexOfFirstPointOfFirstBoundary - (firstBoundary.getPoints().size() - 1)) % nbPoints;
             if(lastPointIndex < 0){
                 lastPointIndex = nbPoints + lastPointIndex;
             }
         }
-        //System.out.println("\t\t<Current point : "+rawPoly.getPoints().get(currentPointIndex)+"/>");
-        //System.out.println("\t\t<Last point : "+rawPoly.getPoints().get(lastPointIndex)+"/>");
-
         remainingBoundaries.remove(0);
         
         int firstExtremity = currentPointIndex;
         boolean newExtremity = false;
 
         while(currentPointIndex != lastPointIndex){
-            //System.out.println("\t\t<Début while> lastPointIndex = "+lastPointIndex);
             for(int i=0 ; i<remainingBoundaries.size() ; i++){
-                //System.out.println("\t\t\t<Début for, i="+(i+1)+"/"+remainingBoundaries.size()+"> <currentPointIndex = "+currentPointIndex+"/>");
                 Boundary b = remainingBoundaries.get(i);
                 
                 Point currentPoint = rawPoly.getPoints().get(currentPointIndex);
                 boolean start = (currentPoint.equals(b.getStartingPoint()));
                 boolean end = (currentPoint.equals(b.getEndingPoint()));
-                //System.out.println("\t\t\t\t<currentPoint = "+currentPoint+"/>");
-                //System.out.println("\t\t\t\t<b.getStartingPoint() = "+b.getStartingPoint()+"/>");
-                //System.out.println("\t\t\t\t<b.getEndingPoint() = "+b.getEndingPoint()+"/>");
-
                 if (start || end) {
                     if (firstExtremity != currentPointIndex) {
                         extremities.add(new int[]{firstExtremity, currentPointIndex});
-                        //System.out.println("\t\t\t\t<A:extremities.add("+rawPoly.getPoints().get(firstExtremity)+","+rawPoly.getPoints().get(currentPointIndex)+")/>");
                     }
                     currentPointIndex = (currentPointIndex + b.getPoints().size() - 1) % nbPoints;
-                    //System.out.println("\t\t\t\t<Update> currentPointIndex = "+currentPointIndex+"</>");
                     remainingBoundaries.remove(i);
                     firstExtremity = currentPointIndex;
                     newExtremity = true;
-                    //System.out.println("\t\t\t</Fin for>");
                     break;
                 }
                 else{
                     newExtremity = false;
                 }
-                //System.out.println("\t\t\t</Fin for>");
             }
             if(!newExtremity){
                 currentPointIndex = (currentPointIndex+1) % nbPoints;
             }
             if(remainingBoundaries.isEmpty()){
                 currentPointIndex = lastPointIndex;
-                //System.out.println("\t\t\tremainingBoundaries.isEmpty() -> currentPointIndex = lastPointIndex");
             }
-            //System.out.println("\t\t</Fin while>");
         }
         if (firstExtremity != lastPointIndex) {
             extremities.add(new int[]{firstExtremity, lastPointIndex});
-            //System.out.println("\t\t\t<B:extremities.add("+rawPoly.getPoints().get(firstExtremity)+","+rawPoly.getPoints().get(lastPointIndex)+")/>");
         }
 
         
@@ -479,13 +366,6 @@ public class BoundaryManager {
                     }
                 }
             }
-            
-            /*
-            System.out.println("minX = "+minX);
-            System.out.println("maxX = "+maxX);
-            System.out.println("minY = "+minY);
-            System.out.println("maxY = "+maxY);
-            */
             
             offsetX = 0 - minX;
             offsetY = 0 - minY;

@@ -75,8 +75,6 @@ public class Main extends Application {
                 nameColumns.add(ml.getDbfReader().getField(i).getName());
         }
         geoMap.debug_getManager().setRegionsName(nameColumns.get(nameColumns.size()-1));
-        //geoMap.debug_getManager().setRegionsName("name");
-        //geoMap.debug_getManager().setRegionsName("NAME");
 
         geoMap.getRegions().forEach(Main::afficherRegion);
 
@@ -119,33 +117,5 @@ public class Main extends Application {
                 System.out.println("\t *Vide* : "+boundary.size());
             }
         }
-        
-        //System.out.println("\tCentreX : "+r.getCenter().x);
-        //System.out.println("\tCentreY : "+r.getCenter().y);
     }
-
-    /*
-    @Override
-    public void start(Stage stage) {
-        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
-        HBox root = new HBox();
-        // Création et affichage de la grille hexagonale
-        Canvas hexgrid = new HexCanvas(800, 700, grid);
-        root.getChildren().add(hexgrid);
-        Canvas polygrid = new PolyCanvas(geoMap);
-        root.getChildren().add(polygrid);
-
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Canvas Test");
-        stage.show();
-        Save.saveToImage(stage, Converter.CanvasToImage(hexgrid));
-        //try {
-        //    Load.loadMultiple(stage);
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-        
-    }
-    */
 }
