@@ -45,7 +45,6 @@ public class HexCanvas extends Canvas{
             oldY = 0;
         });
     }
-        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
 
     private void setMouseDraggedEvent() {
         setOnMouseDragged(event -> {
@@ -66,6 +65,7 @@ public class HexCanvas extends Canvas{
         decalageXProperty().addListener(evt -> draw());
         decalageYProperty().addListener(evt -> draw());
         zoomProperty().addListener(evt -> draw());
+        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
         setMouseDraggedEvent();
         setMouseReleasedEvent();
     }
