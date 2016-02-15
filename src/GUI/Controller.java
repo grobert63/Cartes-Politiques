@@ -84,7 +84,7 @@ public class Controller {
     {
         menuName.getItems().clear();
         ToggleGroup toggleGroup = new ToggleGroup();
-        for (String name :Main.nameCollumns) {
+        for (String name :Main.nameColumns) {
             RadioMenuItem radio = new RadioMenuItem(name);
             radio.setToggleGroup(toggleGroup);
             radio.setSelected(true);
