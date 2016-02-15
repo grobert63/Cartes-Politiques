@@ -49,7 +49,7 @@ public class Main extends Application {
         TimeDebug.timeStart(0);
         // Chargement des régions en mémoire
         MapLoader ml;
-        if(shp == null || dbf == null)
+        if(shp == null)
         {
              ml = new MapLoader(
                     "test/FRA_adm1.shp",
@@ -73,11 +73,13 @@ public class Main extends Application {
         // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
         int i;
         nameCollumns.clear();
-        for(i = 0; i < ml.getDbfReader().getFieldCount(); ++i) {
-            if(ml.getDbfReader().getField(i).getName().toLowerCase().contains("name"))
-                nameCollumns.add(ml.getDbfReader().getField(i).getName());
+        if(ml.getDbfReader() != null) {
+            for (i = 0; i < ml.getDbfReader().getFieldCount(); ++i) {
+                if (ml.getDbfReader().getField(i).getName().toLowerCase().contains("name"))
+                    nameCollumns.add(ml.getDbfReader().getField(i).getName());
+            }
+            geoMap.debug_getManager().setRegionsName(nameCollumns.get(nameCollumns.size() - 1));
         }
-        geoMap.debug_getManager().setRegionsName(nameCollumns.get(nameCollumns.size()-1));
         //geoMap.debug_getManager().setRegionsName("name");
         //geoMap.debug_getManager().setRegionsName("NAME");
 

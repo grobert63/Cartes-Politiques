@@ -43,7 +43,7 @@ public class PolyCanvas extends Canvas {
         nomPaysProperty().addListener(evt -> draw());
         zoomProperty().addListener(evt -> draw());
 
-        setOnScroll(event -> zoomProperty().setValue(event.getDeltaY()/200+zoomProperty().getValue()));
+        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
 
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
@@ -51,8 +51,8 @@ public class PolyCanvas extends Canvas {
                 int x =(int) (event.getX());
                 int y =(int) (event.getY());
                 if(oldX != 0) {
-                    decalageXProperty().setValue(getDecalageX() + x - oldX );
-                    decalageYProperty().setValue(getDecalageY() + y - oldY );
+                    setDecalageX((int) (getDecalageX() + x - oldX));
+                    setDecalageY((int) (getDecalageY() + y - oldY));
                 }
                 oldX = x;
                 oldY = y;
@@ -74,7 +74,8 @@ public class PolyCanvas extends Canvas {
     }
 
     public void setZoom(double zoom) {
-        this.zoom.set(zoom);
+        if(zoom>=0.5)
+            this.zoom.set(zoom);
     }
 
     public DoubleProperty zoomProperty() {
@@ -98,7 +99,7 @@ public class PolyCanvas extends Canvas {
     }
 
     public void setDecalageY(int decalageY) {
-        this.decalageY.set(decalageY);
+         this.decalageY.set(decalageY);
     }
 
     public IntegerProperty decalageYProperty() {
@@ -115,6 +116,13 @@ public class PolyCanvas extends Canvas {
 
     public BooleanProperty nomPaysProperty() {
         return nomPays;
+    }
+
+    public void initialize()
+    {
+        setZoom(1);
+        setDecalageX(0);
+        setDecalageY(0);
     }
 
     public void draw()
@@ -135,8 +143,8 @@ public class PolyCanvas extends Canvas {
             double x[] = new double[size];
             double y[] = new double[size];
             for (int i = 0; i < size; i++) {
-                y[i] =_canvasHeight- (b.getPoints().get(i).y)*_ratio*getZoom() + getDecalageY();
-                x[i] =(b.getPoints().get(i).x )*_ratio*getZoom() + getDecalageX();
+                y[i] = computeY(b.getPoints().get(i).y);
+                x[i] =computeX(b.getPoints().get(i).x );
             }
 
             gc.strokePolyline(x, y, size);
@@ -148,11 +156,11 @@ public class PolyCanvas extends Canvas {
     }
     
     private double computeX(double x){
-        return ((x + getDecalageX()/50) * _ratio - (_canvasWidth / 2)) * getZoom() + (_canvasWidth / 2);
+        return x*_ratio*getZoom() + getDecalageX() +(_canvasWidth / 2)*(1- getZoom());
     }
     
     private double computeY(double y){
-        return (_canvasHeight - (y - getDecalageY()/50) * _ratio - (_canvasHeight / 2)) * getZoom() + (_canvasHeight / 2);
+        return -y*_ratio*getZoom() + getDecalageY() + (_canvasHeight / 2)*(getZoom()+1);
     }
 
     private double resize() {

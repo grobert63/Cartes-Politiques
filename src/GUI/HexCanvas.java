@@ -40,29 +40,23 @@ public class HexCanvas extends Canvas{
         decalageYProperty().addListener(evt -> draw());
         zoomProperty().addListener(evt -> draw());
 
-        setOnScroll(event -> zoomProperty().setValue(event.getDeltaY()/200+zoomProperty().getValue()));
+        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
 
-        setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                int x =(int) (event.getX());
-                int y =(int) (event.getY());
-                if(oldX != 0) {
-                    decalageXProperty().setValue(getDecalageX() + x - oldX);
-                    decalageYProperty().setValue(getDecalageY() + y - oldY);
-                }
-                oldX = x;
-                oldY = y;
-
+        setOnMouseDragged(event -> {
+            int x =(int) (event.getX());
+            int y =(int) (event.getY());
+            if(oldX != 0) {
+                decalageXProperty().setValue(getDecalageX() + x - oldX);
+                decalageYProperty().setValue(getDecalageY() + y - oldY);
             }
+            oldX = x;
+            oldY = y;
+
         });
 
-        setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                oldX = 0;
-                oldY = 0;
-            }
+        setOnMouseReleased(event -> {
+            oldX = 0;
+            oldY = 0;
         });
     }
 
@@ -71,7 +65,8 @@ public class HexCanvas extends Canvas{
     }
 
     public void setZoom(double zoom) {
-        this.zoom.set(zoom);
+        if(zoom >= 0.5)
+            this.zoom.set(zoom);
     }
 
     public DoubleProperty zoomProperty() {
@@ -117,7 +112,12 @@ public class HexCanvas extends Canvas{
         return getHeight();
     }
 
-
+    public void initialize()
+    {
+        setZoom(1);
+        setDecalageX(0);
+        setDecalageY(0);
+    }
 
     public void draw()
     {
@@ -159,7 +159,7 @@ public class HexCanvas extends Canvas{
         double[] hexCoordAbsoluteX = new double[6];
         
         for(int i = 0; i<6; i++){
-            hexCoordAbsoluteX[i] = (hexCoordRelativeX[i] + col + 0.5 + decalage) * hexWidth+getDecalageX();
+            hexCoordAbsoluteX[i] = (hexCoordRelativeX[i] + col + 0.5 + decalage) * hexWidth+getDecalageX() +(getWidth() / 2)*(1- getZoom());
         }
         return hexCoordAbsoluteX;
     }
@@ -169,7 +169,7 @@ public class HexCanvas extends Canvas{
         double[] hexCoordAbsoluteY = new double[6];
         
         for(int i = 0; i<6; i++){
-            hexCoordAbsoluteY[i] = (hexCoordRelativeY[i] + 0.75*row + 0.5) * hexHeight+getDecalageY();
+            hexCoordAbsoluteY[i] = (hexCoordRelativeY[i] + 0.75*row + 0.5) * hexHeight+getDecalageY() +(getHeight() / 2)*(1- getZoom());
         }
         return hexCoordAbsoluteY;
     }
@@ -178,11 +178,11 @@ public class HexCanvas extends Canvas{
         double decalage = 0.0;
         if(row % 2 == 0) decalage = 0.5;
         
-        return (col + decalage) * hexWidth+getDecalageX();
+        return (col + decalage) * hexWidth+getDecalageX() +(getWidth() / 2)*(1- getZoom());
     }
     
     private double getTextPositionY(int row){
-        return (row * 0.75 + 0.5) * hexHeight+getDecalageY();
+        return (row * 0.75 + 0.5) * hexHeight+getDecalageY()+(getHeight() / 2)*(1- getZoom());
     }
     
     /*
