@@ -28,6 +28,7 @@ public class SimpleAggregerResolver implements IResolver{
         for (int i = 0; i < isolated.size(); i++) {
             for (int j = i + 1; j < isolated.size(); j++) {
                 distance = isolated.get(i).getDistanceTo(isolated.get(j));
+                System.out.println("distance : "+ distance);
                 if (min_dist == -1.0 || distance < min_dist) {
                     source = isolated.get(i);
                     nearest = isolated.get(j);

@@ -95,7 +95,7 @@ public class Region {
         if(this._defaultField != null) {
             return infos.get(_defaultField);
         }
-        return "noname";
+        return "";
     }
     
     /**

@@ -9,7 +9,13 @@
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" text="Open" onAction="#load"/>
+                <Menu mnemonicParsing="false" text="Open">
+                    <MenuItem  mnemonicParsing="false" text="With .dbf" onAction="#loadDbf"/>
+                    <MenuItem  mnemonicParsing="false" text="Without .dbf" onAction="#load"/>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Export">
+                    <MenuItem mnemonicParsing="false" text="To image" onAction="#SaveImage"/>
+                </Menu>
                 <MenuItem mnemonicParsing="false" text="Close"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
@@ -27,15 +33,6 @@
     </bottom>
     <center>
         <BorderPane BorderPane.alignment="CENTER">
-            <top>
-                <FlowPane BorderPane.alignment="CENTER">
-                    <Button mnemonicParsing="false" text="Play">
-                        <FlowPane.margin>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                        </FlowPane.margin>
-                    </Button>
-                </FlowPane>
-            </top>
             <center>
                 <GridPane BorderPane.alignment="CENTER">
                     <columnConstraints>
@@ -49,20 +46,6 @@
                         <center>
                             <Pane fx:id="PaneAffichageCarte" BorderPane.alignment="CENTER" />
                         </center>
-                        <bottom>
-                            <ScrollBar fx:id="ScrollHCarte" BorderPane.alignment="CENTER">
-                                <padding>
-                                    <Insets left="15.0" right="10.0" />
-                                </padding>
-                            </ScrollBar>
-                        </bottom>
-                        <right>
-                            <ScrollBar fx:id="ScrollVCarte" orientation="VERTICAL" BorderPane.alignment="CENTER">
-                                <BorderPane.margin>
-                                    <Insets />
-                                </BorderPane.margin>
-                            </ScrollBar>
-                        </right>
                   <top>
                       <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
                           <CheckBox mnemonicParsing="false" text=": Nom des pays" fx:id="NomPaysCarte">
@@ -82,16 +65,6 @@
                         <center>
                             <Pane fx:id="PaneAffichageResult" BorderPane.alignment="CENTER" />
                         </center>
-                        <bottom>
-                            <ScrollBar fx:id="ScrollHResult" BorderPane.alignment="CENTER">
-                                <padding>
-                                    <Insets right="15.0" />
-                                </padding>
-                            </ScrollBar>
-                        </bottom>
-                        <right>
-                            <ScrollBar fx:id="ScrollVResult" orientation="VERTICAL" BorderPane.alignment="CENTER" />
-                        </right>
                   <top>
                       <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
                           <Slider fx:id="SliderResult" maxWidth="100"/>
@@ -100,9 +73,6 @@
                     </BorderPane>
                 </GridPane>
             </center>
-            <bottom>
-                <ProgressBar prefWidth="500.0" progress="0.0" BorderPane.alignment="CENTER" />
-            </bottom>
         </BorderPane>
     </center>
 </BorderPane>

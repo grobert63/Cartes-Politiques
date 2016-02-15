@@ -5,6 +5,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -17,11 +18,11 @@ import java.util.logging.Level;
  */
 public class Save {
 
-    public static boolean saveToImage(Stage stage, Image imageToSave) {
+    public static boolean saveToImage(Window stage, Image imageToSave) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir où enregistrer le fichier");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Supported Files", "*.png", "*.jpg", "*.jpeg", "*.gif"),
+                new FileChooser.ExtensionFilter("All Supported Files *.png *.jpg *.jpeg *.gif", "*.png", "*.jpg", "*.jpeg", "*.gif"),
                 new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));

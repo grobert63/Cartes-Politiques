@@ -1,14 +1,23 @@
 package GUI;
 
+import DataManager.Converter;
+import DataManager.Save;
 import Debug.TimeDebug;
 import Entities.Boundary;
-import Entities.GeoMap;
 import Entities.HexGrid;
+import Entities.GeoMap;
 import Entities.Region;
 import Loader.MapLoader;
 import LoggerUtils.LoggerManager;
 import Resolver.IResolver;
 import Resolver.SimpleAggregerResolver;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.hexiong.jdbf.DBFReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -46,7 +55,7 @@ public class Main extends Application {
         TimeDebug.timeStart(0);
         // Chargement des régions en mémoire
         MapLoader ml;
-        if(shp == null || dbf == null)
+        if(shp == null)
         {
              ml = new MapLoader(
                     "test/FRA_adm1.shp",
@@ -70,11 +79,13 @@ public class Main extends Application {
         // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
         int i;
         nameColumns.clear();
-        for(i = 0; i < ml.getDbfReader().getFieldCount(); ++i) {
-            if(ml.getDbfReader().getField(i).getName().toLowerCase().contains("name"))
-                nameColumns.add(ml.getDbfReader().getField(i).getName());
+        if(ml.getDbfReader() != null) {
+            for (i = 0; i < ml.getDbfReader().getFieldCount(); ++i) {
+                if (ml.getDbfReader().getField(i).getName().toLowerCase().contains("name"))
+                    nameColumns.add(ml.getDbfReader().getField(i).getName());
+            }
+            geoMap.debug_getManager().setRegionsName(nameColumns.get(nameColumns.size() - 1));
         }
-        geoMap.debug_getManager().setRegionsName(nameColumns.get(nameColumns.size()-1));
 
         geoMap.getRegions().forEach(Main::afficherRegion);
 

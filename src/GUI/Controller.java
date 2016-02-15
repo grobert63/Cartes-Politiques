@@ -1,13 +1,21 @@
 package GUI;
 
+import DataManager.Converter;
 import DataManager.Load;
+import DataManager.Save;
+import GUI.*;
+import GUI.Main;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Controller {
 
@@ -18,23 +26,12 @@ public class Controller {
     @FXML
     Pane PaneAffichageResult;
 
-    @FXML
-    ScrollBar ScrollHResult;
-
-    @FXML
-    ScrollBar ScrollVResult;
 
     @FXML
     Slider SliderResult;
 
     @FXML
     Pane PaneAffichageCarte;
-
-    @FXML
-    ScrollBar ScrollHCarte;
-
-    @FXML
-    ScrollBar ScrollVCarte;
 
     @FXML
     Slider SliderZoomCarte;
@@ -56,9 +53,6 @@ public class Controller {
         SliderZoomCarte.setMax(10);
         SliderZoomCarte.setBlockIncrement(0.01);
 
-        ScrollHCarte.setValue(50);
-        ScrollVCarte.setValue(50);
-
         try {
             Main.chargement(null,null);
         } catch (Exception e) {
@@ -79,10 +73,6 @@ public class Controller {
         canvasCarte.zoomProperty().bindBidirectional(SliderZoomCarte.valueProperty());
         canvas.zoomProperty().bindBidirectional(SliderResult.valueProperty());
 
-        canvas.decalageXProperty().bindBidirectional(ScrollHResult.valueProperty());
-        canvasCarte.decalageXProperty().bindBidirectional(ScrollHCarte.valueProperty());
-        canvas.decalageYProperty().bindBidirectional(ScrollVResult.valueProperty());
-        canvasCarte.decalageYProperty().bindBidirectional(ScrollVCarte.valueProperty());
 
         canvasCarte.nomPaysProperty().bind(NomPaysCarte.selectedProperty());
 
@@ -110,7 +100,7 @@ public class Controller {
     }
 
     @FXML
-    public void load()
+    public void loadDbf()
     {
         try {
             File dbf = null;
@@ -122,7 +112,32 @@ public class Controller {
             e.printStackTrace();
         }
         chargementName();
+        canvas.initialize();
         canvas.draw();
+        canvasCarte.initialize();
         canvasCarte.draw();
+    }
+
+    @FXML
+    public void load()
+    {
+        try {
+            File shp = Load.loadSingle(fenetre.getScene().getWindow(),new FileChooser.ExtensionFilter("Shapefile", "*.shp"),new File(System.getProperty("user.home")));
+            if(shp != null) Main.chargement(shp.getPath(),null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        chargementName();
+        canvas.initialize();
+        canvas.draw();
+        canvasCarte.initialize();
+        canvasCarte.draw();
+    }
+
+    @FXML
+    public void SaveImage()
+    {
+        Save.saveToImage(fenetre.getScene().getWindow(), Converter.CanvasToImage(canvas));
     }
 }
