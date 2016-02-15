@@ -60,12 +60,9 @@ public class PolyCanvas extends Canvas {
             }
         });
 
-        setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                oldX = 0;
-                oldY = 0;
-            }
+        setOnMouseReleased(event -> {
+            oldX = 0;
+            oldY = 0;
         });
     }
 

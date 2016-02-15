@@ -1,4 +1,4 @@
-package exception;
+package CustomException;
 
 /**
  * Erreur lancée si la direction est invalide

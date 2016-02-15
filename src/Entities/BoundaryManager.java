@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -138,11 +139,10 @@ public class BoundaryManager {
         RawPolygon polygon = raws[rawPolygonIndex];
         int nbPoints = polygon.getPoints().size();
         
-        Point previous_pt, current_pt, first_pt, last_pt;
-        
+        Point previous_pt, current_pt, first_pt;
+
         first_pt = polygon.getPoints().get(firstPointIndex);
-        last_pt = polygon.getPoints().get(lastPointIndex);
-        
+
         //System.out.println("\t<Boundaries de "+first_pt+" -> "+last_pt+">");
 
         List<Integer> polyWithPreviousPt;
@@ -346,10 +346,7 @@ public class BoundaryManager {
     private List<int[]> getExtremitiesOfBoundariesToBeMade(BoundPolygon boundPoly, RawPolygon rawPoly){
         List<int[]> extremities = new ArrayList<>();
         
-        List<Boundary> remainingBoundaries = new ArrayList<>();
-        for(Boundary b : boundPoly.getBoundaries()){
-            remainingBoundaries.add(b);
-        }
+        List<Boundary> remainingBoundaries = boundPoly.getBoundaries().stream().collect(Collectors.toList());
         //System.out.println("\t\t<remainingBoundaries.size() = "+remainingBoundaries.size()+"/>");
         
         int nbPoints = rawPoly.getPoints().size() - 1;

@@ -1,6 +1,6 @@
 package Entities;
 
-import exception.InvalidDirectionException;
+import CustomException.InvalidDirectionException;
 
 /**
  * Permet d'utiliser les directions lié aux arêtes d'un hexagone

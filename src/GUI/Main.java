@@ -24,13 +24,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 
 public class Main extends Application {
     public static HexGrid grid;
     public static GeoMap geoMap;
-    public static ArrayList<String> nameCollumns = new ArrayList<String>();
+    public static ArrayList<String> nameColumns = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -39,10 +43,12 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception{
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Application started");
     }
 
     public static void chargement(String shp,String dbf) throws Exception {
@@ -83,9 +89,7 @@ public class Main extends Application {
         //geoMap.debug_getManager().setRegionsName("name");
         //geoMap.debug_getManager().setRegionsName("NAME");
 
-        for (Region r : geoMap.getRegions()) {
-            afficherRegion(r);
-        }
+        geoMap.getRegions().forEach(Main::afficherRegion);
 
         TimeDebug.timeStart(21);
         IResolver algo = new SimpleAggregerResolver();

@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 public class SimpleAggregerResolver implements IResolver{
     final List<Region> isolated = new ArrayList<>();
     Aggreger aggreger = null;
-    int minX=0, maxX=0, minY=0, maxY=0;
- 
+
     private void firstAggregate() {
         double distance, min_dist = -1.0;
         Region nearest = null;
