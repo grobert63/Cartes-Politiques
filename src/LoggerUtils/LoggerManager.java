@@ -2,6 +2,8 @@ package LoggerUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.AccessControlException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,10 +47,10 @@ public class LoggerManager {
             {
                 path=System.getProperty("user.home")+appDirectory;
             }
-            System.out.println("chemin : "+path);
-            if (!(new File(path)).mkdirs())
-            {
-                _logger.log(Level.SEVERE, "Impossible de créer le repertoire de Log");
+            if(!Files.isDirectory(Paths.get(path))) {
+                if (!(new File(path)).mkdirs()) {
+                    _logger.log(Level.SEVERE, "Impossible de créer le repertoire de Log");
+                }
             }
             path+= filename;
             FileHandler handler = new FileHandler(path);
