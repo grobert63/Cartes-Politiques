@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import Resolver.Test2Resolver;
 import com.hexiong.jdbf.DBFReader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -79,6 +80,7 @@ public class Main extends Application {
         // Le champ par défaut correspond au nom de la colonne contenant le nom de la région dans le .dbf
         int i;
         nameColumns.clear();
+
         if(ml.getDbfReader() != null) {
             for (i = 0; i < ml.getDbfReader().getFieldCount(); ++i) {
                 if (ml.getDbfReader().getField(i).getName().toLowerCase().contains("name"))
@@ -86,14 +88,12 @@ public class Main extends Application {
             }
             geoMap.debug_getManager().setRegionsName(nameColumns.get(nameColumns.size() - 1));
         }
-        //geoMap.debug_getManager().setRegionsName("name");
-        //geoMap.debug_getManager().setRegionsName("NAME");
 
         geoMap.getRegions().forEach(Main::afficherRegion);
 
         TimeDebug.timeStart(21);
-        IResolver algo = new SimpleAggregerResolver();
-        grid = algo.resolve(geoMap.getRegions());
+        Test2Resolver algo = new Test2Resolver();
+        grid = algo.resolve(geoMap.getRegions(),0,true,geoMap.getRegions().get(0),-1);
         TimeDebug.timeStop(21);
         
         TimeDebug.timeStop(0);

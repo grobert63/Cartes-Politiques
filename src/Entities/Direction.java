@@ -2,6 +2,8 @@ package Entities;
 
 import CustomException.InvalidDirectionException;
 
+import java.util.ArrayList;
+
 /**
  * Permet d'utiliser les directions lié aux arêtes d'un hexagone
  * @author Théophile
@@ -27,7 +29,9 @@ public class Direction{
         }
         throw new InvalidDirectionException("Une direction doit être comprise entre 0 et 5");
     }
-    
+
+
+
     /**
      * (Fonction inutilisée)
      * Indique la direction opposée à une direction donnée
@@ -55,5 +59,17 @@ public class Direction{
     
     public static double getDifferenceAngleDirection(double angle, int direction) throws Exception{
         return Math.abs(angle - getAngle(direction));
+    }
+
+    public static ArrayList<Integer> getAllDirection()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(NORTH_EAST);
+        list.add(NORTH_WEST);
+        list.add(WEST);
+        list.add(SOUTH_EAST);
+        list.add(SOUTH_WEST);
+        list.add(EAST);
+        return list;
     }
 }

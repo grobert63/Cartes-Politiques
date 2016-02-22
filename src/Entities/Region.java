@@ -121,4 +121,16 @@ public class Region {
     public Map<Region, List<Boundary>> getNeighbors() {
         return _neighbors;
     }
+
+    public boolean IsCommunBoundary(Region r)
+    {
+        for(Boundary b:getBoundMainPolygon().getBoundaries())
+        {
+            for(Boundary b2: r.getBoundMainPolygon().getBoundaries())
+            {
+                if(b == b2) return true;
+            }
+        }
+        return false;
+    }
 }

@@ -21,10 +21,14 @@
             <Menu mnemonicParsing="false" text="Edit">
                 <MenuItem mnemonicParsing="false" text="Delete"/>
             </Menu>
-            <Menu fx:id="menuName" text="Name">
-            </Menu>
+            <Menu fx:id="menuName" text="Name"/>
             <Menu mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" text="About"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Argument">
+                <Menu mnemonicParsing="false" text="First country" fx:id="FirstCountryArgument"/>
+                <Menu  mnemonicParsing="false" text="Direction" fx:id="MenuDirection"/>
+                <Menu mnemonicParsing="false" text="NbOccurence" fx:id="occurenceMenu"/>
             </Menu>
         </MenuBar>
     </top>
@@ -67,6 +71,7 @@
                         </center>
                   <top>
                       <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+                          <Button text="Refresh" onAction="#refreshAlgo"/>
                           <Slider fx:id="SliderResult" maxWidth="100"/>
                       </HBox>
                   </top>

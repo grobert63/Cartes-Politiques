@@ -25,35 +25,38 @@ public class Aggreger {
         for (Map.Entry<Index2, Region> entry : map.entrySet()){
             if(r == entry.getValue()){ return entry.getKey(); }
         }
+
         return null;
     }
     
-    private Index2 getDirectionIndex(Index2 idx, int direction){
+    private Index2 getDirectionIndex(Index2 idx, int direction, int nb ){
+        if(nb <= 1) nb =1;
+        if(nb >=2) nb =2;
         switch(direction){
             case Direction.NORTH_EAST : 
                 if(idx.y % 2 == 0)
-                    return new Index2(idx.x + 1, idx.y - 1);
+                    return new Index2(idx.x + nb, idx.y - nb);
                 else
-                    return new Index2(idx.x, idx.y - 1);
+                    return new Index2(idx.x, idx.y - nb);
             case Direction.EAST : //
-                return new Index2(idx.x + 1, idx.y);
+                return new Index2(idx.x + nb, idx.y);
             case Direction.SOUTH_EAST : 
                 if(idx.y % 2 == 0)
-                    return new Index2(idx.x + 1, idx.y + 1);
+                    return new Index2(idx.x + nb, idx.y +nb);
                 else
-                    return new Index2(idx.x, idx.y + 1);
+                    return new Index2(idx.x, idx.y + nb);
             case Direction.SOUTH_WEST : 
                 if(idx.y % 2 == 0)
-                    return new Index2(idx.x, idx.y + 1);
+                    return new Index2(idx.x, idx.y + nb);
                 else
-                    return new Index2(idx.x - 1, idx.y + 1);
+                    return new Index2(idx.x - nb, idx.y + nb);
             case Direction.WEST : //
-                return new Index2(idx.x - 1, idx.y);
+                return new Index2(idx.x - nb, idx.y);
             case Direction.NORTH_WEST : 
                 if(idx.y % 2 == 0)
-                    return new Index2(idx.x, idx.y - 1);
+                    return new Index2(idx.x, idx.y - nb);
                 else
-                    return new Index2(idx.x - 1, idx.y - 1);
+                    return new Index2(idx.x - nb, idx.y - nb);
         }
         return null;
     }
@@ -69,7 +72,8 @@ public class Aggreger {
     
     public boolean hasPlace(Region r, int direction){    
         Index2 idx = getIndex(r);
-        return !map.containsKey(getDirectionIndex(idx,direction));
+        if(idx == null) return false;
+        return !map.containsKey(getDirectionIndex(idx,direction,1));
     }
     
     public List<Region> getAggregatedRegion(){
@@ -77,9 +81,10 @@ public class Aggreger {
     }
     
     public void add(Region r, Region reference, int direction){//Index2 source, Region nearest){
+        if(getIndex(r) != null) return;
         Index2 ref = getIndex(reference);
-        Index2 idx = getDirectionIndex(ref, direction);
-        addInMap(idx, r);
+         Index2 idx = getDirectionIndex(ref, direction,1);
+            addInMap(idx, r);
     }
     
     private void addInMap(Index2 idx, Region r){
@@ -89,6 +94,51 @@ public class Aggreger {
         if(idx.y > maxY) maxY = idx.y;
         //r.setData(r.getDefaultField(), idx.toString());
         map.put(idx, r);
+    }
+
+    public void decaler(Region r, Region reference, int direction,double distance)
+    {
+        if(getIndex(r) != null) return;
+        Index2 idx = getIndex(reference);
+        System.out.println(r.getName()+" "+distance);
+        Index2 idxf = getDirectionIndex(idx,direction,(int)(distance));
+        idx =idxf;
+        int nb =0;
+        int min = 999 ;
+        int dir = 0;
+        Index2 idxDernier = idx;
+        //for (int direction:Direction.getAllDirection()) {
+
+            while(map.containsKey(getDirectionIndex(idx,direction,1)))
+            {
+                nb++;
+                idx = getDirectionIndex(idx,direction,1);
+            }
+
+            if(nb < min)
+            {
+                idxDernier = idx;
+                min = nb;
+                dir = direction;
+            }
+        //}
+        for(int i =0; i<= min ;i++)
+        {
+            try {
+                addInMap(getDirectionIndex(idxDernier,dir,1),map.get(idxDernier));
+                idxDernier = getDirectionIndex(idxDernier,Direction.getOpposite(dir),1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        addInMap(idxf,r);
+    }
+
+    public boolean exist(Region r)
+    {
+        if(getIndex(r) == null) return false;
+        return true;
     }
 
     public HexGrid toGrid(){
@@ -101,9 +151,11 @@ public class Aggreger {
         for (Map.Entry<Index2, Region> entry : map.entrySet()){
             Index2 idx = entry.getKey();
             Region r = entry.getValue();
-            grid.addRegion(idx.x+decalageX, idx.y+decalageY, r);
+            if((idx.y+decalageY)%2 == 0)
+                grid.addRegion(idx.x+decalageX, idx.y+decalageY, r);
+            else
+                grid.addRegion(idx.x+decalageX, idx.y+decalageY, r);
         }
-        
         return grid;
     }
     
