@@ -23,7 +23,8 @@ public class PolyCanvas extends Canvas {
     private final BooleanProperty nomPays = new SimpleBooleanProperty();
     private  double _canvasWidth;
     private  double _canvasHeight;
-    
+    private GeoMap map;
+
     private double _ratio;
     private double oldX;
     private double oldY;
@@ -34,36 +35,40 @@ public class PolyCanvas extends Canvas {
      */
     public PolyCanvas(GeoMap map) {
         super();
+        this.map = map;
+        setEvents();
+    }
 
+    private void setMouseReleasedEvent() {
+        setOnMouseReleased(event -> {
+            oldX = 0;
+            oldY = 0;
+        });
+    }
 
+    private void setMouseDraggedEvent() {
+        setOnMouseDragged(event -> {
+            int x =(int) (event.getX());
+            int y =(int) (event.getY());
+            if(oldX != 0) {
+                decalageXProperty().setValue(getDecalageX() + x - oldX );
+                decalageYProperty().setValue(getDecalageY() + y - oldY );
+            }
+            oldX = x;
+            oldY = y;
+        });
+    }
+
+    private void setEvents() {
         widthProperty().addListener(evt -> draw());
         heightProperty().addListener(evt -> draw());
         decalageXProperty().addListener(evt -> draw());
         decalageYProperty().addListener(evt -> draw());
         nomPaysProperty().addListener(evt -> draw());
         zoomProperty().addListener(evt -> draw());
-
-        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
-
-        setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                int x =(int) (event.getX());
-                int y =(int) (event.getY());
-                if(oldX != 0) {
-                    setDecalageX((int) (getDecalageX() + x - oldX));
-                    setDecalageY((int) (getDecalageY() + y - oldY));
-                }
-                oldX = x;
-                oldY = y;
-
-            }
-        });
-
-        setOnMouseReleased(event -> {
-            oldX = 0;
-            oldY = 0;
-        });
+        setOnScroll(event -> zoomProperty().setValue(event.getDeltaY()/200+zoomProperty().getValue()));
+        setMouseDraggedEvent();
+        setMouseReleasedEvent();
     }
 
     public double getZoom() {
@@ -128,30 +133,37 @@ public class PolyCanvas extends Canvas {
         _canvasHeight = getHeight();
         GraphicsContext gc = super.getGraphicsContext2D();
         _ratio = resize();
+        drawInitialize(gc);
+        for (Boundary b : map.getSimpleBoundaries()) {
+            drawPolygon(gc, b);
+        }
+        if(getNomPays())
+            for (Region region : map.getRegions()) {
+                gc.fillText(region.getName(), computeX(region.getCenter().x), computeY(region.getCenter().y));
+        }
+    }
 
+    private void drawInitialize(GraphicsContext gc) {
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,getWidth(),getHeight());
         gc.setFill(Color.BLACK);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
-                
-        for (Boundary b : Main.geoMap.getSimpleBoundaries()) {
-            int size = b.getPoints().size();
-            double x[] = new double[size];
-            double y[] = new double[size];
-            for (int i = 0; i < size; i++) {
-                y[i] = computeY(b.getPoints().get(i).y);
-                x[i] =computeX(b.getPoints().get(i).x );
-            }
-
-            gc.strokePolyline(x, y, size);
-        }
-        if(getNomPays())
-            for (Region region : Main.geoMap.getRegions()) {
-                gc.fillText(region.getName(), computeX(region.getCenter().x), computeY(region.getCenter().y));
-        }
     }
-    
+
+    private void drawPolygon(GraphicsContext gc, Boundary b) {
+        int size = b.getPoints().size();
+        double x[] = new double[size];
+        double y[] = new double[size];
+        for (int i = 0; i < size; i++) {
+            y[i] =_canvasHeight- (b.getPoints().get(i).y)*_ratio*getZoom() + getDecalageY();
+            x[i] =(b.getPoints().get(i).x )*_ratio*getZoom() + getDecalageX();
+        }
+
+        gc.strokePolyline(x, y, size);
+    }
+
+
     private double computeX(double x){
         return x*_ratio*getZoom() + getDecalageX() +(_canvasWidth / 2)*(1- getZoom());
     }
@@ -162,12 +174,12 @@ public class PolyCanvas extends Canvas {
 
     private double resize() {
         double ratioX, ratioY;
-        ratioX = _canvasWidth / Main.geoMap.getWidth();
-        ratioY = _canvasHeight / Main.geoMap.getHeight();
+        ratioX = _canvasWidth / map.getWidth();
+        ratioY = _canvasHeight / map.getHeight();
         if (ratioX < 1 && ratioY < 1)
         {
-            ratioX = Main.geoMap.getWidth() / _canvasWidth;
-            ratioY = Main.geoMap.getHeight() / _canvasHeight;
+            ratioX = map.getWidth() / _canvasWidth;
+            ratioY = map.getHeight() / _canvasHeight;
         }
         return ratioX < ratioY ? ratioX : ratioY;
     }

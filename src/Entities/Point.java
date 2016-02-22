@@ -6,7 +6,6 @@ package Entities;
  */
 public class Point{
 
-    static Point Zero = new Point(0.0,0.0);
     public final double x;
     public final double y;
 
