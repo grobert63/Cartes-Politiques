@@ -1,31 +1,15 @@
 package GUI;
 
 import Entities.HexGrid;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.EventHandler;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 /**
  * Décrit un canvas spécialisé dans l'affichage d'une grille hexagonale
  * @author Théophile
  */
-public class HexCanvas extends Canvas{
+public class HexCanvas extends CustomCanvas {
     private final double[] hexCoordRelativeX = {0.5, 0.5, 0.0, -0.5, -0.5, 0.0};
     private final double[] hexCoordRelativeY = {0.25, -0.25, -0.5, -0.25, 0.25, 0.5};
-    private final IntegerProperty decalageX = new SimpleIntegerProperty();
-    private final IntegerProperty decalageY = new SimpleIntegerProperty();
-    private final DoubleProperty zoom = new SimpleDoubleProperty();
-    private double hexWidth;
-    private double hexHeight;
-    private double oldX;
-    private double oldY;
     private HexGrid grid;
     /**
      * @param width  Largeur en pixel
@@ -39,79 +23,11 @@ public class HexCanvas extends Canvas{
         setEvents();
     }
 
-    private void setMouseReleasedEvent() {
-        setOnMouseReleased(event -> {
-            oldX = 0;
-            oldY = 0;
-        });
-    }
-
-    private void setMouseDraggedEvent() {
-        setOnMouseDragged(event -> {
-            int x =(int) (event.getX());
-            int y =(int) (event.getY());
-            if(oldX != 0) {
-                decalageXProperty().setValue(getDecalageX() + x - oldX );
-                decalageYProperty().setValue(getDecalageY() + y - oldY );
-            }
-            oldX = x;
-            oldY = y;
-        });
-    }
-
-    private void setEvents() {
-        widthProperty().addListener(evt -> draw());
-        heightProperty().addListener(evt -> draw());
-        decalageXProperty().addListener(evt -> draw());
-        decalageYProperty().addListener(evt -> draw());
-        zoomProperty().addListener(evt -> draw());
-        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
-        setMouseDraggedEvent();
-        setMouseReleasedEvent();
-    }
-
     public void changeGrid(HexGrid grid) {
         this.grid = grid;
         initialize();
         draw();
 
-    }
-
-    public double getZoom() {
-        return zoom.get();
-    }
-
-    public void setZoom(double zoom) {
-        if(zoom >= 0.5)
-            this.zoom.set(zoom);
-    }
-
-    public DoubleProperty zoomProperty() {
-        return zoom;
-    }
-
-    public int getDecalageX() {
-        return decalageX.get();
-    }
-
-    public void setDecalageX(int decalageX) {
-        this.decalageX.set(decalageX);
-    }
-
-    public IntegerProperty decalageXProperty() {
-        return decalageX;
-    }
-
-    public int getDecalageY() {
-        return decalageY.get();
-    }
-
-    public void setDecalageY(int decalageY) {
-        this.decalageY.set(decalageY);
-    }
-
-    public IntegerProperty decalageYProperty() {
-        return decalageY;
     }
 
     @Override
@@ -129,13 +45,6 @@ public class HexCanvas extends Canvas{
         return getHeight();
     }
 
-    private void initialize()
-    {
-        setZoom(1);
-        setDecalageX(0);
-        setDecalageY(0);
-    }
-
     public void draw()
     {
         drawInitialize();
@@ -151,12 +60,12 @@ public class HexCanvas extends Canvas{
 
     private void drawInitialize() {
         if(getHeight()/(grid.getHeight()*0.75 + 0.25) > getWidth()/(grid.getWidth())){
-            this.hexHeight = getHeight() / ((3.0/4.0)*grid.getHeight() + 0.25)*getZoom();
-            this.hexWidth = (Math.sqrt(3.0))/2.0 * hexHeight;
+            this._canvasHeight = getHeight() / ((3.0/4.0)*grid.getHeight() + 0.25)*getZoom();
+            this._canvasWidth = (Math.sqrt(3.0))/2.0 * _canvasHeight;
         }
         else{
-            this.hexWidth = getWidth() / (grid.getWidth() + 0.5)*getZoom();
-            this.hexHeight = hexWidth * 2.0/(Math.sqrt(3.0));
+            this._canvasWidth = getWidth() / (grid.getWidth() + 0.5)*getZoom();
+            this._canvasHeight = _canvasWidth * 2.0/(Math.sqrt(3.0));
         }
     }
 
@@ -181,7 +90,7 @@ public class HexCanvas extends Canvas{
         double[] hexCoordAbsoluteX = new double[6];
         
         for(int i = 0; i<6; i++){
-            hexCoordAbsoluteX[i] = (hexCoordRelativeX[i] + col + 0.5 + decalage) * hexWidth+getDecalageX() +(getWidth() / 2)*(1- getZoom());
+            hexCoordAbsoluteX[i] = (hexCoordRelativeX[i] + col + 0.5 + decalage) * _canvasWidth +getDecalageX() +(getWidth() / 2)*(1- getZoom());
         }
         return hexCoordAbsoluteX;
     }
@@ -191,7 +100,7 @@ public class HexCanvas extends Canvas{
         double[] hexCoordAbsoluteY = new double[6];
         
         for(int i = 0; i<6; i++){
-            hexCoordAbsoluteY[i] = (hexCoordRelativeY[i] + 0.75*row + 0.5) * hexHeight+getDecalageY() +(getHeight() / 2)*(1- getZoom());
+            hexCoordAbsoluteY[i] = (hexCoordRelativeY[i] + 0.75*row + 0.5) * _canvasHeight +getDecalageY() +(getHeight() / 2)*(1- getZoom());
         }
         return hexCoordAbsoluteY;
     }
@@ -200,11 +109,11 @@ public class HexCanvas extends Canvas{
         double decalage = 0.0;
         if(row % 2 == 0) decalage = 0.5;
         
-        return (col + decalage) * hexWidth+getDecalageX() +(getWidth() / 2)*(1- getZoom());
+        return (col + decalage) * _canvasWidth +getDecalageX() +(getWidth() / 2)*(1- getZoom());
     }
     
     private double getTextPositionY(int row){
-        return (row * 0.75 + 0.5) * hexHeight+getDecalageY()+(getHeight() / 2)*(1- getZoom());
+        return (row * 0.75 + 0.5) * _canvasHeight +getDecalageY()+(getHeight() / 2)*(1- getZoom());
     }
 
 

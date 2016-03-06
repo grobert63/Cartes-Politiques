@@ -3,31 +3,20 @@ package GUI;
 import Entities.Boundary;
 import Entities.GeoMap;
 import Entities.Region;
-import javafx.beans.property.*;
-import javafx.event.EventHandler;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.text.TextAlignment;
 
 /**
  * Décrit un canvas spécialisé dans l'affichage de polygones
  */
-public class PolyCanvas extends Canvas {
-    private final IntegerProperty decalageX = new SimpleIntegerProperty();
-    private final IntegerProperty decalageY = new SimpleIntegerProperty();
-    private final DoubleProperty zoom = new SimpleDoubleProperty();
+public class PolyCanvas extends CustomCanvas {
     private final BooleanProperty nomPays = new SimpleBooleanProperty();
-    private  double _canvasWidth;
-    private  double _canvasHeight;
     private GeoMap map;
-
     private double _ratio;
-    private double oldX;
-    private double oldY;
     /**
      * Canvas affichant la carte avec le nom de la région. Le ratio est toujours respecté
      *
@@ -39,79 +28,15 @@ public class PolyCanvas extends Canvas {
         setEvents();
     }
 
-    private void setMouseReleasedEvent() {
-        setOnMouseReleased(event -> {
-            oldX = 0;
-            oldY = 0;
-        });
-    }
-
-    private void setMouseDraggedEvent() {
-        setOnMouseDragged(event -> {
-            int x =(int) (event.getX());
-            int y =(int) (event.getY());
-            if(oldX != 0) {
-                decalageXProperty().setValue(getDecalageX() + x - oldX );
-                decalageYProperty().setValue(getDecalageY() + y - oldY );
-            }
-            oldX = x;
-            oldY = y;
-        });
-    }
-
-    private void setEvents() {
-        widthProperty().addListener(evt -> draw());
-        heightProperty().addListener(evt -> draw());
-        decalageXProperty().addListener(evt -> draw());
-        decalageYProperty().addListener(evt -> draw());
+    protected void setEvents() {
+        super.setEvents();
         nomPaysProperty().addListener(evt -> draw());
-        zoomProperty().addListener(evt -> draw());
-        setOnScroll(event -> zoomProperty().setValue(event.getDeltaY()/200+zoomProperty().getValue()));
-        setMouseDraggedEvent();
-        setMouseReleasedEvent();
     }
 
     public void changeMap(GeoMap map) {
         this.map = map;
         initialize();
         draw();
-    }
-
-    public double getZoom() {
-        return zoom.get();
-    }
-
-    public void setZoom(double zoom) {
-        if(zoom>=0.5)
-            this.zoom.set(zoom);
-    }
-
-    public DoubleProperty zoomProperty() {
-        return zoom;
-    }
-
-    public int getDecalageX() {
-        return decalageX.get();
-    }
-
-    public void setDecalageX(int decalageX) {
-        this.decalageX.set(decalageX);
-    }
-
-    public IntegerProperty decalageXProperty() {
-        return decalageX;
-    }
-
-    public int getDecalageY() {
-        return decalageY.get();
-    }
-
-    public void setDecalageY(int decalageY) {
-         this.decalageY.set(decalageY);
-    }
-
-    public IntegerProperty decalageYProperty() {
-        return decalageY;
     }
 
     public boolean getNomPays() {
@@ -124,13 +49,6 @@ public class PolyCanvas extends Canvas {
 
     public BooleanProperty nomPaysProperty() {
         return nomPays;
-    }
-
-    public void initialize()
-    {
-        setZoom(1);
-        setDecalageX(0);
-        setDecalageY(0);
     }
 
     public void draw()
