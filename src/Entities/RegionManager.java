@@ -7,13 +7,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * Classe qui permet la création et la gestion des régions.
  * @author Théophile
  */
 public class RegionManager {
     private final BoundaryManager _bm;
     private final List<Region> _regions = new ArrayList<>();
 
+    /**
+     * Créer un manager à partir d'un ensemble de liste de RawPolygon
+     * @param rawRegions 
+     */
     public RegionManager(List<List<RawPolygon>> rawRegions){
         int nbRegions = rawRegions.size();
         
@@ -40,14 +44,27 @@ public class RegionManager {
         TimeDebug.timeStop(20);
     }
     
+    /**
+     * Récupère les régions créées
+     * @return Les régions
+     */
     public List<Region> getRegions(){
         return _regions;
     }
     
+    /**
+     * Récupère toutes les frontières toutes régions confondues
+     * @return Liste des frontières
+     */
     public List<Boundary> getBoundaries(){
         return _bm.getBoundaries();
     }
     
+    /**
+     * Calcul et intégre les voisins dans les régions à partir de celle-ci et de l'ensemble des frontières.
+     * @param regions Liste des régions dont on veut calculer les voisins
+     * @param allBoundaries Ensemble des frontières de toutes les régions
+     */
     private void calculateNeighbors(List<Region> regions, List<Boundary> allBoundaries){
         List<Region> involvedRegions = new LinkedList<>();
         BoundPolygon currentPoly;
@@ -79,6 +96,10 @@ public class RegionManager {
         }
     }
 
+    /**
+     * Indique le nom de la colonne par défaut du DBF qui servira du nom de région
+     * @param defaultField Nom de la colonne principal
+     */
     public void setRegionsName(String defaultField){
         for(Region r : _regions){
             r.setDefaultField(defaultField);
