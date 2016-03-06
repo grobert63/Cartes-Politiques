@@ -70,6 +70,13 @@ public class HexCanvas extends Canvas{
         setMouseReleasedEvent();
     }
 
+    public void changeGrid(HexGrid grid) {
+        this.grid = grid;
+        initialize();
+        draw();
+
+    }
+
     public double getZoom() {
         return zoom.get();
     }
@@ -122,7 +129,7 @@ public class HexCanvas extends Canvas{
         return getHeight();
     }
 
-    public void initialize()
+    private void initialize()
     {
         setZoom(1);
         setDecalageX(0);
@@ -199,4 +206,6 @@ public class HexCanvas extends Canvas{
     private double getTextPositionY(int row){
         return (row * 0.75 + 0.5) * hexHeight+getDecalageY()+(getHeight() / 2)*(1- getZoom());
     }
+
+
 }

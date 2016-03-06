@@ -19,6 +19,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Controller {
@@ -31,6 +32,8 @@ public class Controller {
     private int Direction;
     private boolean Clock;
     private int nbTour;
+
+    private ArrayList<Region> regions = new ArrayList<>();
 
     @FXML
     Pane PaneAffichageResult;
@@ -59,6 +62,9 @@ public class Controller {
 
     @FXML
     Menu occurenceMenu;
+
+    @FXML
+    Menu selectedCountry;
 
     @FXML
     void initialize()
@@ -94,9 +100,10 @@ public class Controller {
 
         canvasCarte.nomPaysProperty().bind(NomPaysCarte.selectedProperty());
 
-
+        chargementSelectionPays();
         chargementName();
         chargementArgs();
+
     }
 
     private void chargementName()
@@ -110,6 +117,7 @@ public class Controller {
             radio.setOnAction(event -> {
                 Main.geoMap.debug_getManager().setRegionsName(radio.getText());
                 canvas.draw();
+                chargementSelectionPays();
                 chargementArgumentName();
                 canvasCarte.draw();
             });
@@ -124,7 +132,7 @@ public class Controller {
         FirstCountryArgument.getItems().clear();
         ToggleGroup toggleGroup = new ToggleGroup();
         int first = 0;
-        for (Region r:Main.geoMap.getRegions()) {
+        for (Region r:regions) {
             RadioMenuItem radio = new RadioMenuItem(r.getName());
             radio.setToggleGroup(toggleGroup);
             if(first == 0){
@@ -134,6 +142,39 @@ public class Controller {
             radio.setOnAction(event -> FirstRegion = r.getName());
             FirstCountryArgument.getItems().add(radio);
             first++;
+        }
+
+    }
+
+    private void chargementSelectionPays()
+    {
+        selectedCountry.getItems().clear();
+        regions.clear();
+        RadioMenuItem radioAll = new RadioMenuItem("all");
+        radioAll.setSelected(true);
+        radioAll.setOnAction(event -> {
+            for (MenuItem item:selectedCountry.getItems()) {
+                 RadioMenuItem radio = (RadioMenuItem)item;
+                if(item != radioAll)
+                    radio.setSelected(radioAll.isSelected());
+            }
+
+        });
+        selectedCountry.getItems().add(radioAll);
+        for (Region r:Main.geoMap.getRegions()) {
+            RadioMenuItem radio = new RadioMenuItem(r.getName());
+            regions.add(r);
+            radio.setSelected(true);
+            radio.setOnAction(event -> {
+                if(radio.isSelected()){
+                    regions.add(r);
+                }else{
+                    radioAll.setSelected(false);
+                    regions.remove(r);
+                }
+                chargementArgumentName();
+            });
+            selectedCountry.getItems().add(radio);
         }
 
     }
@@ -201,10 +242,8 @@ public class Controller {
         }
         chargementName();
         chargementArgumentName();
-        canvas.initialize();
-        canvas.draw();
-        canvasCarte.initialize();
-        canvasCarte.draw();
+        canvas.changeGrid(Main.grid);
+        canvasCarte.changeMap(Main.geoMap);
     }
 
     @FXML
@@ -219,10 +258,8 @@ public class Controller {
         }
         chargementName();
         chargementArgumentName();
-        canvas.initialize();
-        canvas.draw();
-        canvasCarte.initialize();
-        canvasCarte.draw();
+        canvas.changeGrid(Main.grid);
+        canvasCarte.changeMap(Main.geoMap);
     }
 
     @FXML
@@ -240,8 +277,8 @@ public class Controller {
             if(Objects.equals(r.getName(), FirstRegion)) region = r;
         }
         if(region != null) {
-            Main.grid = algo.resolve(Main.geoMap.getRegions(), Direction, Clock, region, nbTour);
-            canvas.draw();
+            Main.grid = algo.resolve(regions, Direction, Clock, region, nbTour);
+            canvas.changeGrid(Main.grid);
         }
     }
 }

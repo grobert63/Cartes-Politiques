@@ -92,7 +92,6 @@ public class Aggreger {
         if(idx.x > maxX) maxX = idx.x;
         if(idx.y < minY) minY = idx.y;
         if(idx.y > maxY) maxY = idx.y;
-        //r.setData(r.getDefaultField(), idx.toString());
         map.put(idx, r);
     }
 
@@ -100,28 +99,27 @@ public class Aggreger {
     {
         if(getIndex(r) != null) return;
         Index2 idx = getIndex(reference);
-        System.out.println(r.getName()+" "+distance);
+        if(r.IsCommunBoundary(reference)) distance = 1;
         Index2 idxf = getDirectionIndex(idx,direction,(int)(distance));
         idx =idxf;
         int nb =0;
         int min = 999 ;
         int dir = 0;
         Index2 idxDernier = idx;
-        //for (int direction:Direction.getAllDirection()) {
 
-            while(map.containsKey(getDirectionIndex(idx,direction,1)))
-            {
-                nb++;
-                idx = getDirectionIndex(idx,direction,1);
-            }
+        while(map.containsKey(getDirectionIndex(idx,direction,1)))
+        {
+            nb++;
+            idx = getDirectionIndex(idx,direction,1);
+        }
 
-            if(nb < min)
-            {
-                idxDernier = idx;
-                min = nb;
-                dir = direction;
-            }
-        //}
+        if(nb < min)
+        {
+            idxDernier = idx;
+            min = nb;
+            dir = direction;
+        }
+
         for(int i =0; i<= min ;i++)
         {
             try {
@@ -151,10 +149,7 @@ public class Aggreger {
         for (Map.Entry<Index2, Region> entry : map.entrySet()){
             Index2 idx = entry.getKey();
             Region r = entry.getValue();
-            if((idx.y+decalageY)%2 == 0)
-                grid.addRegion(idx.x+decalageX, idx.y+decalageY, r);
-            else
-                grid.addRegion(idx.x+decalageX, idx.y+decalageY, r);
+            grid.addRegion(idx.x+decalageX, idx.y+decalageY, r);
         }
         return grid;
     }

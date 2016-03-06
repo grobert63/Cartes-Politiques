@@ -19,28 +19,14 @@ import java.util.stream.Collectors;
     public class Test2Resolver {
     final List<Region> isolated = new ArrayList<>();
     Aggreger aggreger = null;
-    int minX=0, maxX=0, minY=0, maxY=0;
 
-    private void firstAggregate() {
-        double distance, min_dist = -1.0;
-        Region nearest = null;
-        Region source = null;
-        for (int i = 0; i < isolated.size(); i++) {
-            for (int j = i + 1; j < isolated.size(); j++) {
-                distance = isolated.get(i).getDistanceTo(isolated.get(j));
-                if (min_dist == -1.0 || distance < min_dist) {
-                    source = isolated.get(i);
-                    nearest = isolated.get(j);
-                    min_dist = distance;
-                }
-            }
-        }
-        aggreger = new Aggreger(source);
-        aggreger.add(nearest, source, getDirection(source, nearest));
-        isolated.remove(source);
-        isolated.remove(nearest);
-    }
-
+    /**
+     *
+     * @param region region a ajouter les pays voisins
+     * @param firstDirection direction que l'algo renvoi
+     * @param clok
+     * @return
+     */
     private Region aggregate(Region region,int firstDirection,boolean clok) {
         double distance, min_dist = -1.0;
         Region nearest = null;
@@ -93,37 +79,6 @@ import java.util.stream.Collectors;
         double angle = source.getAngleTo(nearest);
         int direction = Direction.getDirectionFromAngle(angle);
         return direction;
-    }
-
-    public Region addRegion(Region region)
-    {
-        if(aggreger.exist(region)) return region;
-        List<Region> coucou = new ArrayList<>();
-        double distance;
-        double min_dist = -1;
-        Region nearest = null;
-        for (int direction:Direction.getAllDirection()) {
-            for (Region r : aggreger.getAggregatedRegion()) {
-                int dire = getDirection(region, r);
-
-                if (dire == direction) {
-                    coucou.add(r);
-                }
-            }
-            for (Region r : coucou) {
-                distance = region.getDistanceTo(r);
-                if (min_dist == -1 || min_dist > distance) {
-                    min_dist = distance;
-                    nearest = r;
-                }
-            }
-            if(nearest != null && region.IsCommunBoundary(nearest))
-            {
-                aggreger.add(region, nearest, direction);
-                return region;
-            }
-        }
-        return region;
     }
 
     private void createRegion(Region region) throws Exception {

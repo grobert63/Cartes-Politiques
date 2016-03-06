@@ -26,6 +26,7 @@
                 <MenuItem mnemonicParsing="false" text="About"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Argument">
+                <Menu mnemonicParsing="false" text="Selected region" fx:id="selectedCountry"/>
                 <Menu mnemonicParsing="false" text="First country" fx:id="FirstCountryArgument"/>
                 <Menu  mnemonicParsing="false" text="Direction" fx:id="MenuDirection"/>
                 <Menu mnemonicParsing="false" text="NbOccurence" fx:id="occurenceMenu"/>
