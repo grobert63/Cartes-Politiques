@@ -27,6 +27,11 @@ public class Geometry {
         }
         return larger;}
 
+    /**
+     * Récupère le centre de masse d'un RawPolygon
+     * @param polygon Polygone
+     * @return Centre de masse du polygone
+     */
     static public Point getCentreDeMasse(RawPolygon polygon) {
         double somme_X = 0, somme_Y = 0, somme_aire = 0;
         Point pt0;
@@ -69,10 +74,23 @@ public class Geometry {
         return pt1.x * pt0.y - pt0.x * pt1.y;
     }
     
+    /**
+     * Calcule la distance entre deux points
+     * @param pointA Point A
+     * @param pointB Point B
+     * @return Distance entre le point A et le point B
+     */
     public static double distanceBetween2Points(Point pointA, Point pointB) {
         return Math.sqrt((Math.pow(pointB.x - pointA.x,2) + Math.pow(pointB.y - pointA.y,2)));
     }
     
+    /**
+     * Calcule la distance entre deux points contenus dans une frontière en suivant celle-ci
+     * @param boundary Frontière contenant les deux points
+     * @param firstIndex Index du premier point dans la frontière
+     * @param lastIndex Index du dernier point dans la frontière
+     * @return Distance entre deux points suivant la frontière
+     */
     public static double distanceBetween2PointsAlongBoundary(Boundary boundary, int firstIndex, int lastIndex){
         if(firstIndex > lastIndex){
             int tmp = lastIndex;
@@ -91,12 +109,27 @@ public class Geometry {
         return somme_dist;
     }
     
+    /**
+     * Angle du point "pt" à partir du point "reference".
+     * Ex 1 : Si "pt" et au-dessus de "reference", l'angle sera 0°
+     * Ex 2 : Si "pt" et à droite de "reference", l'angle sera 90°
+     * @param reference Point de référence
+     * @param pt Point de 
+     * @return Angle entre reference et pt
+     */
     static public double angleBetween2Points(Point reference, Point pt){
         double vecteurX = pt.x - reference.x;
         double vecteurY = pt.y - reference.y;
         return (Math.atan2(vecteurY, vecteurX) * -(180/Math.PI) + 450) % 360;
     }
         
+    /**
+     * Simplifie une liste de frontières.
+     * Les frontières simplifiés contiennent moins de points.
+     * @param boundaries
+     * @param coef TODO : à arranger
+     * @return Frontières simplifiées
+     */
     public static List<Boundary> getSimplifyBoundaries(List<Boundary> boundaries, double coef){
         return boundaries.stream().map(b -> simplifyBoundary(b, coef)).collect(Collectors.toList());
     }
@@ -162,6 +195,7 @@ public class Geometry {
         return (2*aire)/longueurBase;
     }
     
+    // TODO : à finir
     public static HashMap<Boundary,double[]> calculerPourcentageBoundary(BoundPolygon bound, Point center){
         HashMap<Boundary,double[]> pourcentages = new HashMap<>();
         

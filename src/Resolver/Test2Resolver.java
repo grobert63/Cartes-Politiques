@@ -6,7 +6,9 @@ import Entities.HexGrid;
 import Entities.Region;
 import Resolver.Tools.Aggreger;
 import com.sun.javafx.geom.Vec2d;
-import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
+//import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
+// /!\ J'ai commenté cet import parce qu'il empêchait la compilation
+
 
 import java.util.ArrayList;
 import java.util.List;

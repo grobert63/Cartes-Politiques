@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
- *
+ * Décrit un outil permettant de créer et de contenir l'ensemble des frontières de toutes les régions
  * @author Théophile
  */
 public class BoundaryManager {
