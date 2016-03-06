@@ -1,11 +1,6 @@
 package GUI;
 
 import Entities.HexGrid;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -13,12 +8,7 @@ import javafx.scene.paint.Color;
  * Décrit un canvas spécialisé dans l'affichage d'une grille hexagonale
  * @author Théophile
  */
-public class HexCanvas extends Canvas{
-    private final IntegerProperty decalageX = new SimpleIntegerProperty();
-    private final IntegerProperty decalageY = new SimpleIntegerProperty();
-    private final DoubleProperty zoom = new SimpleDoubleProperty();
-    private double oldX;
-    private double oldY;
+public class HexCanvas extends CustomCanvas{
 
     private final HexPolygonContainer hexContainer;
 
@@ -34,48 +24,21 @@ public class HexCanvas extends Canvas{
         setEvents();
     }
 
-    private void setMouseReleasedEvent() {
-        setOnMouseReleased(event -> {
-            oldX = 0;
-            oldY = 0;
-        });
-    }
-
-    private void setMouseDraggedEvent() {
-        setOnMouseDragged(event -> {
-            int x =(int) (event.getX());
-            int y =(int) (event.getY());
-            if(oldX != 0) {
-                decalageXProperty().setValue(getDecalageX() + x - oldX );
-                decalageYProperty().setValue(getDecalageY() + y - oldY );
-            }
-            oldX = x;
-            oldY = y;
-        });
-    }
-
-    private void setEvents() {
+    @Override
+    protected void setEvents() {
+        super.setEvents();
         widthProperty().addListener(evt -> {
             hexContainer.notifyCanvasWidthChange(widthProperty().getValue());
             draw();
         });
-
         heightProperty().addListener(evt -> {
             hexContainer.notifyCanvasHeightChange(heightProperty().getValue());
             draw();
         });
-
-        decalageXProperty().addListener(evt -> draw());
-        decalageYProperty().addListener(evt -> draw());
-
         zoomProperty().addListener(evt -> {
             hexContainer.notifyZoomChange(zoomProperty().getValue());
             draw();
         });
-
-        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
-        setMouseDraggedEvent();
-        setMouseReleasedEvent();
     }
 
     public void changeGrid(HexGrid grid) {

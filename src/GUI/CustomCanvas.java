@@ -95,11 +95,8 @@ public abstract class CustomCanvas extends Canvas{
     public abstract void draw();
 
     protected void setEvents() {
-        widthProperty().addListener(evt -> draw());
-        heightProperty().addListener(evt -> draw());
         decalageXProperty().addListener(evt -> draw());
         decalageYProperty().addListener(evt -> draw());
-        zoomProperty().addListener(evt -> draw());
         setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
         setMouseDraggedEvent();
         setMouseReleasedEvent();

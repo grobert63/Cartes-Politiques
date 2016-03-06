@@ -28,8 +28,12 @@ public class PolyCanvas extends CustomCanvas {
         setEvents();
     }
 
+    @Override
     protected void setEvents() {
         super.setEvents();
+        widthProperty().addListener(evt -> draw());
+        heightProperty().addListener(evt -> draw());
+        zoomProperty().addListener(evt -> draw());
         nomPaysProperty().addListener(evt -> draw());
     }
 
