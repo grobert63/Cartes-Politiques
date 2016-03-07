@@ -111,8 +111,8 @@ public class Geometry {
     
     /**
      * Angle du point "pt" à partir du point "reference".
-     * Ex 1 : Si "pt" et au-dessus de "reference", l'angle sera 0°
-     * Ex 2 : Si "pt" et à droite de "reference", l'angle sera 90°
+     * Ex 1 : Si "pt" est au-dessus de "reference", l'angle sera 0°
+     * Ex 2 : Si "pt" est à droite de "reference", l'angle sera 90°
      * @param reference Point de référence
      * @param pt Point de 
      * @return Angle entre reference et pt
