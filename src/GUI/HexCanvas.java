@@ -81,4 +81,8 @@ public class HexCanvas extends CustomCanvas{
             rgb = (rgb + 8) % 224;
         }
     }
+
+    public HexPolygonContainer getHexContainer() {
+        return hexContainer;
+    }
 }

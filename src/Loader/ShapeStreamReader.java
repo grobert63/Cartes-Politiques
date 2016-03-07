@@ -22,6 +22,7 @@ import java.util.List;
  */
 public class ShapeStreamReader {
     private ShapeFileReader _reader;
+    public static final double NO_DATA = -1e38;
 
     /**
      * Constructeur de la classe
@@ -83,7 +84,7 @@ public class ShapeStreamReader {
     }
 
     private boolean isMapValid(ShapeFileReader reader) throws InvalidMapException {
-        if (reader.getHeader().getBoxMaxZ() != 0 || reader.getHeader().getBoxMinZ() != 0 || reader.getHeader().getBoxMaxM() != 0 || reader.getHeader().getBoxMinM() != 0) {
+        if ((reader.getHeader().getBoxMaxZ() != 0 && reader.getHeader().getBoxMaxZ() != NO_DATA )|| (reader.getHeader().getBoxMinZ() != 0 && reader.getHeader().getBoxMinZ() != NO_DATA ) || (reader.getHeader().getBoxMaxM() != 0 && reader.getHeader().getBoxMaxM() != NO_DATA ) || (reader.getHeader().getBoxMinM() != 0 && reader.getHeader().getBoxMinM() != NO_DATA )) {
             throw new InvalidMapException("Seules les cartes 2D sont gérées");
         }
         if (reader.getHeader().getShapeType() != ShapeType.POLYGON && reader.getHeader().getShapeType() != ShapeType.POLYGON_Z && reader.getHeader().getShapeType() != ShapeType.POLYGON_M){

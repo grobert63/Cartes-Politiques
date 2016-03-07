@@ -3,22 +3,17 @@ package GUI;
 import DataManager.Converter;
 import DataManager.Load;
 import DataManager.Save;
-import Entities.Direction;
 import Entities.Region;
-import GUI.*;
-import GUI.Main;
 import Resolver.Test2Resolver;
-import javafx.event.ActionEvent;
+import Saver.ShapeFileWriter;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -103,6 +98,7 @@ public class Controller {
         chargementSelectionPays();
         chargementName();
         chargementArgs();
+        new ShapeFileWriter(canvas.getHexContainer());
 
     }
 

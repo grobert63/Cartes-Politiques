@@ -37,6 +37,8 @@ public class MapLoader {
 
         ValidationPreferences v = new ValidationPreferences();
         v.setAllowUnlimitedNumberOfPointsPerShape(true);
+        //v.setAllowBadRecordNumbers(true);
+        //v.setAllowMultipleShapeTypes(true);
 
         this.shapeStreamReader = new ShapeStreamReader(fileReader.getFileInputStream(),v);
         if(dbfFilePath != null){
