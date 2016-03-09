@@ -17,10 +17,6 @@ public class ShapeFileBox {
         this.xMax = xMax;
         this.yMax = yMax;
     }
-    private ShapeFileBox()
-    {
-
-    }
 
     public double getxMin() {
         return xMin;
