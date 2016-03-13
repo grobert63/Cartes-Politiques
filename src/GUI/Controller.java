@@ -3,7 +3,6 @@ package GUI;
 import DataManager.Converter;
 import DataManager.Load;
 import DataManager.Save;
-import Entities.Direction;
 import Entities.Region;
 import Resolver.Arguments;
 import Resolver.Resolver3;
@@ -293,7 +292,7 @@ public class Controller {
                 RadioMenuItem radio = (RadioMenuItem)menu;
                 if(radio.getText().equals(direction))
                     radio.setSelected(true);
-            }catch (ClassCastException c)
+            }catch (ClassCastException ignored)
             {
 
             }

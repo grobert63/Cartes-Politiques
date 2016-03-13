@@ -34,7 +34,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
         primaryStage.setTitle("Hexagomap");
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
@@ -115,15 +115,5 @@ public class Main extends Application {
                 System.out.println("\t *Vide* : " + boundary.size());
             }
         }
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 650, 400));
-        primaryStage.show();
-        LoggerManager.getInstance().getLogger().log(Level.INFO, "Application started");
     }
 }
