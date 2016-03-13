@@ -30,6 +30,16 @@ public class Main extends Application {
     public static void main(String[] args) {
         Application.launch(args);
     }
+    
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        primaryStage.setTitle("Hexagomap");
+        primaryStage.setScene(new Scene(root, 650, 400));
+        primaryStage.show();
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Application started");
+    }
 
     public static void chargement(String shp, String dbf) throws Exception {
         TimeDebug.timeStart(0);

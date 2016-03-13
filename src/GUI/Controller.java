@@ -3,7 +3,10 @@ package GUI;
 import DataManager.Converter;
 import DataManager.Load;
 import DataManager.Save;
+import Entities.Direction;
 import Entities.Region;
+import Resolver.Arguments;
+import Resolver.Resolver3;
 import Resolver.Test2Resolver;
 import Saver.ShapeFileWriter;
 import javafx.event.ActionEvent;
@@ -216,6 +219,7 @@ public class Controller {
             e.printStackTrace();
         }
         chargementName();
+        chargementSelectionPays();
         chargementArgumentName();
         canvas.changeGrid(Main.grid);
         canvasCarte.changeMap(Main.geoMap);
@@ -231,6 +235,7 @@ public class Controller {
             e.printStackTrace();
         }
         chargementName();
+        chargementSelectionPays();
         chargementArgumentName();
         canvas.changeGrid(Main.grid);
         canvasCarte.changeMap(Main.geoMap);
@@ -253,5 +258,55 @@ public class Controller {
             Main.grid = algo.resolve(regions, Direction, Clock, region, nbTour);
             canvas.changeGrid(Main.grid);
         }
+    }
+
+    @FXML
+    public void bestAlgo()
+    {
+        Resolver3 algo = new Resolver3();
+        Arguments a = algo.resolve(regions);
+        String namePays = a.getRegion().getName();
+        String direction ="";
+        switch (a.getDirection())
+        {
+            case Entities.Direction.NORTH_EAST:
+                direction = "North-East";
+                break;
+            case Entities.Direction.EAST:
+                direction = "East";
+                break;
+            case Entities.Direction.SOUTH_EAST:
+                direction = "South-East";
+                break;
+            case Entities.Direction.SOUTH_WEST:
+                direction = "South-West";
+                break;
+            case Entities.Direction.WEST:
+                direction = "West";
+                break;
+            case Entities.Direction.NORTH_WEST:
+                direction = "North-West";
+                break;
+        }
+        for (MenuItem menu :MenuDirection.getItems()) {
+            try {
+                RadioMenuItem radio = (RadioMenuItem)menu;
+                if(radio.getText().equals(direction))
+                    radio.setSelected(true);
+            }catch (ClassCastException c)
+            {
+
+            }
+
+        }
+
+        for (MenuItem menu :FirstCountryArgument.getItems()) {
+            RadioMenuItem radio = (RadioMenuItem)menu;
+            if(radio.getText().equals(namePays))
+                radio.setSelected(true);
+        }
+
+        Main.grid = a.getHexGrid();
+        canvas.changeGrid(Main.grid);
     }
 }
