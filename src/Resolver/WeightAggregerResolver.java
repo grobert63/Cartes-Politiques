@@ -4,20 +4,18 @@ import Entities.HexGrid;
 import Entities.Region;
 import Resolver.Tools.Aggreger;
 import Resolver.Tools.WeightArray;
-import Resolver.Tools.WeightCalculator;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- *
  * @author Théophile
  */
-public class WeightAggregerResolver implements IResolver{
+public class WeightAggregerResolver implements IResolver {
     private Aggreger aggreger;
     private List<Region> isolated;
     private List<Region> regions;
     private WeightArray weightArray;
-    
+
     @Override
     public HexGrid resolve(List<Region> list) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -37,5 +35,5 @@ public class WeightAggregerResolver implements IResolver{
         return aggreger.toGrid();
         */
     }
-    
+
 }

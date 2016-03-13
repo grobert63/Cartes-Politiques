@@ -2,6 +2,7 @@ package Entities;
 
 /**
  * Décrit une grille hexagonale contenant des régions
+ *
  * @author Théophile
  */
 public class HexGrid {
@@ -12,7 +13,8 @@ public class HexGrid {
 
     /**
      * Construit la grille avec sa hauteur et sa largeur.
-     * @param width Largeur de la grille ou nombre d'hexagones horizontaux
+     *
+     * @param width  Largeur de la grille ou nombre d'hexagones horizontaux
      * @param height Hauteur de la grille ou nombre d'hexagones verticaux
      */
     public HexGrid(int width, int height) {
@@ -34,29 +36,31 @@ public class HexGrid {
     public int getHeight() {
         return height;
     }
-    
+
     /**
      * Récupère la région aux indexs indiqués dans la grille
-     * @param x Index en X / Numéro de colonne 
+     *
+     * @param x Index en X / Numéro de colonne
      * @param y Index en Y / Numéro de ligne
      * @return Région aux index indiqués
      */
-    public Region getRegion(int x, int y){
+    public Region getRegion(int x, int y) {
         return array[x][y];
     }
-    
+
     /**
      * Ajoute une région dans la grille aux indexs indiqués
-     * @param x Index en X / Numéro de colonne 
+     *
+     * @param x Index en X / Numéro de colonne
      * @param y Index en Y / Numéro de ligne
      * @param r Région à ajouter dans la grille
      */
-    public void addRegion(int x, int y, Region r){
+    public void addRegion(int x, int y, Region r) {
         array[x][y] = r;
         nbRegions++;
     }
-    
-    public int getNbRegions(){
+
+    public int getNbRegions() {
         return nbRegions;
     }
 }

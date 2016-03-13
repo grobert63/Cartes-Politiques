@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
@@ -10,8 +10,8 @@
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
                 <Menu mnemonicParsing="false" text="Open">
-                    <MenuItem  mnemonicParsing="false" text="With .dbf" onAction="#loadDbf"/>
-                    <MenuItem  mnemonicParsing="false" text="Without .dbf" onAction="#load"/>
+                    <MenuItem mnemonicParsing="false" text="With .dbf" onAction="#loadDbf"/>
+                    <MenuItem mnemonicParsing="false" text="Without .dbf" onAction="#load"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Export">
                     <MenuItem mnemonicParsing="false" text="To image" onAction="#SaveImage"/>
@@ -28,54 +28,54 @@
             <Menu mnemonicParsing="false" text="Argument">
                 <Menu mnemonicParsing="false" text="Selected region" fx:id="selectedCountry"/>
                 <Menu mnemonicParsing="false" text="First country" fx:id="FirstCountryArgument"/>
-                <Menu  mnemonicParsing="false" text="Direction" fx:id="MenuDirection"/>
+                <Menu mnemonicParsing="false" text="Direction" fx:id="MenuDirection"/>
                 <Menu mnemonicParsing="false" text="NbOccurence" fx:id="occurenceMenu"/>
             </Menu>
         </MenuBar>
     </top>
     <bottom>
-        <Label text="\@Created by G. Robert, T. Pumain, M. Lemort, J. Defiolles " BorderPane.alignment="CENTER_LEFT" />
+        <Label text="\@Created by G. Robert, T. Pumain, M. Lemort, J. Defiolles " BorderPane.alignment="CENTER_LEFT"/>
     </bottom>
     <center>
         <BorderPane BorderPane.alignment="CENTER">
             <center>
                 <GridPane BorderPane.alignment="CENTER">
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="50" />
-                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints vgrow="ALWAYS" />
+                        <RowConstraints vgrow="ALWAYS"/>
                     </rowConstraints>
                     <BorderPane>
                         <center>
-                            <Pane fx:id="PaneAffichageCarte" BorderPane.alignment="CENTER" />
+                            <Pane fx:id="PaneAffichageCarte" BorderPane.alignment="CENTER"/>
                         </center>
-                  <top>
-                      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
-                          <CheckBox mnemonicParsing="false" text=": Nom des pays" fx:id="NomPaysCarte">
-                              <padding>
-                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                              </padding>
-                          </CheckBox>
-                          <Slider fx:id="SliderZoomCarte" maxWidth="100">
-                              <padding>
-                                  <Insets right="10.0"/>
-                              </padding>
-                          </Slider>
-                      </HBox>
-                  </top>
+                        <top>
+                            <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
+                                <CheckBox mnemonicParsing="false" text=": Nom des pays" fx:id="NomPaysCarte">
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </padding>
+                                </CheckBox>
+                                <Slider fx:id="SliderZoomCarte" maxWidth="100">
+                                    <padding>
+                                        <Insets right="10.0"/>
+                                    </padding>
+                                </Slider>
+                            </HBox>
+                        </top>
                     </BorderPane>
                     <BorderPane GridPane.columnIndex="1">
                         <center>
-                            <Pane fx:id="PaneAffichageResult" BorderPane.alignment="CENTER" />
+                            <Pane fx:id="PaneAffichageResult" BorderPane.alignment="CENTER"/>
                         </center>
-                  <top>
-                      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
-                          <Button text="Refresh" onAction="#refreshAlgo"/>
-                          <Slider fx:id="SliderResult" maxWidth="100"/>
-                      </HBox>
-                  </top>
+                        <top>
+                            <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+                                <Button text="Refresh" onAction="#refreshAlgo"/>
+                                <Slider fx:id="SliderResult" maxWidth="100"/>
+                            </HBox>
+                        </top>
                     </BorderPane>
                 </GridPane>
             </center>

@@ -4,7 +4,6 @@ import LoggerUtils.LoggerManager;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import javax.imageio.ImageIO;

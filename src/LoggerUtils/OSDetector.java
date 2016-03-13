@@ -14,7 +14,6 @@ public class OSDetector {
 
 
     /**
-     *
      * @return true if OS is windows
      */
     public static boolean isWindows() {
@@ -22,7 +21,6 @@ public class OSDetector {
     }
 
     /**
-     *
      * @return true if OS is Mac OS
      */
     public static boolean isMac() {
@@ -30,14 +28,9 @@ public class OSDetector {
     }
 
     /**
-     *
      * @return true if OS is Unix based (inlcudes Linux)
      */
     public static boolean isUnix() {
-        return (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0 );
+        return (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0);
     }
-
-    /*public static boolean isSolaris() {
-        return (OS.contains("sunos"));
-    }*/
 }

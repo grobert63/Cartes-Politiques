@@ -19,8 +19,7 @@ class LoggerFormatter extends Formatter {
         builder.append("] ");
         builder.append(dateFormat.format(new Date(record.getMillis())));
         builder.append(": ");
-        if (!record.getMessage().equals(""))
-        {
+        if (!record.getMessage().equals("")) {
             try {
                 builder.append(record.getResourceBundle().getString(record.getMessage()));
             } catch (Exception e) {
@@ -28,8 +27,7 @@ class LoggerFormatter extends Formatter {
             }
         }
         builder.append("\r\n");
-        if (record.getThrown() != null)
-        {
+        if (record.getThrown() != null) {
             builder.append(record.getThrown().getLocalizedMessage());
             builder.append("\r\n");
         }

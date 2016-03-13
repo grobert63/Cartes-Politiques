@@ -1,10 +1,9 @@
 package Entities;
 
 /**
- *
  * @author Théophile
  */
-public class Point{
+public class Point {
 
     public final double x;
     public final double y;
@@ -16,19 +15,17 @@ public class Point{
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Point other = (Point) obj;
+        return obj != null && getClass() == obj.getClass() && equals((Point) obj);
+
+    }
+
+    public boolean equals(Point other) {
         return this.x == other.x && this.y == other.y;
     }
 
     @Override
     public int hashCode() {
-        return (int)((x * 4957.0 + y)*13.0);
+        return (int) ((x * 4957.0 + y) * 13.0);
     }
 
     @Override

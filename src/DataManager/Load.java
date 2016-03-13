@@ -28,54 +28,37 @@ public class Load {
         List<File> list = fileChooser.showOpenMultipleDialog(stage);
         if (list != null) {
             for (File file : list) {
-                if (!file.exists())
-                {
+                if (!file.exists()) {
                     throw new IOException("impossible de lire le fichier : " + file.getName());
                 }
             }
             String message = "Files : ";
             for (File file : list) {
                 message += file.getName();
-                if (list.size() - 1 > list.indexOf(file))
-                {
+                if (list.size() - 1 > list.indexOf(file)) {
                     message += ", ";
                 }
             }
             message += " loaded";
 
-            LoggerManager.getInstance().getLogger().log(Level.INFO,message);
+            LoggerManager.getInstance().getLogger().log(Level.INFO, message);
         }
 
         return list;
     }
 
     public static File loadSingle(Window stage) throws IOException {
-        final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Ouvrir le fichier shapeFile");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Supported Files", "*.shp", "*.dbf"),
-                new FileChooser.ExtensionFilter("Shapefile", "*.shp"),
-                new FileChooser.ExtensionFilter("DataBase File", "*.dbf")
-        );
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        File file = fileChooser.showOpenDialog(stage);
-        if (file.exists())
-        {
-            LoggerManager.getInstance().getLogger().log(Level.INFO,"File : " + file.getName() + " loaded");
-            return file;
-        }
-        throw new IOException("impossible de lire le fichier : " + file.getName());
+        return loadSingle(stage, new FileChooser.ExtensionFilter("Shapefile", "*.shp"), new File(System.getProperty("user.home")));
     }
 
-    public static File loadSingle(Window stage, FileChooser.ExtensionFilter extension,File directory) throws IOException {
+    public static File loadSingle(Window stage, FileChooser.ExtensionFilter extension, File directory) throws IOException {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Ouvrir le fichier");
         fileChooser.getExtensionFilters().addAll(extension);
         fileChooser.setInitialDirectory(directory);
         File file = fileChooser.showOpenDialog(stage);
-        if (file.exists())
-        {
-            LoggerManager.getInstance().getLogger().log(Level.INFO,"File : " + file.getName() + " loaded");
+        if (file.exists()) {
+            LoggerManager.getInstance().getLogger().log(Level.INFO, "File : " + file.getName() + " loaded");
             return file;
         }
         return null;

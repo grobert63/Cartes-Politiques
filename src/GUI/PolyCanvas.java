@@ -17,6 +17,7 @@ public class PolyCanvas extends CustomCanvas {
     private final BooleanProperty nomPays = new SimpleBooleanProperty();
     private GeoMap map;
     private double _ratio;
+
     /**
      * Canvas affichant la carte avec le nom de la région. Le ratio est toujours respecté
      *
@@ -55,8 +56,7 @@ public class PolyCanvas extends CustomCanvas {
         return nomPays;
     }
 
-    public void draw()
-    {
+    public void draw() {
         _canvasWidth = getWidth();
         _canvasHeight = getHeight();
         GraphicsContext gc = super.getGraphicsContext2D();
@@ -65,47 +65,49 @@ public class PolyCanvas extends CustomCanvas {
         for (Boundary b : map.getSimpleBoundaries()) {
             drawPolygon(gc, b);
         }
-        if(getNomPays())
+        if (getNomPays())
             for (Region region : map.getRegions()) {
                 gc.fillText(region.getName(), computeX(region.getCenter().x), computeY(region.getCenter().y));
-        }
+            }
     }
 
     private void drawInitialize(GraphicsContext gc) {
         gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,getWidth(),getHeight());
+        gc.fillRect(0, 0, getWidth(), getHeight());
         gc.setFill(Color.BLACK);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
     }
 
+    //empeche le render correct des "vrais" polygones!!!
     private void drawPolygon(GraphicsContext gc, Boundary b) {
-        int size = b.getPoints().size();
+        int size = b.getPoints().size() /*+ 1*/;
         double x[] = new double[size];
         double y[] = new double[size];
-        for (int i = 0; i < size; i++) {
-            y[i] =computeY(b.getPoints().get(i).y);
-            x[i] =computeX(b.getPoints().get(i).x);
+        for (int i = 0; i < size/*-1*/; i++) {
+            y[i] = computeY(b.getPoints().get(i).y);
+            x[i] = computeX(b.getPoints().get(i).x);
         }
+        //y[size-1] = computeY(b.getPoints().get(0).y);
+        //x[size-1] = computeX(b.getPoints().get(0).x);
 
         gc.strokePolyline(x, y, size);
     }
 
 
-    private double computeX(double x){
-        return x*_ratio*getZoom() + getDecalageX() +(_canvasWidth / 2)*(1- getZoom());
+    private double computeX(double x) {
+        return x * _ratio * getZoom() + getDecalageX() + (_canvasWidth / 2) * (1 - getZoom());
     }
-    
-    private double computeY(double y){
-        return -y*_ratio*getZoom() + getDecalageY() + (_canvasHeight / 2)*(getZoom()+1);
+
+    private double computeY(double y) {
+        return -y * _ratio * getZoom() + getDecalageY() + (_canvasHeight / 2) * (getZoom() + 1);
     }
 
     private double resize() {
         double ratioX, ratioY;
         ratioX = _canvasWidth / map.getWidth();
         ratioY = _canvasHeight / map.getHeight();
-        if (ratioX < 1 && ratioY < 1)
-        {
+        if (ratioX < 1 && ratioY < 1) {
             ratioX = map.getWidth() / _canvasWidth;
             ratioY = map.getHeight() / _canvasHeight;
         }

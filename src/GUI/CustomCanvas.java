@@ -11,10 +11,10 @@ import javafx.scene.canvas.Canvas;
  * Created by Guillaume Robert on 06/03/2016.
  * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
-public abstract class CustomCanvas extends Canvas{
-    private final DoubleProperty zoom = new SimpleDoubleProperty();
+public abstract class CustomCanvas extends Canvas {
     protected final IntegerProperty decalageX = new SimpleIntegerProperty();
     protected final IntegerProperty decalageY = new SimpleIntegerProperty();
+    private final DoubleProperty zoom = new SimpleDoubleProperty();
     protected double _canvasWidth;
     protected double _canvasHeight;
     protected double oldX;
@@ -37,11 +37,11 @@ public abstract class CustomCanvas extends Canvas{
 
     protected void setMouseDraggedEvent() {
         setOnMouseDragged(event -> {
-            int x =(int) (event.getX());
-            int y =(int) (event.getY());
-            if(oldX != 0) {
-                decalageXProperty().setValue(getDecalageX() + x - oldX );
-                decalageYProperty().setValue(getDecalageY() + y - oldY );
+            int x = (int) (event.getX());
+            int y = (int) (event.getY());
+            if (oldX != 0) {
+                decalageXProperty().setValue(getDecalageX() + x - oldX);
+                decalageYProperty().setValue(getDecalageY() + y - oldY);
             }
             oldX = x;
             oldY = y;
@@ -53,7 +53,7 @@ public abstract class CustomCanvas extends Canvas{
     }
 
     public void setZoom(double zoom) {
-        if(zoom>=0.5)
+        if (zoom >= 0.5)
             this.zoom.set(zoom);
     }
 
@@ -85,8 +85,7 @@ public abstract class CustomCanvas extends Canvas{
         return decalageY;
     }
 
-    public void initialize()
-    {
+    public void initialize() {
         setZoom(1);
         setDecalageX(0);
         setDecalageY(0);
@@ -97,7 +96,7 @@ public abstract class CustomCanvas extends Canvas{
     protected void setEvents() {
         decalageXProperty().addListener(evt -> draw());
         decalageYProperty().addListener(evt -> draw());
-        setOnScroll(event -> setZoom(event.getDeltaY()/200+zoomProperty().getValue()));
+        setOnScroll(event -> setZoom(event.getDeltaY() / 200 + zoomProperty().getValue()));
         setMouseDraggedEvent();
         setMouseReleasedEvent();
     }

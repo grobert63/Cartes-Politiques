@@ -37,11 +37,11 @@ public class ShapeFileWriter {
             ShapeFilePoint[] points = new ShapeFilePoint[7];
             final double[] hexEdgesX = {0.5, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5};
             final double[] hexEdgesY = {0.25, -0.25, -0.5, -0.25, 0.25, 0.5, 0.25};
-            for (int j = 0; j < 7; ++j) {
-                points[j] = new ShapeFilePoint(point.x * hexEdgesX[j], point.y * hexEdgesY[j]);
+            for (int j = 0; j < 6; ++j) {
+                points[j] = new ShapeFilePoint(point.x * 1.0000000001 + hexEdgesX[j], -point.y * 1.0000000001 + hexEdgesY[j]);
             }
-            //points[0] = new ShapeFilePoint(point.x,point.y);
-            System.out.println("x : " + point.x + "y : " + point.y);
+            points[6] = new ShapeFilePoint(points[0].getX()+0.1,-points[0].getY()+0.1);
+            System.out.println("x : " + point.x + " y : " + point.y);
             ShapeFilePolygon polygon = new ShapeFilePolygon(new ShapeFileBox(-0.5 * point.x, -0.5 * point.y, 0.5 * point.x, 0.5 * point.y), new int[]{0}, points);
             updateLimits(polygon.getBox());
             writePolygon(polygon);
@@ -107,13 +107,10 @@ public class ShapeFileWriter {
     }
 
     private void writePoint(ShapeFilePoint point) {
-        //writeRecordHeader(4+2+8);
-        if (bodySpaceLeft < (/*INT + */(DOUBLE * 2))) {
+        if (bodySpaceLeft < ((DOUBLE * 2))) {
             resizeBodyBuffer(DEFAULT_RESIZE_QUANTITY);
         }
         body.order(ByteOrder.LITTLE_ENDIAN);
-        /*bodySpaceLeft -= INT;
-        body.putInt(1);*/
         bodySpaceLeft -= DOUBLE;
         body.putDouble(point.getX());
         bodySpaceLeft -= DOUBLE;
@@ -169,32 +166,12 @@ public class ShapeFileWriter {
     }
 
     private void writeToFile(String filePath) {
-        /*File f = new File(filePath);
-        FileChannel channel;
-        //header.flip();
-        body.flip();
-        try {
-            channel = new FileOutputStream(f,false).getChannel();
-            channel.write(header);
-            channel.write(body);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         byte[] buffer = header.array();
-
-
-        // write() writes as many bytes from the buffer
-        // as the length of the buffer. You can also
-        // use
-        // write(buffer, offset, length)
-        // if you want to write a specific number of
-        // bytes, or only part of the buffer.
         try {
             FileOutputStream outputStream =
                     new FileOutputStream(filePath);
             outputStream.write(buffer);
             outputStream.write(body.array(), 0, bodySize - bodySpaceLeft);
-            // Always close files.
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,9 +6,10 @@ import javafx.scene.paint.Color;
 
 /**
  * Décrit un canvas spécialisé dans l'affichage d'une grille hexagonale
+ *
  * @author Théophile
  */
-public class HexCanvas extends CustomCanvas{
+public class HexCanvas extends CustomCanvas {
 
     private final HexPolygonContainer hexContainer;
 
@@ -63,20 +64,19 @@ public class HexCanvas extends CustomCanvas{
         return getHeight();
     }
 
-    public void draw()
-    {
+    public void draw() {
         GraphicsContext gc = super.getGraphicsContext2D();
         int rgb = 0;
         gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,getWidth(),getHeight());
+        gc.fillRect(0, 0, getWidth(), getHeight());
 
         int nbHexagones = hexContainer.size();
 
-        for(int i=0; i<nbHexagones ; i++){
+        for (int i = 0; i < nbHexagones; i++) {
             gc.setFill(Color.rgb(255, rgb, rgb));
             gc.fillPolygon(hexContainer.getDrawableHexCoordX(i, getDecalageX()), hexContainer.getDrawableHexCoordY(i, getDecalageY()), 6);
             gc.setFill(Color.BLACK);
-            gc.fillText(hexContainer.getRegion(i).getName(),hexContainer.getTextPositionX(i, getDecalageX()), hexContainer.getTextPositionY(i, getDecalageY()));
+            gc.fillText(hexContainer.getRegion(i).getName(), hexContainer.getTextPositionX(i, getDecalageX()), hexContainer.getTextPositionY(i, getDecalageY()));
 
             rgb = (rgb + 8) % 224;
         }
