@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40"
             fx:controller="GUI.Controller" fx:id="fenetre">
@@ -31,6 +32,7 @@
                 <Menu  mnemonicParsing="false" text="Direction" fx:id="MenuDirection"/>
                 <Menu mnemonicParsing="false" text="NbOccurence" fx:id="occurenceMenu"/>
             </Menu>
+
         </MenuBar>
     </top>
     <bottom>
@@ -72,6 +74,7 @@
                         </center>
                   <top>
                       <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+                          <Button text="Best Algo" onAction="#bestAlgo"/>
                           <Button text="Refresh" onAction="#refreshAlgo"/>
                           <Slider fx:id="SliderResult" maxWidth="100"/>
                       </HBox>

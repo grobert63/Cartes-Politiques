@@ -46,7 +46,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Hexagomap");
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
         LoggerManager.getInstance().getLogger().log(Level.INFO, "Application started");
