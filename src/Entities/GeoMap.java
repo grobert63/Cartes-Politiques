@@ -1,7 +1,5 @@
 package Entities;
 
-import Debug.TimeDebug;
-
 import java.util.List;
 
 /**
@@ -27,10 +25,7 @@ public class GeoMap {
         this._height = height;
         this._manager = manager;
 
-        TimeDebug.timeStart(1);
-        // à déplacer
         this._simpleBoundaries = Geometry.getSimplifyBoundaries(manager.getBoundaries(), COEF_SIMPLIFY);
-        TimeDebug.timeStop(1);
     }
 
     /**
@@ -78,7 +73,7 @@ public class GeoMap {
         return _simpleBoundaries;
     }
 
-    public RegionManager debug_getManager() {
+    public RegionManager getManager() {
         return _manager;
     }
 }

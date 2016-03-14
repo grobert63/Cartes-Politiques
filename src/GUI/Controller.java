@@ -98,7 +98,7 @@ public class Controller {
             radio.setToggleGroup(toggleGroup);
             radio.setSelected(true);
             radio.setOnAction(event -> {
-                Main.geoMap.debug_getManager().setRegionsName(radio.getText());
+                Main.geoMap.getManager().setRegionsName(radio.getText());
                 canvas.draw();
                 chargementSelectionPays();
                 chargementArgumentName();

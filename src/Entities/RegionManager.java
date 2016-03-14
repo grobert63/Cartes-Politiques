@@ -1,7 +1,5 @@
 package Entities;
 
-import Debug.TimeDebug;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,19 +30,15 @@ public class RegionManager {
             rawMainPolygons[i] = Geometry.getMainPolygon(polygons);
         }
 
-        TimeDebug.timeStart(19);
         _bm = new BoundaryManager(rawMainPolygons);
         BoundPolygon[] boundMainPolygons = _bm.getBoundPolygon();
-        TimeDebug.timeStop(19);
 
         for (int i = 0; i < nbRegions; i++) {
             Region r = new Region(displayablePolygons[i], rawMainPolygons[i], boundMainPolygons[i]);
             _regions.add(r);
         }
 
-        TimeDebug.timeStart(20);
         calculateNeighbors(_regions, _bm.getBoundaries());
-        TimeDebug.timeStop(20);
     }
 
     /**
@@ -96,7 +90,7 @@ public class RegionManager {
                     r2.addNeighbor(r1, b);
                     break;
                 default:
-                    System.err.println("involvedRegions.size() = " + involvedRegions.size());
+                    //System.err.println("involvedRegions.size() = " + involvedRegions.size());
                     break;
             }
         }
