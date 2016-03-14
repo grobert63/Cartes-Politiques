@@ -81,15 +81,13 @@ public class PolyCanvas extends CustomCanvas {
 
     //empeche le render correct des "vrais" polygones!!!
     private void drawPolygon(GraphicsContext gc, Boundary b) {
-        int size = b.getPoints().size() /*+ 1*/;
+        int size = b.getPoints().size();
         double x[] = new double[size];
         double y[] = new double[size];
-        for (int i = 0; i < size/*-1*/; i++) {
+        for (int i = 0; i < size; i++) {
             y[i] = computeY(b.getPoints().get(i).y);
             x[i] = computeX(b.getPoints().get(i).x);
         }
-        //y[size-1] = computeY(b.getPoints().get(0).y);
-        //x[size-1] = computeX(b.getPoints().get(0).x);
 
         gc.strokePolyline(x, y, size);
     }

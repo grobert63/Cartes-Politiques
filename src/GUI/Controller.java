@@ -259,7 +259,7 @@ public class Controller {
 
     @FXML
     public void refreshAlgo() {
-        new ShapeFileWriter(canvas.getHexContainer());
+        new ShapeFileWriter("test.shp",canvas.getHexContainer());
         Test2Resolver algo = new Test2Resolver();
         Region region = null;
         for (Region r : Main.geoMap.getRegions()) {
