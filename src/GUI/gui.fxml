@@ -8,7 +8,7 @@
             minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40"
             fx:controller="GUI.Controller" fx:id="fenetre">
     <top>
-        <MenuBar BorderPane.alignment="CENTER">
+        <MenuBar BorderPane.alignment="CENTER" >
             <Menu mnemonicParsing="false" text="File">
                 <Menu mnemonicParsing="false" text="Open">
                     <MenuItem mnemonicParsing="false" text="With .dbf" onAction="#loadDbf"/>

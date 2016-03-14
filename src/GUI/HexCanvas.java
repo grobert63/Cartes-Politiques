@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
  *
  * @author Théophile
  */
-public class HexCanvas extends CustomCanvas {
+class HexCanvas extends CustomCanvas {
 
     private final HexPolygonContainer hexContainer;
 

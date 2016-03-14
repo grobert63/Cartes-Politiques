@@ -11,7 +11,7 @@ import javafx.scene.canvas.Canvas;
  * Created by Guillaume Robert on 06/03/2016.
  * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
-public abstract class CustomCanvas extends Canvas {
+abstract class CustomCanvas extends Canvas {
     protected final IntegerProperty decalageX = new SimpleIntegerProperty();
     protected final IntegerProperty decalageY = new SimpleIntegerProperty();
     private final DoubleProperty zoom = new SimpleDoubleProperty();

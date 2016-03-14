@@ -136,8 +136,20 @@ public class Controller {
         radioAll.setOnAction(event -> {
             for (MenuItem item : selectedCountry.getItems()) {
                 RadioMenuItem radio = (RadioMenuItem) item;
-                if (item != radioAll)
+                Region region = null;
+                for (Region r : Main.geoMap.getRegions()) {
+                    if (Objects.equals(r.getName(), FirstRegion)) region = r;
+                }
+                if (item != radioAll) {
                     radio.setSelected(radioAll.isSelected());
+                    if (radio.isSelected()) {
+                        regions.add(region);
+                    } else {
+                        radioAll.setSelected(false);
+                        regions.remove(region);
+                    }
+                    chargementArgumentName();
+                }
             }
 
         });
