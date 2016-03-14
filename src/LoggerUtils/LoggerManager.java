@@ -1,7 +1,6 @@
 package LoggerUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.AccessControlException;
@@ -34,40 +33,36 @@ public class LoggerManager {
             String path = System.getProperty("user.dir");
             String separator = System.getProperty("file.separator");
             String filename = df.format(currentDate) + "-%u.log";
-            String appDirectory = separator+"Cartes-Politiques"+separator;
-            if (OSDetector.isWindows())
-            {
-                path=System.getProperty("java.io.tmpdir")+appDirectory;
+            String appDirectory = separator + "Cartes-Politiques" + separator;
+            if (OSDetector.isWindows()) {
+                path = System.getProperty("java.io.tmpdir") + appDirectory;
             }
-            if (OSDetector.isUnix())
-            {
-                path=separator+"var"+separator+"log"+appDirectory;
+            if (OSDetector.isUnix()) {
+                path = separator + "var" + separator + "log" + appDirectory;
             }
-            if (OSDetector.isMac())
-            {
-                path=System.getProperty("user.home")+appDirectory;
+            if (OSDetector.isMac()) {
+                path = System.getProperty("user.home") + appDirectory;
             }
-            if(!Files.isDirectory(Paths.get(path))) {
+            if (!Files.isDirectory(Paths.get(path))) {
                 if (!(new File(path)).mkdirs()) {
                     _logger.log(Level.SEVERE, "Impossible de créer le repertoire de Log");
                 }
             }
-            path+= filename;
+            path += filename;
             FileHandler handler = new FileHandler(path);
             handler.setFormatter(new LoggerUtils.LoggerFormatter());
             _logger.setUseParentHandlers(true);
             _logger.addHandler(handler);
-        }
-        catch (AccessControlException e) {
+        } catch (AccessControlException e) {
             System.out.println("Impossible de logger");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Gives the log manager to use
+     *
      * @return the log manager
      */
     public static LoggerManager getInstance() {
@@ -76,6 +71,7 @@ public class LoggerManager {
 
     /**
      * Gives the logger to use to log infos
+     *
      * @return the logger
      */
     public Logger getLogger() {

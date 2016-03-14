@@ -14,10 +14,11 @@ import java.util.stream.Collectors;
  * Cet algorithme de résolution fonctionne de la manière suivante :
  * • il prend les deux régions les plus proches et les assemble
  * • tant qu'il reste des régions non assemblées :
- *     - il prend la région non assemblée la plus proche de l'une des régions déjà assemblée, et l'assemble.
+ * - il prend la région non assemblée la plus proche de l'une des régions déjà assemblée, et l'assemble.
+ *
  * @author Théophile
  */
-public class SimpleAggregerResolver implements IResolver{
+public class SimpleAggregerResolver implements IResolver {
     final List<Region> isolated = new ArrayList<>();
     Aggreger aggreger = null;
 
@@ -62,21 +63,21 @@ public class SimpleAggregerResolver implements IResolver{
         isolated.remove(nearest);
     }
 
-    private int getDirection(Region source, Region nearest){
+    private int getDirection(Region source, Region nearest) {
         double angle = source.getAngleTo(nearest);
         int direction = Direction.getDirectionFromAngle(angle);
-        while(!aggreger.hasPlace(source,direction)){
+        while (!aggreger.hasPlace(source, direction)) {
             direction = (direction + 1) % 6;
         }
         return direction;
     }
-    
+
     @Override
-    public HexGrid resolve(List<Region> list){
+    public HexGrid resolve(List<Region> list) {
         isolated.addAll(list.stream().collect(Collectors.toList()));
-        
+
         firstAggregate();
-        while(!isolated.isEmpty()){
+        while (!isolated.isEmpty()) {
             aggregate();
         }
         return aggreger.toGrid();

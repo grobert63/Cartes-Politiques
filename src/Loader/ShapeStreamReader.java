@@ -1,8 +1,8 @@
 package Loader;
 
+import CustomException.InvalidMapException;
 import Entities.Point;
 import Entities.RawPolygon;
-import CustomException.InvalidMapException;
 import org.nocrala.tools.gis.data.esri.shapefile.ShapeFileReader;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
@@ -21,39 +21,38 @@ import java.util.List;
  * Classe permettant la lecture d'un fichier shapefile pour en recuperer les informations globales et les polygones representant chaque pays
  */
 public class ShapeStreamReader {
-    private ShapeFileReader _reader;
     public static final double NO_DATA = -1e38;
+    private ShapeFileReader _reader;
 
     /**
      * Constructeur de la classe
+     *
      * @param stream Flux du fichier shapefile a lire
      * @throws InvalidShapeFileException Le flux n'est pas un fichier shapefile valide
-     * @throws IOException Erreur de lecture du flux de donnees
-     * @throws InvalidMapException Le format de la carte n'est pas reconnu
-     * @throws NullPointerException Le flux de donnees est invalide ou absent
+     * @throws IOException               Erreur de lecture du flux de donnees
+     * @throws InvalidMapException       Le format de la carte n'est pas reconnu
+     * @throws NullPointerException      Le flux de donnees est invalide ou absent
      */
     public ShapeStreamReader(FileInputStream stream) throws InvalidShapeFileException, IOException, InvalidMapException, NullPointerException {
-        this(stream,null);
+        this(stream, null);
     }
 
     /**
      * Constructeur de la classe
-     * @param stream Flux du fichier shapefile a lire
+     *
+     * @param stream                Flux du fichier shapefile a lire
      * @param validationPreferences Preferences de lecture du fichier shapefile
      * @throws InvalidShapeFileException Le flux n'est pas un fichier shapefile valide
-     * @throws IOException Erreur de lecture du flux de donnees
-     * @throws InvalidMapException Le format de la carte n'est pas reconnu
-     * @throws NullPointerException Le flux de donnees est invalide ou absent
+     * @throws IOException               Erreur de lecture du flux de donnees
+     * @throws InvalidMapException       Le format de la carte n'est pas reconnu
+     * @throws NullPointerException      Le flux de donnees est invalide ou absent
      */
     public ShapeStreamReader(FileInputStream stream, ValidationPreferences validationPreferences) throws InvalidShapeFileException, IOException, InvalidMapException, NullPointerException {
         if (stream != null) {
-            if (validationPreferences == null)
-            {
+            if (validationPreferences == null) {
                 createShapeFileReader(stream);
-            }
-            else
-            {
-                createShapeFileReader(stream,validationPreferences);
+            } else {
+                createShapeFileReader(stream, validationPreferences);
             }
         } else {
             _reader = null;
@@ -72,9 +71,9 @@ public class ShapeStreamReader {
         isMapValid(_reader);
     }
 
-    private void createShapeFileReader(FileInputStream stream,ValidationPreferences validationPreferences) throws InvalidShapeFileException, IOException, InvalidMapException {
+    private void createShapeFileReader(FileInputStream stream, ValidationPreferences validationPreferences) throws InvalidShapeFileException, IOException, InvalidMapException {
         try {
-            _reader = new ShapeFileReader(stream,validationPreferences);
+            _reader = new ShapeFileReader(stream, validationPreferences);
         } catch (InvalidShapeFileException e) {
             throw new InvalidShapeFileException("La forme est invalide", e.getCause());
         } catch (IOException e) {
@@ -84,10 +83,10 @@ public class ShapeStreamReader {
     }
 
     private boolean isMapValid(ShapeFileReader reader) throws InvalidMapException {
-        if ((reader.getHeader().getBoxMaxZ() != 0 && reader.getHeader().getBoxMaxZ() != NO_DATA )|| (reader.getHeader().getBoxMinZ() != 0 && reader.getHeader().getBoxMinZ() != NO_DATA ) || (reader.getHeader().getBoxMaxM() != 0 && reader.getHeader().getBoxMaxM() != NO_DATA ) || (reader.getHeader().getBoxMinM() != 0 && reader.getHeader().getBoxMinM() != NO_DATA )) {
+        if ((reader.getHeader().getBoxMaxZ() != 0 && reader.getHeader().getBoxMaxZ() != NO_DATA) || (reader.getHeader().getBoxMinZ() != 0 && reader.getHeader().getBoxMinZ() != NO_DATA) || (reader.getHeader().getBoxMaxM() != 0 && reader.getHeader().getBoxMaxM() != NO_DATA) || (reader.getHeader().getBoxMinM() != 0 && reader.getHeader().getBoxMinM() != NO_DATA)) {
             throw new InvalidMapException("Seules les cartes 2D sont gérées");
         }
-        if (reader.getHeader().getShapeType() != ShapeType.POLYGON && reader.getHeader().getShapeType() != ShapeType.POLYGON_Z && reader.getHeader().getShapeType() != ShapeType.POLYGON_M){
+        if (reader.getHeader().getShapeType() != ShapeType.POLYGON && reader.getHeader().getShapeType() != ShapeType.POLYGON_Z && reader.getHeader().getShapeType() != ShapeType.POLYGON_M) {
             throw new InvalidMapException("Seuls les polygones sont gérés pour les régions");
         }
         return true;
@@ -96,6 +95,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne la taille en X de la carte
+     *
      * @return Taille en X
      */
     public double getMapSizeX() {
@@ -104,6 +104,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne la taille en Y de la carte
+     *
      * @return Taille en Y
      */
     public double getMapSizeY() {
@@ -112,6 +113,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne la valeur minimale de X
+     *
      * @return Minimum de X
      */
     public double getMapMinX() {
@@ -120,6 +122,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne la valeur minimale de Y
+     *
      * @return Minimum de Y
      */
     public double getMapMinY() {
@@ -128,6 +131,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne la valeur maximale de X
+     *
      * @return Maximum de X
      */
     public double getMapMaxX() {
@@ -136,6 +140,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne la valeur maximale de Y
+     *
      * @return Maximum de Y
      */
     public double getMapMaxY() {
@@ -144,6 +149,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne le type de formes contenues dans le fichier shapefile
+     *
      * @return Type des formes
      */
     public String getShapeName() {
@@ -165,6 +171,7 @@ public class ShapeStreamReader {
 
     /**
      * Retourne la prochaine forme contenue dans le flux de données
+     *
      * @return Polygone JavaFX contenant les frontières de la région
      * @throws IOException
      * @throws InvalidShapeFileException
@@ -172,8 +179,7 @@ public class ShapeStreamReader {
     public List<RawPolygon> getNextShape() throws IOException, InvalidShapeFileException {
         AbstractShape shape = _reader.next();
         List<RawPolygon> polygons = new ArrayList<>();
-        if (shape != null)
-        {
+        if (shape != null) {
             AbstractPolyShape polygonShape = (AbstractPolyShape) shape;
             for (int i = 0; i < polygonShape.getNumberOfParts(); i++) {
                 polygons.add(addPointDataArrayToPolygon(polygonShape.getPointsOfPart(i)));
@@ -185,7 +191,7 @@ public class ShapeStreamReader {
     private RawPolygon addPointDataArrayToPolygon(PointData[] points) {
         RawPolygon polygon = new RawPolygon();
         for (PointData point : points) {
-            polygon.getPoints().add(new Point(point.getX() - getMapMinX(),point.getY() - getMapMinY()));
+            polygon.getPoints().add(new Point(point.getX() - getMapMinX(), point.getY() - getMapMinY()));
         }
         return polygon;
     }

@@ -1,5 +1,6 @@
 package Loader;
 
+import CustomException.InvalidMapException;
 import Debug.TimeDebug;
 import Entities.GeoMap;
 import Entities.RawPolygon;
@@ -7,7 +8,6 @@ import Entities.Region;
 import Entities.RegionManager;
 import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
-import CustomException.InvalidMapException;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 
@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Chargeur des fichiers .shp et .dbf
+ *
  * @author Théophile
  */
 public class MapLoader {
@@ -25,6 +26,7 @@ public class MapLoader {
 
     /**
      * Construit un chargeur de fichiers .shp et .dbf
+     *
      * @param shpFilePath Emplacement du fichier .shp
      * @param dbfFilePath Emplacement du fichier .dbf
      * @throws IOException
@@ -37,20 +39,18 @@ public class MapLoader {
 
         ValidationPreferences v = new ValidationPreferences();
         v.setAllowUnlimitedNumberOfPointsPerShape(true);
-        //v.setAllowBadRecordNumbers(true);
-        //v.setAllowMultipleShapeTypes(true);
 
-        this.shapeStreamReader = new ShapeStreamReader(fileReader.getFileInputStream(),v);
-        if(dbfFilePath != null){
+        this.shapeStreamReader = new ShapeStreamReader(fileReader.getFileInputStream(), v);
+        if (dbfFilePath != null) {
             this.dbfReader = new DBFReader(dbfFilePath);
-        }
-        else {
+        } else {
             this.dbfReader = null;
         }
     }
-    
+
     /**
      * Construit un chargeur avec uniquement un fichier .shp
+     *
      * @param shpFilePath Emplacement du fichier .shp
      * @throws IOException
      * @throws InvalidMapException
@@ -60,9 +60,10 @@ public class MapLoader {
     public MapLoader(String shpFilePath) throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
         this(shpFilePath, null);
     }
-    
+
     /**
      * Charge une liste de régions à partir des données du/des fichier(s)
+     *
      * @return Structure carte contenant toutes les régions et les dimensions de la carte
      * @throws IOException
      * @throws InvalidShapeFileException
@@ -70,12 +71,11 @@ public class MapLoader {
      */
     public GeoMap load() throws JDBFException, IOException, InvalidShapeFileException {
         RegionManager manager = loadRegions();
-        
+
         return new GeoMap(shapeStreamReader.getMapSizeX(), shapeStreamReader.getMapSizeY(), manager);
     }
 
-    public DBFReader getDbfReader()
-    {
+    public DBFReader getDbfReader() {
         return dbfReader;
     }
 
@@ -85,7 +85,7 @@ public class MapLoader {
         TimeDebug.timeStart(18);
         List<RawPolygon> rawRegion = shapeStreamReader.getNextShape();
 
-        while(rawRegion.size() > 0){
+        while (rawRegion.size() > 0) {
             rawRegions.add(rawRegion);
             rawRegion = shapeStreamReader.getNextShape();
         }
@@ -94,20 +94,19 @@ public class MapLoader {
         RegionManager manager = new RegionManager(rawRegions);
 
         TimeDebug.timeStart(18);
-        for(Region r : manager.getRegions()){
+        for (Region r : manager.getRegions()) {
             getdbfInfos(r);
         }
         TimeDebug.timeStop(18);
-        
+
         return manager;
     }
 
     private void getdbfInfos(Region region) throws JDBFException {
-        if(dbfReader != null){
-            if(dbfReader.hasNextRecord()){
+        if (dbfReader != null) {
+            if (dbfReader.hasNextRecord()) {
                 readdbfNextRecord(region);
-            }
-            else{
+            } else {
                 System.err.println("[Warning] Données manquantes dans le .dbf");
             }
         }
@@ -115,8 +114,7 @@ public class MapLoader {
 
     private void readdbfNextRecord(Region region) throws JDBFException {
         Object[] data = dbfReader.nextRecord();
-        for (int fieldIndex=0; fieldIndex < dbfReader.getFieldCount(); fieldIndex++)
-        {
+        for (int fieldIndex = 0; fieldIndex < dbfReader.getFieldCount(); fieldIndex++) {
             String fieldName = dbfReader.getField(fieldIndex).getName();
             region.setInfo(fieldName, data[fieldIndex].toString());
         }
