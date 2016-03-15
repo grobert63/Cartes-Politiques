@@ -33,8 +33,8 @@ public class Main extends Application {
         MapLoader ml;
         if (shp == null) {
             ml = new MapLoader(
-                    "test/FRA_adm1.shp",
-                    "test/FRA_adm1.dbf"
+                    "Samples/FRA_adm1.shp",
+                    "Samples/FRA_adm1.dbf"
             );
         } else {
             ml = new MapLoader(shp, dbf);
