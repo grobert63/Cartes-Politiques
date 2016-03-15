@@ -17,15 +17,15 @@ import java.util.logging.Level;
  */
 public class ShapeFileWriter {
 
-    public static final double NO_DATA = -1e38;
+    private static final double NO_DATA = -1e38;
     private static final int INT = 4;
     private static final int DOUBLE = 8;
     private static final int DEFAULT_RESIZE_QUANTITY = 10000;
-    private ByteBuffer header;
+    private final ByteBuffer header;
+    private final ShapeFileBox limits;
     private ByteBuffer body;
     private int recordCount = 0;
     private int fileSize = 0;
-    private ShapeFileBox limits;
     private int bodySize = 10000;
     private int bodySpaceLeft;
 
@@ -87,7 +87,7 @@ public class ShapeFileWriter {
         length += 8 * polygon.getNumberPoints();//points list length (2 + 2*4)
         writeRecordHeader(length);
         if (bodySpaceLeft < ((3 + polygon.getNumberParts()) * INT + (DOUBLE * 4))) {
-            resizeBodyBuffer(DEFAULT_RESIZE_QUANTITY);
+            resizeBodyBuffer();
         }
         body.order(ByteOrder.LITTLE_ENDIAN);
         bodySpaceLeft -= INT;
@@ -109,7 +109,7 @@ public class ShapeFileWriter {
 
     private void writePoint(ShapeFilePoint point) {
         if (bodySpaceLeft < ((DOUBLE * 2))) {
-            resizeBodyBuffer(DEFAULT_RESIZE_QUANTITY);
+            resizeBodyBuffer();
         }
         body.order(ByteOrder.LITTLE_ENDIAN);
         bodySpaceLeft -= DOUBLE;
@@ -121,7 +121,7 @@ public class ShapeFileWriter {
 
     private void writeBox(ShapeFileBox box) {
         if (bodySpaceLeft < DOUBLE * 4) {
-            resizeBodyBuffer(DEFAULT_RESIZE_QUANTITY);
+            resizeBodyBuffer();
         }
         bodySpaceLeft -= DOUBLE;
         body.putDouble(box.getxMin());
@@ -135,7 +135,7 @@ public class ShapeFileWriter {
 
     private void writeRecordHeader(int contentLength) {
         if (bodySpaceLeft < INT * 2) {
-            resizeBodyBuffer(DEFAULT_RESIZE_QUANTITY);
+            resizeBodyBuffer();
         }
         body.order(ByteOrder.BIG_ENDIAN);
         bodySpaceLeft -= INT;
@@ -144,11 +144,12 @@ public class ShapeFileWriter {
         body.putInt(contentLength);
     }
 
-    private int resizeBodyBuffer(int addSize) {
-        ByteBuffer temp = ByteBuffer.allocate(bodySize + addSize);
+    private void resizeBodyBuffer() {
+        ByteBuffer temp = ByteBuffer.allocate(bodySize + ShapeFileWriter.DEFAULT_RESIZE_QUANTITY);
         temp.put(body);
         body = temp;
-        return bodySize + addSize;
+        bodySize = bodySize + DEFAULT_RESIZE_QUANTITY;
+        bodySpaceLeft += DEFAULT_RESIZE_QUANTITY;
     }
 
     private void updateLimits(ShapeFileBox newPolygonLimits) {
@@ -175,7 +176,7 @@ public class ShapeFileWriter {
             outputStream.close();
             LoggerManager.getInstance().getLogger().log(Level.INFO,"ShapeFile saved to : "+ new File(filePath).getAbsolutePath() + " with a size of " + (header.array().length + bodySize - bodySpaceLeft) + " bytes");
         } catch (IOException e) {
-            LoggerManager.getInstance().getLogger().log(Level.WARNING, "Error while saving Shapefile to disk" + e.getMessage());
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while saving Shapefile to disk : " + e.getMessage());
         }
     }
 }

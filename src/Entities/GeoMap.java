@@ -56,15 +56,6 @@ public class GeoMap {
     }
 
     /**
-     * Recupère l'ensemble des frontières calculées toutes régions confondues
-     *
-     * @return Liste des frontières
-     */
-    public List<Boundary> getBoundaries() {
-        return _manager.getBoundaries();
-    }
-
-    /**
      * Recupère l'ensemble des frontières simplifiées
      *
      * @return Liste des frontières simplifiées

@@ -17,7 +17,7 @@ import java.util.logging.Level;
  */
 public class Save {
 
-    public static boolean saveToImage(Window stage, Image imageToSave) {
+    public static void saveToImage(Window stage, Image imageToSave) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir où enregistrer le fichier");
         fileChooser.getExtensionFilters().addAll(
@@ -43,13 +43,10 @@ public class Save {
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(imageToSave, null), type, file);
                 LoggerManager.getInstance().getLogger().log(Level.INFO, "Image saved to " + file.getAbsolutePath());
-                return true;
             } catch (IOException e) {
                 LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Unable to save image : " + e.getMessage());
-                return false;
             }
         }
-        return false;
     }
 
     private static String getExtension(File file) {

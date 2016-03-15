@@ -5,6 +5,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * File : GUI.CustomCanvas.java
@@ -12,30 +14,30 @@ import javafx.scene.canvas.Canvas;
  * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
 abstract class CustomCanvas extends Canvas {
-    protected final IntegerProperty decalageX = new SimpleIntegerProperty();
-    protected final IntegerProperty decalageY = new SimpleIntegerProperty();
+    private final IntegerProperty decalageX = new SimpleIntegerProperty();
+    private final IntegerProperty decalageY = new SimpleIntegerProperty();
     private final DoubleProperty zoom = new SimpleDoubleProperty();
-    protected double _canvasWidth;
-    protected double _canvasHeight;
-    protected double oldX;
-    protected double oldY;
+    double _canvasWidth;
+    double _canvasHeight;
+    private double oldX;
+    private double oldY;
 
-    public CustomCanvas(double width, double height) {
+    CustomCanvas(double width, double height) {
         super(width, height);
     }
 
-    public CustomCanvas() {
+    CustomCanvas() {
         super();
     }
 
-    protected void setMouseReleasedEvent() {
+    private void setMouseReleasedEvent() {
         setOnMouseReleased(event -> {
             oldX = 0;
             oldY = 0;
         });
     }
 
-    protected void setMouseDraggedEvent() {
+    private void setMouseDraggedEvent() {
         setOnMouseDragged(event -> {
             int x = (int) (event.getX());
             int y = (int) (event.getY());
@@ -48,11 +50,11 @@ abstract class CustomCanvas extends Canvas {
         });
     }
 
-    public double getZoom() {
+    double getZoom() {
         return zoom.get();
     }
 
-    public void setZoom(double zoom) {
+    private void setZoom(double zoom) {
         if (zoom >= 0.5)
             this.zoom.set(zoom);
     }
@@ -61,43 +63,48 @@ abstract class CustomCanvas extends Canvas {
         return zoom;
     }
 
-    public int getDecalageX() {
+    int getDecalageX() {
         return decalageX.get();
     }
 
-    public void setDecalageX(int decalageX) {
-        this.decalageX.set(decalageX);
+    private void setDecalageX() {
+        this.decalageX.set(0);
     }
 
-    public IntegerProperty decalageXProperty() {
+    private IntegerProperty decalageXProperty() {
         return decalageX;
     }
 
-    public int getDecalageY() {
+    int getDecalageY() {
         return decalageY.get();
     }
 
-    public void setDecalageY(int decalageY) {
-        this.decalageY.set(decalageY);
+    private void setDecalageY() {
+        this.decalageY.set(0);
     }
 
-    public IntegerProperty decalageYProperty() {
+    private IntegerProperty decalageYProperty() {
         return decalageY;
     }
 
-    public void initialize() {
+    void initialize() {
         setZoom(1);
-        setDecalageX(0);
-        setDecalageY(0);
+        setDecalageX();
+        setDecalageY();
     }
 
-    public abstract void draw();
+    protected abstract void draw();
 
-    protected void setEvents() {
+    void setEvents() {
         decalageXProperty().addListener(evt -> draw());
         decalageYProperty().addListener(evt -> draw());
         setOnScroll(event -> setZoom(event.getDeltaY() / 200 + zoomProperty().getValue()));
         setMouseDraggedEvent();
         setMouseReleasedEvent();
+    }
+
+    void initializeGraphicsContext(GraphicsContext gc) {
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, getWidth(), getHeight());
     }
 }

@@ -17,21 +17,6 @@ public class Direction {
     public static final int WEST = 4;
     public static final int NORTH_WEST = 5;
 
-    /**
-     * (Fonction inutilisée)
-     * Indique l'angle lié à la direction donné
-     *
-     * @param direction Un des membres de HexDirection.
-     * @return Angle de cette direction en degré
-     * @throws InvalidDirectionException
-     */
-    public static double getAngle(int direction) throws Exception {
-        if (direction >= 0 && direction <= 5) {
-            return direction * 60.0 + 30.0;
-        }
-        throw new InvalidDirectionException("Une direction doit être comprise entre 0 et 5");
-    }
-
 
     /**
      * (Fonction inutilisée)
@@ -41,11 +26,11 @@ public class Direction {
      * @return Direction opposé à la direction donnée
      * @throws InvalidDirectionException
      */
-    public static int getOpposite(int direction) throws Exception {
+    public static int getOpposite(int direction) throws InvalidDirectionException {
         if (direction >= 0 && direction <= 5) {
             return (direction + 3) % 6;
         }
-        throw new InvalidDirectionException("Une direction doit être comprise entre 0 et 5");
+        throw new InvalidDirectionException();
     }
 
     /**
@@ -58,10 +43,6 @@ public class Direction {
     public static int getDirectionFromAngle(double angle) {
         angle = angle % 360;
         return (int) (angle / 60.0);
-    }
-
-    public static double getDifferenceAngleDirection(double angle, int direction) throws Exception {
-        return Math.abs(angle - getAngle(direction));
     }
 
     public static ArrayList<Integer> getAllDirection() {

@@ -1,11 +1,12 @@
 package Resolver;
 
-import Entities.Direction;
 import Entities.HexGrid;
 import Entities.Region;
 
 /**
- * Created by PAYS on 07/03/2016.
+ * File : Resolver.Arguments.java
+ * Created by Julien Defiolles on 07/03/2016.
+ * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
 public class Arguments {
     private HexGrid hexGrid = null;
@@ -19,14 +20,12 @@ public class Arguments {
         return hexGrid;
     }
 
-    public Region getRegion() {
-        return region;
-    }
-
-
-
     public void setHexGrid(HexGrid hexGrid) {
         this.hexGrid = hexGrid;
+    }
+
+    public Region getRegion() {
+        return region;
     }
 
     public void setRegion(Region region) {

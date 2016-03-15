@@ -20,22 +20,9 @@ import java.util.List;
 /**
  * Classe permettant la lecture d'un fichier shapefile pour en recuperer les informations globales et les polygones representant chaque pays
  */
-public class ShapeStreamReader {
-    public static final double NO_DATA = -1e38;
+class ShapeStreamReader {
+    private static final double NO_DATA = -1e38;
     private ShapeFileReader _reader;
-
-    /**
-     * Constructeur de la classe
-     *
-     * @param stream Flux du fichier shapefile a lire
-     * @throws InvalidShapeFileException Le flux n'est pas un fichier shapefile valide
-     * @throws IOException               Erreur de lecture du flux de donnees
-     * @throws InvalidMapException       Le format de la carte n'est pas reconnu
-     * @throws NullPointerException      Le flux de donnees est invalide ou absent
-     */
-    public ShapeStreamReader(FileInputStream stream) throws InvalidShapeFileException, IOException, InvalidMapException, NullPointerException {
-        this(stream, null);
-    }
 
     /**
      * Constructeur de la classe
@@ -82,14 +69,13 @@ public class ShapeStreamReader {
         isMapValid(_reader);
     }
 
-    private boolean isMapValid(ShapeFileReader reader) throws InvalidMapException {
+    private void isMapValid(ShapeFileReader reader) throws InvalidMapException {
         if ((reader.getHeader().getBoxMaxZ() != 0 && reader.getHeader().getBoxMaxZ() != NO_DATA) || (reader.getHeader().getBoxMinZ() != 0 && reader.getHeader().getBoxMinZ() != NO_DATA) || (reader.getHeader().getBoxMaxM() != 0 && reader.getHeader().getBoxMaxM() != NO_DATA) || (reader.getHeader().getBoxMinM() != 0 && reader.getHeader().getBoxMinM() != NO_DATA)) {
             throw new InvalidMapException("Seules les cartes 2D sont gérées");
         }
         if (reader.getHeader().getShapeType() != ShapeType.POLYGON && reader.getHeader().getShapeType() != ShapeType.POLYGON_Z && reader.getHeader().getShapeType() != ShapeType.POLYGON_M) {
             throw new InvalidMapException("Seuls les polygones sont gérés pour les régions");
         }
-        return true;
     }
 
 
@@ -116,7 +102,7 @@ public class ShapeStreamReader {
      *
      * @return Minimum de X
      */
-    public double getMapMinX() {
+    private double getMapMinX() {
         return _reader.getHeader().getBoxMinX();
     }
 
@@ -125,48 +111,8 @@ public class ShapeStreamReader {
      *
      * @return Minimum de Y
      */
-    public double getMapMinY() {
+    private double getMapMinY() {
         return _reader.getHeader().getBoxMinY();
-    }
-
-    /**
-     * Retourne la valeur maximale de X
-     *
-     * @return Maximum de X
-     */
-    public double getMapMaxX() {
-        return _reader.getHeader().getBoxMaxX();
-    }
-
-    /**
-     * Retourne la valeur maximale de Y
-     *
-     * @return Maximum de Y
-     */
-    public double getMapMaxY() {
-        return _reader.getHeader().getBoxMaxY();
-    }
-
-    /**
-     * Retourne le type de formes contenues dans le fichier shapefile
-     *
-     * @return Type des formes
-     */
-    public String getShapeName() {
-        return _reader.getHeader().getShapeType().name();
-    }
-
-    /**
-     * Affiche les infos globales sur le fichier dans la console
-     */
-    public void printInfos() {
-        System.out.println("min (X) : " + getMapMinX());
-        System.out.println("max (X) : " + getMapMaxX());
-        System.out.println("size (X) : " + getMapSizeX());
-        System.out.println("min (Y) : " + getMapMinY());
-        System.out.println("max (Y) : " + getMapMaxY());
-        System.out.println("size (Y) : " + getMapSizeY());
-        System.out.println("Shape File : " + getShapeName());
     }
 
     /**

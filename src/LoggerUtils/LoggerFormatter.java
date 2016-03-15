@@ -10,6 +10,7 @@ import java.util.logging.LogRecord;
  * File : LoggerUtils.LoggerFormatter.java
  * Created by Guillaume Robert on 08/12/2015.
  */
+@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 class LoggerFormatter extends Formatter {
     @Override
     public String format(LogRecord record) {

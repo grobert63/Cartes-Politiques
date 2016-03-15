@@ -1,53 +1,40 @@
 package GUI;
 
+import CustomException.InvalidMapException;
 import Entities.GeoMap;
 import Entities.HexGrid;
 import Loader.MapLoader;
 import LoggerUtils.LoggerManager;
 import Resolver.Test2Resolver;
+import com.hexiong.jdbf.JDBFException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 
 public class Main extends Application {
+    public static final ArrayList<String> nameColumns = new ArrayList<>();
     public static HexGrid grid;
     public static GeoMap geoMap;
-    public static ArrayList<String> nameColumns = new ArrayList<>();
-
 
     public static void main(String[] args) {
         Application.launch(args);
     }
-    
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
-        Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
-        primaryStage.setTitle("Hexagomap");
-        primaryStage.setScene(new Scene(root, 650, 400));
-        primaryStage.show();
-        LoggerManager.getInstance().getLogger().log(Level.INFO, "Application started");
-    }
 
-    public static void chargement(String shp, String dbf) throws Exception {
+    public static void chargement(String shp, String dbf) throws InvalidShapeFileException, JDBFException, InvalidMapException, IOException {
         // Chargement des régions en mémoire
         MapLoader ml;
         if (shp == null) {
             ml = new MapLoader(
                     "test/FRA_adm1.shp",
                     "test/FRA_adm1.dbf"
-                    //"test/world.shp",
-                    //"test/world.dbf"
-                    //"test/usstate500k.shp",
-                    //"test/usstate500k.dbf"
-                    //"test/usstate20m.shp",
-                    //"test/usstate20m.dbf"
             );
         } else {
             ml = new MapLoader(shp, dbf);
@@ -70,5 +57,15 @@ public class Main extends Application {
 
         Test2Resolver algo = new Test2Resolver();
         grid = algo.resolve(geoMap.getRegions(), 0, true, geoMap.getRegions().get(0), -1);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Starting...");
+        Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
+        primaryStage.setTitle("Hexagomap");
+        primaryStage.setScene(new Scene(root, 650, 400));
+        primaryStage.show();
+        LoggerManager.getInstance().getLogger().log(Level.INFO, "Application started");
     }
 }

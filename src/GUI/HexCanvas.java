@@ -14,19 +14,17 @@ class HexCanvas extends CustomCanvas {
     private final HexPolygonContainer hexContainer;
 
     /**
-     * @param width  Largeur en pixel
-     * @param height Hauteur en pixel
      * @param grid   Grille hexagonale contenant les régions à afficher
      */
-    public HexCanvas(double width, double height, HexGrid grid) {
-        super(width, height);
+    public HexCanvas(HexGrid grid) {
+        super((double) 1000, (double) 700);
 
-        hexContainer = new HexPolygonContainer(grid, 1, width, height);
+        hexContainer = new HexPolygonContainer(grid, (double) 1000, (double) 700);
         setEvents();
     }
 
     @Override
-    protected void setEvents() {
+    void setEvents() {
         super.setEvents();
         widthProperty().addListener(evt -> {
             hexContainer.notifyCanvasWidthChange(widthProperty().getValue());
@@ -67,8 +65,7 @@ class HexCanvas extends CustomCanvas {
     public void draw() {
         GraphicsContext gc = super.getGraphicsContext2D();
         int rgb = 0;
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, getWidth(), getHeight());
+        initializeGraphicsContext(gc);
 
         int nbHexagones = hexContainer.size();
 

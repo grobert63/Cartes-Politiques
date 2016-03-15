@@ -7,9 +7,7 @@ import java.io.FileNotFoundException;
 /**
  * Classe permettant de récuperer un flux de lecture pour un fichier à partir de son chemin
  */
-public class FileReader {
-
-    private String _path = "";
+class FileReader {
 
     private File _file = null;
 
@@ -24,24 +22,14 @@ public class FileReader {
     }
 
     /**
-     * Retourne le chemin du fichier
-     *
-     * @return Chemin du fichier
-     */
-    public String getPath() {
-        return _path;
-    }
-
-    /**
      * Met à jour le chemin du fichier
      *
      * @param path Nouveau chemin du fichier
      * @throws FileNotFoundException Le fichier n'a pas été trouvé a l'emplacement donné
      */
-    public void setPath(String path) throws FileNotFoundException {
+    private void setPath(String path) throws FileNotFoundException {
         File file = new File(path);
         if (file.exists()) {
-            this._path = path;
             this._file = file;
         } else {
             throw new FileNotFoundException("Le fichier n'existe pas");

@@ -1,6 +1,7 @@
 package LoggerUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.AccessControlException;
@@ -54,9 +55,9 @@ public class LoggerManager {
             _logger.setUseParentHandlers(true);
             _logger.addHandler(handler);
         } catch (AccessControlException e) {
-            System.out.println("Impossible de logger");
-        } catch (Exception e) {
-            e.printStackTrace();
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "To use applet you must accept to trust it : " + e.getMessage());
+        } catch (IOException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "An error occured while creating or opening log file : " + e.getMessage());
         }
     }
 

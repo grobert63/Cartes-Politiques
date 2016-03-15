@@ -20,16 +20,4 @@ public class BoundPolygon {
         return _boundaries;
     }
 
-    /**
-     * Retourne le périmètre du polygon c-a-d la somme des longueurs de chaque frontières
-     *
-     * @return Périmètre du polygone
-     */
-    public double getPerimeter() {
-        double perimeter = 0;
-        for (Boundary b : _boundaries) {
-            perimeter += b.getLength();
-        }
-        return perimeter;
-    }
 }

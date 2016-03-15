@@ -9,8 +9,8 @@ package LoggerUtils;
 /**
  * Allows to recognize major Operating Systems
  */
-public class OSDetector {
-    private static String OS = System.getProperty("os.name").toLowerCase();
+class OSDetector {
+    private static final String OS = System.getProperty("os.name").toLowerCase();
 
 
     /**

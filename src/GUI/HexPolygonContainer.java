@@ -18,15 +18,15 @@ public class HexPolygonContainer {
     private final double[] hexEdgesX = {0.5, 0.5, 0.0, -0.5, -0.5, 0.0};
     private final double[] hexEdgesY = {0.25, -0.25, -0.5, -0.25, 0.25, 0.5};
 
-    private List<Region> regions = new ArrayList<>();
+    private final List<Region> regions = new ArrayList<>();
 
     // hexNormalizeCoordCenter : coordonnées des centres normalisés des hexagones.
     // Elles ne seront jamais modifiées ni par un changement de zoom ou de taille du canvas, ni par un décalage.
-    private List<Point> hexNormalizeCoordCenter = new ArrayList<>();
+    private final List<Point> hexNormalizeCoordCenter = new ArrayList<>();
 
     // hexRealCoordCenterWithoutOffset : coordonnées des centres réels des hexagones.
     // Elles sont modifiés à chaque changement de zoom ou de taille du canvas. Elles ne sont pas modifiées par un décalage.
-    private List<Point> hexRealCoordCenterWithoutOffset = new ArrayList<>();
+    private final List<Point> hexRealCoordCenterWithoutOffset = new ArrayList<>();
 
     // Taille de la HexGrid
     private double hexGridHeight;
@@ -42,8 +42,8 @@ public class HexPolygonContainer {
     private double _canvasWidth;
 
 
-    public HexPolygonContainer(HexGrid hexgrid, double canvasZoom, double canvasWidth, double canvasHeight) {
-        _zoom = canvasZoom;
+    public HexPolygonContainer(HexGrid hexgrid, double canvasWidth, double canvasHeight) {
+        _zoom = (double) 1;
         _canvasHeight = canvasHeight;
         _canvasWidth = canvasWidth;
         notifyHexGridChange(hexgrid);

@@ -30,7 +30,7 @@ public class PolyCanvas extends CustomCanvas {
     }
 
     @Override
-    protected void setEvents() {
+    void setEvents() {
         super.setEvents();
         widthProperty().addListener(evt -> draw());
         heightProperty().addListener(evt -> draw());
@@ -44,12 +44,8 @@ public class PolyCanvas extends CustomCanvas {
         draw();
     }
 
-    public boolean getNomPays() {
+    private boolean getNomPays() {
         return nomPays.get();
-    }
-
-    public void setNomPays(boolean nomPays) {
-        this.nomPays.set(nomPays);
     }
 
     public BooleanProperty nomPaysProperty() {
@@ -72,14 +68,12 @@ public class PolyCanvas extends CustomCanvas {
     }
 
     private void drawInitialize(GraphicsContext gc) {
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, getWidth(), getHeight());
+        initializeGraphicsContext(gc);
         gc.setFill(Color.BLACK);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
     }
 
-    //empeche le render correct des "vrais" polygones!!!
     private void drawPolygon(GraphicsContext gc, Boundary b) {
         int size = b.getPoints().size();
         double x[] = new double[size];

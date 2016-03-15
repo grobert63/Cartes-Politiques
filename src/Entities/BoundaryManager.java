@@ -2,8 +2,8 @@ package Entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Décrit un outil permettant de créer et de contenir l'ensemble des frontières de toutes les régions
  * @author Théophile
  */
-public class BoundaryManager {
+class BoundaryManager {
     private final List<Boundary> _boundaries = new ArrayList<>();
     private final PointSeeker _seeker;
     private final BoundPolygon[] _boundPolygons;
@@ -196,8 +196,7 @@ public class BoundaryManager {
     }
 
     private List<Integer> getRegionsWhichContains(Point p) {
-        List<Integer> region_indexes = _seeker.getContainingPolygon(p);
-        return region_indexes;
+        return _seeker.getContainingPolygon(p);
     }
 
     private Boundary startOrContinueBoundary(Boundary boundary_tmp, Point point) {
@@ -232,34 +231,25 @@ public class BoundaryManager {
         
         int nbPoints = rawPoly.getPoints().size() - 1;
 
-        int indexPoint = 0;
+        int indexPoint;
         int indexBound = 0;
-        
-        Boundary firstBoundary = null;
+
+        Boundary firstBoundary;
         int indexOfFirstPointOfFirstBoundary;
-        boolean next = true;
-        
+
         while(true){
-            if(next){
-                if(indexBound >= remainingBoundaries.size()){
-                    return null;
-                }
-                firstBoundary = remainingBoundaries.get(indexBound);
-                indexBound++;
-                indexPoint = 0;
+            if (indexBound >= remainingBoundaries.size()) {
+                return null;
             }
-            
+            firstBoundary = remainingBoundaries.get(indexBound);
+            indexBound++;
+            indexPoint = 0;
+
             if(indexPoint < firstBoundary.getPoints().size()){
                 indexOfFirstPointOfFirstBoundary = rawPoly.getPoints().indexOf(firstBoundary.getPoints().get(indexPoint));
                 if(indexOfFirstPointOfFirstBoundary != -1){
                     break;
                 }
-                else{
-                    indexPoint++;
-                }
-            }
-            else{
-                next = true;
             }
         }
         

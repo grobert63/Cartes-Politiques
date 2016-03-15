@@ -5,20 +5,12 @@ package Saver;
  * Created by Guillaume Robert on 06/03/2016.
  * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
-public class ShapeFilePolygon {
-    private ShapeFileBox box;
-    private int numberParts;
-    private int numberPoints;
-    private int Parts[];
-    private ShapeFilePoint[] Points;
-
-    public ShapeFilePolygon(ShapeFileBox box, int numberParts, int numberPoints, int[] parts, ShapeFilePoint[] points) {
-        this.box = box;
-        this.numberParts = numberParts;
-        this.numberPoints = numberPoints;
-        Parts = parts;
-        Points = points;
-    }
+class ShapeFilePolygon {
+    private final ShapeFileBox box;
+    private final int numberParts;
+    private final int numberPoints;
+    private final int[] Parts;
+    private final ShapeFilePoint[] Points;
 
     public ShapeFilePolygon(ShapeFileBox box, int[] parts, ShapeFilePoint[] points) {
         this.box = box;
