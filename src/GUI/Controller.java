@@ -1,13 +1,16 @@
 package GUI;
 
+import CustomException.InvalidMapException;
 import DataManager.Converter;
 import DataManager.Load;
 import DataManager.Save;
 import Entities.Region;
+import LoggerUtils.LoggerManager;
 import Resolver.Arguments;
 import Resolver.Resolver3;
 import Resolver.Test2Resolver;
 import Saver.ShapeFileWriter;
+import com.hexiong.jdbf.JDBFException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,13 +18,17 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.logging.Level;
 
 public class Controller {
 
+    private final ArrayList<Region> regions = new ArrayList<>();
     public Menu menuName;
     @FXML
     Pane PaneAffichageResult;
@@ -49,7 +56,6 @@ public class Controller {
     private int Direction;
     private boolean Clock;
     private int nbTour;
-    private ArrayList<Region> regions = new ArrayList<>();
 
     @FXML
     void initialize() {
@@ -63,11 +69,17 @@ public class Controller {
 
         try {
             Main.chargement(null, null);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InvalidShapeFileException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile : " + e.getMessage());
+        } catch (JDBFException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile DataBase (.dbf) : " + e.getMessage());
+        } catch (IOException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile from disk : " + e.getMessage());
+        } catch (InvalidMapException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile (only 2D maps with polygons can be handled) : " + e.getMessage());
         }
         canvasCarte = new PolyCanvas(Main.geoMap);
-        canvas = new HexCanvas(1000, 700, GUI.Main.grid);
+        canvas = new HexCanvas(GUI.Main.grid);
 
         PaneAffichageCarte.getChildren().add(canvasCarte);
         PaneAffichageResult.getChildren().add(canvas);
@@ -136,8 +148,11 @@ public class Controller {
         radioAll.setOnAction(event -> {
             for (MenuItem item : selectedCountry.getItems()) {
                 RadioMenuItem radio = (RadioMenuItem) item;
-                if (item != radioAll)
+                Region region = getRegion();
+                if (item != radioAll) {
                     radio.setSelected(radioAll.isSelected());
+                    handleRegionsWithRadio(radioAll, radio, region);
+                }
             }
 
         });
@@ -146,18 +161,28 @@ public class Controller {
             RadioMenuItem radio = new RadioMenuItem(r.getName());
             regions.add(r);
             radio.setSelected(true);
-            radio.setOnAction(event -> {
-                if (radio.isSelected()) {
-                    regions.add(r);
-                } else {
-                    radioAll.setSelected(false);
-                    regions.remove(r);
-                }
-                chargementArgumentName();
-            });
+            radio.setOnAction(event -> handleRegionsWithRadio(radioAll, radio, r));
             selectedCountry.getItems().add(radio);
         }
 
+    }
+
+    private void handleRegionsWithRadio(RadioMenuItem radioAll, RadioMenuItem radio, Region region) {
+        if (radio.isSelected()) {
+            regions.add(region);
+        } else {
+            radioAll.setSelected(false);
+            regions.remove(region);
+        }
+        chargementArgumentName();
+    }
+
+    private Region getRegion() {
+        Region region = null;
+        for (Region r : Main.geoMap.getRegions()) {
+            if (Objects.equals(r.getName(), FirstRegion)) region = r;
+        }
+        return region;
     }
 
 
@@ -209,14 +234,28 @@ public class Controller {
     public void loadDbf() {
         try {
             File dbf = null;
-            File shp = Load.loadSingle(fenetre.getScene().getWindow(), new FileChooser.ExtensionFilter("Shapefile", "*.shp"), new File(System.getProperty("user.home")));
+            File shp = loadShp();
             if (shp != null)
                 dbf = Load.loadSingle(fenetre.getScene().getWindow(), new FileChooser.ExtensionFilter("DataBase File", "*.dbf"), shp.getParentFile());
             if (dbf != null) Main.chargement(shp.getPath(), dbf.getPath());
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InvalidShapeFileException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile : " + e.getMessage());
+        } catch (JDBFException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile DataBase (.dbf) : " + e.getMessage());
+        } catch (IOException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile from disk : " + e.getMessage());
+        } catch (InvalidMapException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile (only 2D maps with polygons can be handled) : " + e.getMessage());
         }
+        chargement();
+    }
+
+    private File loadShp() {
+        return Load.loadSingle(fenetre.getScene().getWindow(), new FileChooser.ExtensionFilter("Shapefile", "*.shp"), new File(System.getProperty("user.home")));
+    }
+
+    private void chargement() {
         chargementName();
         chargementSelectionPays();
         chargementArgumentName();
@@ -227,17 +266,19 @@ public class Controller {
     @FXML
     public void load() {
         try {
-            File shp = Load.loadSingle(fenetre.getScene().getWindow(), new FileChooser.ExtensionFilter("Shapefile", "*.shp"), new File(System.getProperty("user.home")));
+            File shp = loadShp();
             if (shp != null) Main.chargement(shp.getPath(), null);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InvalidShapeFileException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile : " + e.getMessage());
+        } catch (JDBFException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile DataBase (.dbf) : " + e.getMessage());
+        } catch (IOException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile from disk : " + e.getMessage());
+        } catch (InvalidMapException e) {
+            LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile (only 2D maps with polygons can be handled) : " + e.getMessage());
         }
-        chargementName();
-        chargementSelectionPays();
-        chargementArgumentName();
-        canvas.changeGrid(Main.grid);
-        canvasCarte.changeMap(Main.geoMap);
+        chargement();
     }
 
     @FXML
@@ -247,12 +288,9 @@ public class Controller {
 
     @FXML
     public void refreshAlgo() {
-        new ShapeFileWriter(canvas.getHexContainer());
+        new ShapeFileWriter("test.shp",canvas.getHexContainer());
         Test2Resolver algo = new Test2Resolver();
-        Region region = null;
-        for (Region r : Main.geoMap.getRegions()) {
-            if (Objects.equals(r.getName(), FirstRegion)) region = r;
-        }
+        Region region = getRegion();
         if (region != null) {
             Main.grid = algo.resolve(regions, Direction, Clock, region, nbTour);
             canvas.changeGrid(Main.grid);
@@ -289,9 +327,7 @@ public class Controller {
         }
         for (MenuItem menu :MenuDirection.getItems()) {
             try {
-                RadioMenuItem radio = (RadioMenuItem)menu;
-                if(radio.getText().equals(direction))
-                    radio.setSelected(true);
+                selectRadioMenuItem(direction, (RadioMenuItem) menu);
             }catch (ClassCastException ignored)
             {
 
@@ -300,12 +336,15 @@ public class Controller {
         }
 
         for (MenuItem menu :FirstCountryArgument.getItems()) {
-            RadioMenuItem radio = (RadioMenuItem)menu;
-            if(radio.getText().equals(namePays))
-                radio.setSelected(true);
+            selectRadioMenuItem(namePays, (RadioMenuItem) menu);
         }
 
         Main.grid = a.getHexGrid();
         canvas.changeGrid(Main.grid);
+    }
+
+    private void selectRadioMenuItem(String direction, RadioMenuItem menu) {
+        if (menu.getText().equals(direction))
+            menu.setSelected(true);
     }
 }

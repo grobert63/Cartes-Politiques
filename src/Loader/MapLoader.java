@@ -5,6 +5,7 @@ import Entities.GeoMap;
 import Entities.RawPolygon;
 import Entities.Region;
 import Entities.RegionManager;
+import LoggerUtils.LoggerManager;
 import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
 import org.nocrala.tools.gis.data.esri.shapefile.ValidationPreferences;
@@ -13,6 +14,7 @@ import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileExcep
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Chargeur des fichiers .shp et .dbf
@@ -45,19 +47,6 @@ public class MapLoader {
         } else {
             this.dbfReader = null;
         }
-    }
-
-    /**
-     * Construit un chargeur avec uniquement un fichier .shp
-     *
-     * @param shpFilePath Emplacement du fichier .shp
-     * @throws IOException
-     * @throws InvalidMapException
-     * @throws InvalidShapeFileException
-     * @throws JDBFException
-     */
-    public MapLoader(String shpFilePath) throws IOException, InvalidMapException, InvalidShapeFileException, JDBFException {
-        this(shpFilePath, null);
     }
 
     /**
@@ -102,7 +91,7 @@ public class MapLoader {
             if (dbfReader.hasNextRecord()) {
                 readdbfNextRecord(region);
             } else {
-                System.err.println("[Warning] Données manquantes dans le .dbf");
+                LoggerManager.getInstance().getLogger().log(Level.WARNING, "Missing data in the DataBase File (.dbf)");
             }
         }
     }

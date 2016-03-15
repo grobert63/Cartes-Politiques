@@ -13,9 +13,12 @@ import java.util.Map;
  * @author Théophile
  */
 public class Aggreger {
-    final Map<Index2, Region> map = new HashMap<>();
+    private final Map<Index2, Region> map = new HashMap<>();
 
-    int minX = 0, maxX = 0, minY = 0, maxY = 0;
+    private int minX = 0;
+    private int maxX = 0;
+    private int minY = 0;
+    private int maxY = 0;
 
     public Aggreger(Region source) {
         addInMap(new Index2(0, 0), source);
@@ -61,15 +64,6 @@ public class Aggreger {
                     return new Index2(idx.x - nb, idx.y - nb);
         }
         return null;
-    }
-
-    public boolean hasPlaceAround(Region r) {
-        for (int direction = 0; direction < 6; direction++) {
-            if (hasPlace(r, direction)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean hasPlace(Region r, int direction) {
@@ -173,11 +167,6 @@ public class Aggreger {
         @Override
         public int hashCode() {
             return x * 43797 + y;
-        }
-
-        @Override
-        public String toString() {
-            return "{" + x + "," + y + "}";
         }
     }
 

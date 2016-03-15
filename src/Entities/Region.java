@@ -12,8 +12,6 @@ import java.util.Map;
  */
 public class Region {
     private final Map<String, String> infos = new HashMap<>();
-    private final List<RawPolygon> _displayablePolygons;
-    private final RawPolygon _rawMainPolygon;
     private final BoundPolygon _boundMainPolygon;
     private final Point _center;
     // equals et hashcode peut-être à redéfinir
@@ -21,30 +19,9 @@ public class Region {
     private String _defaultField = null;
 
     // Constructeur à modifier
-    public Region(List<RawPolygon> displayablePolygons, RawPolygon rawMainPolygon, BoundPolygon boundMainPolygon) {
-        _displayablePolygons = displayablePolygons;
-        _rawMainPolygon = rawMainPolygon;
+    public Region(RawPolygon rawMainPolygon, BoundPolygon boundMainPolygon) {
         _boundMainPolygon = boundMainPolygon;
-
         _center = Geometry.getCentreDeMasse(rawMainPolygon);
-    }
-
-    /**
-     * Obtient les polygones décrivant la région à afficher
-     *
-     * @return Polygones à afficher
-     */
-    public List<RawPolygon> getDisplayablePolygons() {
-        return _displayablePolygons;
-    }
-
-    /**
-     * Obtient le RawPolygon principal de la région
-     *
-     * @return Le RawPolygon principal
-     */
-    public RawPolygon getRawMainPolygon() {
-        return _rawMainPolygon;
     }
 
     /**
@@ -74,26 +51,6 @@ public class Region {
      */
     public void setInfo(String field, String value) {
         infos.put(field, value);
-    }
-
-    /**
-     * Récupère la donnée de la région lié au champ renseigné
-     *
-     * @param field Champ / Colonne
-     * @return Donnée liée au champ renseigné
-     */
-    public String getInfo(String field) {
-        return infos.get(field);
-    }
-
-    /**
-     * Récupère le nom du champ lié au nom de la région.
-     * Ce champ est nommé "champ par défaut".
-     *
-     * @return Champ par défaut
-     */
-    public String getDefaultField() {
-        return _defaultField;
     }
 
     /**
@@ -158,15 +115,6 @@ public class Region {
             _neighbors.put(neighbor, new LinkedList<>());
         }
         _neighbors.get(neighbor).add(commonBoundary);
-    }
-
-    /**
-     * Obtient l'ensemble des régions voisines de celle-ci
-     *
-     * @return Une map avec en clé, la région voisine, et en valeur, la liste des frontières communes
-     */
-    public Map<Region, List<Boundary>> getNeighbors() {
-        return _neighbors;
     }
 
     public boolean IsCommunBoundary(Region r) {

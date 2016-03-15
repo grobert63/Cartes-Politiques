@@ -28,8 +28,4 @@ public class Point {
         return (int) ((x * 4957.0 + y) * 13.0);
     }
 
-    @Override
-    public String toString() {
-        return "{" + x + "," + y + "}";
-    }
 }

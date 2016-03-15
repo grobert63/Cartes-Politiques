@@ -3,20 +3,20 @@ package Resolver;
 import Entities.Direction;
 import Entities.HexGrid;
 import Entities.Region;
-import GUI.HexCanvas;
 
 import java.util.List;
 
 /**
- * Created by PAYS on 07/03/2016.
+ * File : Resolver.Resolver3.java
+ * Created by Julien Defiolles on 07/03/2016.
+ * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
 public class Resolver3 {
 
-    private Test2Resolver test2Resolve = new Test2Resolver();
+    private final Test2Resolver test2Resolve = new Test2Resolver();
 
     public Arguments resolve(List<Region> list) {
-        HexGrid grid = null;
-        HexGrid gridf = null;
+        HexGrid grid;
         double max = 0;
         double nb2 = 0;
         Arguments arguments = new Arguments();
@@ -34,38 +34,20 @@ public class Resolver3 {
                         if(i - 1 >= 0 )
                         {
                             if((region2 = grid.getRegion(i-1,j)) != null) {
-                                if (region2.IsCommunBoundary(region)){
-                                    nb2 ++;
-                                }
-                                else
-                                {
-                                    nb2 -= 0.2;
-                                }
+                                nb2 = updateNb2(nb2, region2.IsCommunBoundary(region));
                             }
 
                             if( j - 1 >= 0)
                             {
                                 if((region2 = grid.getRegion(i-1,j-1)) != null) {
-                                    if (region2.IsCommunBoundary(region)){
-                                        nb2 ++;
-                                    }
-                                    else
-                                    {
-                                        nb2 -= 0.2;
-                                    }
+                                    nb2 = updateNb2(nb2, region2.IsCommunBoundary(region));
                                 }
                             }
 
                             if( j + 1 < grid.getHeight())
                             {
                                 if((region2 = grid.getRegion(i-1,j+1)) != null) {
-                                    if (region2.IsCommunBoundary(region)){
-                                        nb2 ++;
-                                    }
-                                    else
-                                    {
-                                        nb2 -= 0.2;
-                                    }
+                                    nb2 = updateNb2(nb2, region2.IsCommunBoundary(region));
                                 }
                             }
                         }
@@ -73,39 +55,21 @@ public class Resolver3 {
                         if(i + 1 < grid.getWidth())
                         {
                             if((region2 = grid.getRegion(i+1,j)) != null) {
-                                if (region2.IsCommunBoundary(region)){
-                                    nb2 ++;
-                                }
-                                else
-                                {
-                                    nb2 -= 0.2;
-                                }
+                                nb2 = updateNb2(nb2, region2.IsCommunBoundary(region));
                             }
                         }
 
                         if( j - 1 >= 0)
                         {
                             if((region2 = grid.getRegion(i,j-1)) != null) {
-                                if (region2.IsCommunBoundary(region)){
-                                    nb2 ++;
-                                }
-                                else
-                                {
-                                    nb2 -= 0.2;
-                                }
+                                nb2 = updateNb2(nb2, region2.IsCommunBoundary(region));
                             }
                         }
 
                         if( j + 1 < grid.getHeight())
                         {
                             if((region2 = grid.getRegion(i,j+1)) != null) {
-                                if (region2.IsCommunBoundary(region)){
-                                    nb2 ++;
-                                }
-                                else
-                                {
-                                    nb2 -= 0.2;
-                                }
+                                nb2 = updateNb2(nb2, region2.IsCommunBoundary(region));
                             }
                         }
                     }
@@ -121,5 +85,13 @@ public class Resolver3 {
             }
         }
         return arguments;
+    }
+
+    private double updateNb2(double nb2, boolean isCommonBoundary) {
+        if (isCommonBoundary) {
+            return nb2 + 1;
+        } else {
+            return nb2 - 0.2;
+        }
     }
 }

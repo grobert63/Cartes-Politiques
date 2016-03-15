@@ -51,22 +51,4 @@ public class Boundary {
         return _points.get(_points.size() - 1);
     }
 
-    /**
-     * Retourne la longueur d'une frontière c-a-d la somme des distances entre chaque point
-     *
-     * @return Longueur d'une frontière
-     */
-    public double getLength() {
-        double length = 0;
-
-        Point previous;
-        Point current = _points.get(0);
-        for (Point p : _points) {
-            previous = current;
-            current = p;
-            length += Geometry.distanceBetween2Points(previous, current);
-        }
-
-        return length;
-    }
 }

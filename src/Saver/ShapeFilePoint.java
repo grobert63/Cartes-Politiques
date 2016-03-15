@@ -6,8 +6,8 @@ package Saver;
  * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
 public class ShapeFilePoint {
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
 
     public ShapeFilePoint(double x, double y) {
         this.x = x;

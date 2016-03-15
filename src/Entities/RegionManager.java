@@ -10,6 +10,7 @@ import java.util.List;
  *
  * @author Théophile
  */
+@SuppressWarnings("JavaDoc")
 public class RegionManager {
     private final BoundaryManager _bm;
     private final List<Region> _regions = new ArrayList<>();
@@ -23,10 +24,8 @@ public class RegionManager {
         int nbRegions = rawRegions.size();
 
         RawPolygon[] rawMainPolygons = new RawPolygon[nbRegions];
-        List<RawPolygon>[] displayablePolygons = new ArrayList[nbRegions];
         for (int i = 0; i < nbRegions; i++) {
             List<RawPolygon> polygons = rawRegions.get(i);
-            displayablePolygons[i] = polygons;
             rawMainPolygons[i] = Geometry.getMainPolygon(polygons);
         }
 
@@ -34,7 +33,7 @@ public class RegionManager {
         BoundPolygon[] boundMainPolygons = _bm.getBoundPolygon();
 
         for (int i = 0; i < nbRegions; i++) {
-            Region r = new Region(displayablePolygons[i], rawMainPolygons[i], boundMainPolygons[i]);
+            Region r = new Region(rawMainPolygons[i], boundMainPolygons[i]);
             _regions.add(r);
         }
 
@@ -90,7 +89,6 @@ public class RegionManager {
                     r2.addNeighbor(r1, b);
                     break;
                 default:
-                    //System.err.println("involvedRegions.size() = " + involvedRegions.size());
                     break;
             }
         }

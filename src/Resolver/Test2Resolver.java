@@ -1,27 +1,28 @@
 package Resolver;
 
+import CustomException.InvalidDirectionException;
 import Entities.Direction;
 import Entities.HexGrid;
 import Entities.Region;
+import LoggerUtils.LoggerManager;
 import Resolver.Tools.Aggreger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static Entities.Direction.getDirectionFromAngle;
-
-//import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
-// /!\ J'ai commenté cet import parce qu'il empêchait la compilation
 
 /**
  * File : Resolver.Test2Resolver.java
  * Created by Julien Defiolles on 08/02/2016.
  * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
+@SuppressWarnings("JavaDoc")
 public class Test2Resolver {
-    final List<Region> isolated = new ArrayList<>();
-    Aggreger aggreger = null;
+    private final List<Region> isolated = new ArrayList<>();
+    private Aggreger aggreger = null;
 
     /**
      * @param region         region a ajouter les pays voisins
@@ -80,7 +81,7 @@ public class Test2Resolver {
         return getDirectionFromAngle(angle);
     }
 
-    private void createRegion(Region region) throws Exception {
+    private void createRegion(Region region) throws InvalidDirectionException {
         double distance, min_dist = -1.0;
         Region nearest = null;
         if (aggreger.exist(region)) return;
@@ -109,8 +110,8 @@ public class Test2Resolver {
             if (!isolated.isEmpty() && test != nbTour) {
                 try {
                     createRegion(isolated.get(0));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidDirectionException e) {
+                    LoggerManager.getInstance().getLogger().log(Level.WARNING, e.getMessage());
                 }
                 regionSuivante = isolated.get(0);
             }
