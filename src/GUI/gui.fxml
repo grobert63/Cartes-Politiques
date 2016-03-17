@@ -48,7 +48,7 @@
                         </center>
                         <top>
                             <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER_RIGHT">
-                                <CheckBox mnemonicParsing="false" text=": Nom des pays" fx:id="NomPaysCarte">
+                                <CheckBox mnemonicParsing="false" text=": Nom des régions" fx:id="NomPaysCarte">
                                     <padding>
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                     </padding>
