@@ -16,11 +16,9 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Export">
                     <MenuItem mnemonicParsing="false" text="To image" onAction="#SaveImage"/>
+                    <MenuItem mnemonicParsing="false" text="To shapefile" onAction="#SaveShp"/>
                 </Menu>
                 <MenuItem mnemonicParsing="false" text="Close"/>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-                <MenuItem mnemonicParsing="false" text="Delete"/>
             </Menu>
             <Menu fx:id="menuName" text="Name"/>
             <Menu mnemonicParsing="false" text="Help">

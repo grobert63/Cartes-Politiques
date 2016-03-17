@@ -1,11 +1,11 @@
-package Saver;
+package ShapeFileSaver;
 
 /**
  * File : Saver.ShapeFileBox.java
  * Created by Guillaume Robert on 06/03/2016.
  * All Rights Reserved Guillaume Robert & Maxime Lemort & Julien Defiolles & Theophile Pumain
  */
-public class ShapeFileBox {
+class ShapeFileBox {
     private double xMin;
     private double yMin;
     private double xMax;

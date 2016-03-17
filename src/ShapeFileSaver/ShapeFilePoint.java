@@ -1,4 +1,4 @@
-package Saver;
+package ShapeFileSaver;
 
 /**
  * File : Saver.ShapeFilePoint.java

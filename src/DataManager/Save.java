@@ -1,6 +1,8 @@
 package DataManager;
 
+import GUI.HexPolygonContainer;
 import LoggerUtils.LoggerManager;
+import ShapeFileSaver.ShapeFileWriter;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
@@ -46,6 +48,20 @@ public class Save {
             } catch (IOException e) {
                 LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Unable to save image : " + e.getMessage());
             }
+        }
+    }
+
+    public static void saveToShp(Window stage, HexPolygonContainer polygonContainer) {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir où enregistrer le fichier");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Supported Files *.shp","*.shp"),
+                new FileChooser.ExtensionFilter("ShapeFile", "*.shp")
+        );
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            new ShapeFileWriter(file,polygonContainer);
         }
     }
 

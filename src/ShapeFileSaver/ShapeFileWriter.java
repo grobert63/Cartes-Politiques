@@ -1,4 +1,4 @@
-package Saver;
+package ShapeFileSaver;
 
 import Entities.Point;
 import GUI.HexPolygonContainer;
@@ -29,7 +29,7 @@ public class ShapeFileWriter {
     private int bodySize = 10000;
     private int bodySpaceLeft;
 
-    public ShapeFileWriter(String file, HexPolygonContainer hexPolygonContainer) {
+    public ShapeFileWriter(File file, HexPolygonContainer hexPolygonContainer) {
         header = ByteBuffer.allocate(100);
         body = ByteBuffer.allocate(bodySize);
         bodySpaceLeft = bodySize;
@@ -167,14 +167,14 @@ public class ShapeFileWriter {
         }
     }
 
-    private void writeToFile(String filePath) {
+    private void writeToFile(File file) {
         try {
             FileOutputStream outputStream =
-                    new FileOutputStream(filePath);
+                    new FileOutputStream(file);
             outputStream.write(header.array());
             outputStream.write(body.array(), 0, bodySize - bodySpaceLeft);
             outputStream.close();
-            LoggerManager.getInstance().getLogger().log(Level.INFO,"ShapeFile saved to : "+ new File(filePath).getAbsolutePath() + " with a size of " + (header.array().length + bodySize - bodySpaceLeft) + " bytes");
+            LoggerManager.getInstance().getLogger().log(Level.INFO,"ShapeFile saved to : "+ file.getAbsolutePath() + " with a size of " + (header.array().length + bodySize - bodySpaceLeft) + " bytes");
         } catch (IOException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while saving Shapefile to disk : " + e.getMessage());
         }

@@ -9,7 +9,6 @@ import LoggerUtils.LoggerManager;
 import Resolver.Arguments;
 import Resolver.Resolver3;
 import Resolver.Test2Resolver;
-import Saver.ShapeFileWriter;
 import com.hexiong.jdbf.JDBFException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -143,35 +142,22 @@ public class Controller {
     private void chargementSelectionPays() {
         selectedCountry.getItems().clear();
         regions.clear();
-        RadioMenuItem radioAll = new RadioMenuItem("all");
-        radioAll.setSelected(true);
-        radioAll.setOnAction(event -> {
-            for (MenuItem item : selectedCountry.getItems()) {
-                RadioMenuItem radio = (RadioMenuItem) item;
-                Region region = getRegion();
-                if (item != radioAll) {
-                    radio.setSelected(radioAll.isSelected());
-                    handleRegionsWithRadio(radioAll, radio, region);
-                }
-            }
 
-        });
-        selectedCountry.getItems().add(radioAll);
+
         for (Region r : Main.geoMap.getRegions()) {
             RadioMenuItem radio = new RadioMenuItem(r.getName());
             regions.add(r);
             radio.setSelected(true);
-            radio.setOnAction(event -> handleRegionsWithRadio(radioAll, radio, r));
+            radio.setOnAction(event -> handleRegionsWithRadio( radio, r));
             selectedCountry.getItems().add(radio);
         }
 
     }
 
-    private void handleRegionsWithRadio(RadioMenuItem radioAll, RadioMenuItem radio, Region region) {
+    private void handleRegionsWithRadio( RadioMenuItem radio, Region region) {
         if (radio.isSelected()) {
             regions.add(region);
         } else {
-            radioAll.setSelected(false);
             regions.remove(region);
         }
         chargementArgumentName();
@@ -288,7 +274,6 @@ public class Controller {
 
     @FXML
     public void refreshAlgo() {
-        new ShapeFileWriter("test.shp",canvas.getHexContainer());
         Test2Resolver algo = new Test2Resolver();
         Region region = getRegion();
         if (region != null) {
@@ -346,5 +331,9 @@ public class Controller {
     private void selectRadioMenuItem(String direction, RadioMenuItem menu) {
         if (menu.getText().equals(direction))
             menu.setSelected(true);
+    }
+
+    public void SaveShp() {
+        Save.saveToShp(fenetre.getScene().getWindow(),canvas.getHexContainer());
     }
 }
