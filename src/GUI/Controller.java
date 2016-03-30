@@ -15,12 +15,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import org.nocrala.tools.gis.data.esri.shapefile.exception.InvalidShapeFileException;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -227,12 +228,16 @@ public class Controller {
 
         } catch (InvalidShapeFileException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile : " + e.getMessage());
+            showException(e);
         } catch (JDBFException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile DataBase (.dbf) : " + e.getMessage());
+            showException(e);
         } catch (IOException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile from disk : " + e.getMessage());
+            showException(e);
         } catch (InvalidMapException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile (only 2D maps with polygons can be handled) : " + e.getMessage());
+            showException(e);
         }
         chargement();
     }
@@ -257,14 +262,45 @@ public class Controller {
 
         } catch (InvalidShapeFileException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile : " + e.getMessage());
+            showException(e);
         } catch (JDBFException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile DataBase (.dbf) : " + e.getMessage());
+            showException(e);
         } catch (IOException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile from disk : " + e.getMessage());
+            showException(e);
         } catch (InvalidMapException e) {
             LoggerManager.getInstance().getLogger().log(Level.SEVERE, "Error while loading ShapeFile (only 2D maps with polygons can be handled) : " + e.getMessage());
+            showException(e);
         }
         chargement();
+    }
+
+    public void showException(Exception e)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Application Exception");
+        alert.setHeaderText("An error has occured");
+        alert.setContentText(e.getLocalizedMessage());
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String exceptionText = sw.toString();
+        Label label = new Label("The exception stacktrace was:");
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
     }
 
     @FXML
